@@ -2,14 +2,22 @@
 @import "./tokens.css";
 
 @theme {
+  --color-pearl-white: #FFFFFF;
+  --color-pearl-muted: #F8FAFC;
+  --color-pearl-silver: #F1F5F9;
+  --color-soft-silver: #E2E8F0;
+  --color-metallic-titanium: #CBD5E1;
+  --color-metallic-steel: #94A3B8;
+
+  --color-electric-blue: #246BFD;
+  --color-electric-cyan: #00E5FF;
+  --color-accent-orange: #FF7A00;
+  --color-accent-amber: #FFB370;
+
   --color-district-bg: #050A14;
-  --color-district-secondary: #091426;
-  --color-district-blue: #246BFD;
-  --color-district-cyan: #39DDF4;
-  --color-district-orange: #FF9B54;
-  --color-district-text: #F4F7FC;
-  --color-district-muted: #8A99AD;
-  --color-district-border: rgba(57, 221, 244, 0.12);
+  --color-district-secondary: #081120;
+  --color-district-tertiary: #0D1A30;
+  --color-district-elevated: #11223F;
 
   --font-sans: 'Space Grotesk', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
   --font-display: 'Syne', 'Space Grotesk', system-ui, sans-serif;
@@ -63,37 +71,71 @@ body {
   color: var(--selection-color);
 }
 
-::-moz-selection {
-  background-color: var(--selection-bg);
-  color: var(--selection-color);
+/* Architectural Frosted Glass */
+.glass-panel {
+  background: rgba(8, 17, 32, 0.78);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  box-shadow: 0 16px 40px -8px rgba(0, 0, 0, 0.65);
+}
+
+.glass-panel-pearl {
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.08) 0%, rgba(255, 255, 255, 0.02) 100%);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.16);
+}
+
+/* Pearl Gradient Headline */
+.text-gradient-pearl {
+  background: linear-gradient(180deg, #FFFFFF 0%, #E2E8F0 55%, #94A3B8 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.text-gradient-cyan {
+  background: linear-gradient(135deg, #FFFFFF 0%, #38BDF8 60%, #00E5FF 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/* Glowing Border Utilities */
+.border-glow-cyan {
+  border-color: rgba(0, 229, 255, 0.4);
+  box-shadow: 0 0 16px rgba(0, 229, 255, 0.2);
+}
+
+.border-glow-blue {
+  border-color: rgba(36, 107, 253, 0.4);
+  box-shadow: 0 0 16px rgba(36, 107, 253, 0.25);
 }
 
 /* Subtle Architectural Grid Background Pattern */
 .bg-architectural-grid {
-  background-size: 40px 40px;
+  background-size: 48px 48px;
   background-image: 
-    linear-gradient(to right, rgba(57, 221, 244, 0.04) 1px, transparent 1px),
-    linear-gradient(to bottom, rgba(57, 221, 244, 0.04) 1px, transparent 1px);
+    linear-gradient(to right, rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
 }
 
 /* Custom Scrollbar for Futuristic Theme */
 ::-webkit-scrollbar {
-  width: 6px;
-  height: 6px;
+  width: 5px;
+  height: 5px;
 }
 
 ::-webkit-scrollbar-track {
-  background: var(--bg-primary);
+  background: #050A14;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: var(--bg-secondary);
-  border: 1px solid var(--border-subtle);
-  border-radius: 3px;
+  background: #1E293B;
+  border-radius: 4px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: var(--primary-blue);
+  background: #3B82F6;
 }
 
 /* Respect Prefers Reduced Motion */

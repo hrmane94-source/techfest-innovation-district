@@ -14,19 +14,21 @@ import * as THREE from 'three';
 
 export const CITY_COLORS = {
   bgPrimary: '#050A14',
-  bgSecondary: '#091426',
-  metalDark: '#141f30',         // Rich architectural graphite
-  metalTitanium: '#1d2c42',     // Sculpted titanium with diffuse readability
-  metalSteelBlue: '#1f3350',    // Structural steel with subtle navy tint
-  metalAccent: '#2a3f60',       // Mechanical brackets & secondary mullions
-  metalExoskeleton: '#2e4566',  // Exposed diagrids & external trusses
-  metalBrushed: '#3b557a',      // Polished structural alloy
-  glassFacade: '#0b1b30',       // Dark architectural tinted glazing
-  glassReflective: '#122c4e',   // High-reflectance sky-deck glass
-  glassClear: '#1a3a63',        // Clear observation glass
+  bgSecondary: '#081120',
+  metalDark: '#1c2b42',         // Refined architectural titanium graphite
+  metalTitanium: '#283e5c',     // Sculpted titanium with crisp diffuse readability
+  metalSteelBlue: '#2e476b',    // Structural steel with subtle navy tint
+  metalAccent: '#3c5880',       // Mechanical brackets & secondary mullions
+  metalExoskeleton: '#3e5c85',  // Exposed diagrids & external trusses
+  metalBrushed: '#5a7fa8',      // Polished structural alloy
+  pearlWhite: '#F8FAFC',        // Pearl white architectural cladding
+  softSilver: '#E2E8F0',        // Metallic silver accents
+  glassFacade: '#102644',       // Tinted architectural curtain glazing
+  glassReflective: '#1a3d6b',   // High-reflectance sky-deck glass
+  glassClear: '#23508c',        // Clear observation glass
   primaryBlue: '#246BFD',       // Techfest signature electric blue
-  electricCyan: '#39DDF4',      // Futuristic cyan accent
-  accentOrange: '#FF9B54',      // Industrial / telemetry amber
+  electricCyan: '#00E5FF',      // Luminous cyan accent
+  accentOrange: '#FF7A00',      // Industrial / telemetry amber
   accentWarm: '#FFB370',        // Warm architectural interior accent
   accentRed: '#FF4757',         // Aviation beacon / warning light
   roadSurface: '#080e1a',       // Deep asphalt road
@@ -250,9 +252,22 @@ export const windowGridMaterial = new THREE.MeshStandardMaterial({
   map: windowDiffuseTexture,
   emissiveMap: windowEmissiveTexture,
   emissive: new THREE.Color(0xffffff),
-  emissiveIntensity: 0.58,
-  roughness: 0.2,
-  metalness: 0.7,
+  emissiveIntensity: 0.68,
+  roughness: 0.18,
+  metalness: 0.72,
+});
+
+// Pearl White & Soft Silver Cladding
+export const pearlWhiteMaterial = new THREE.MeshStandardMaterial({
+  color: new THREE.Color(CITY_COLORS.pearlWhite),
+  roughness: 0.22,
+  metalness: 0.55,
+});
+
+export const softSilverMaterial = new THREE.MeshStandardMaterial({
+  color: new THREE.Color(CITY_COLORS.softSilver),
+  roughness: 0.25,
+  metalness: 0.72,
 });
 
 // Foundation and Ground Materials

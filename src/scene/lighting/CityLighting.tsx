@@ -92,19 +92,19 @@ export function CityLighting() {
 
   return (
     <group name="city-lighting">
-      {/* 1. Natural Sky/Ground Hemisphere Ambient */}
+      {/* 1. Natural Sky/Ground Hemisphere Ambient (Bright Futurism Lift) */}
       <hemisphereLight
-        args={['#2a4d82', '#0a1728', 1.05]}
+        args={['#589bf8', '#0b162a', 1.35]}
       />
 
       {/* 2. Soft Omnidirectional Shadow Fill */}
-      <ambientLight color="#0e223e" intensity={0.6} />
+      <ambientLight color="#132847" intensity={0.75} />
 
       {/* 3. Primary Key Directional Light with Soft Shadows */}
       <directionalLight
-        position={[70, 100, 60]}
-        intensity={2.1}
-        color="#edf5ff"
+        position={[70, 105, 65]}
+        intensity={2.6}
+        color="#ffffff"
         castShadow
         shadow-mapSize={[2048, 2048]}
         shadow-camera-near={15}
@@ -120,7 +120,7 @@ export function CityLighting() {
       {/* 4. Contrasting Cyan Rim / Silhouette Fill Light */}
       <directionalLight
         position={[-70, 55, -60]}
-        intensity={1.15}
+        intensity={1.4}
         color={CITY_COLORS.electricCyan}
       />
 

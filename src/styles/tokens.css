@@ -1,32 +1,57 @@
 /**
  * TECHFEST — THE INNOVATION DISTRICT
  * Design Tokens & CSS Variables
- * Direction: Premium Futuristic Architectural
+ * Direction: BRIGHT FUTURISM × PREMIUM ARCHITECTURE × CINEMATIC TECHNOLOGY
  */
 
 :root {
-  /* Core Color Palette */
+  /* Core Color Palette: Bright Futurism */
+  --pearl-white: #FFFFFF;
+  --pearl-muted: #F8FAFC;
+  --pearl-silver: #F1F5F9;
+  --soft-silver: #E2E8F0;
+  --metallic-titanium: #CBD5E1;
+  --metallic-steel: #94A3B8;
+  --metallic-dark: #64748B;
+
+  /* Accent Signatures */
+  --electric-blue: #246BFD;
+  --electric-blue-light: #60A5FA;
+  --electric-cyan: #00E5FF;
+  --electric-cyan-soft: #38BDF8;
+  --accent-orange: #FF7A00;
+  --accent-amber: #FFB370;
+
+  /* Contrast Deep Navy Grounds */
   --bg-primary: #050A14;
-  --bg-secondary: #091426;
-  --primary-blue: #246BFD;
-  --electric-cyan: #39DDF4;
-  --accent-orange: #FF9B54;
-  --text-primary: #F4F7FC;
-  --text-secondary: #8A99AD;
-  --text-muted: #4A5B73;
+  --bg-secondary: #081120;
+  --bg-tertiary: #0D1A30;
+  --bg-elevated: #11223F;
 
-  /* Architectural Surface & Border Tokens */
-  --surface-ground: #050A14;
-  --surface-panel: #091426;
-  --surface-overlay: rgba(9, 20, 38, 0.75);
-  --border-subtle: rgba(57, 221, 244, 0.12);
-  --border-accent: rgba(57, 221, 244, 0.35);
-  --border-bright: #39DDF4;
+  /* Typography Text Tokens */
+  --text-primary: #FFFFFF;
+  --text-secondary: #E2E8F0;
+  --text-muted: #94A3B8;
+  --text-dim: #64748B;
 
-  /* Lighting & Glows */
-  --glow-cyan: 0 0 24px rgba(57, 221, 244, 0.28);
-  --glow-blue: 0 0 28px rgba(36, 107, 253, 0.32);
-  --glow-orange: 0 0 24px rgba(255, 155, 84, 0.3);
+  /* Architectural Glass & Surface Tokens */
+  --surface-glass-ultra: rgba(255, 255, 255, 0.08);
+  --surface-glass-subtle: rgba(255, 255, 255, 0.04);
+  --surface-glass-dark: rgba(8, 17, 32, 0.82);
+  --surface-glass-floating: rgba(13, 26, 48, 0.88);
+
+  /* Architectural Borders */
+  --border-pearl: rgba(255, 255, 255, 0.18);
+  --border-silver: rgba(226, 232, 240, 0.14);
+  --border-cyan: rgba(0, 229, 255, 0.28);
+  --border-blue: rgba(36, 107, 253, 0.32);
+
+  /* Shadows & Illuminations */
+  --shadow-architectural: 0 16px 48px -8px rgba(0, 0, 0, 0.65), 0 0 0 1px rgba(255, 255, 255, 0.08);
+  --shadow-elevation: 0 24px 64px -12px rgba(5, 10, 20, 0.85);
+  --glow-cyan-soft: 0 0 32px rgba(0, 229, 255, 0.22);
+  --glow-blue-soft: 0 0 32px rgba(36, 107, 253, 0.28);
+  --glow-pearl: 0 0 24px rgba(255, 255, 255, 0.15);
 
   /* Typography Stacks */
   --font-sans: 'Space Grotesk', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
@@ -35,5 +60,5 @@
 
   /* Selection Colors */
   --selection-bg: #246BFD;
-  --selection-color: #F4F7FC;
+  --selection-color: #FFFFFF;
 }
