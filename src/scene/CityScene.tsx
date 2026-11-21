@@ -1,4 +1,5 @@
 import { Suspense } from 'react';
+import * as THREE from 'three';
 import { Canvas } from '@react-three/fiber';
 import { CityEnvironment } from './environment/CityEnvironment';
 import { CityLighting } from './lighting/CityLighting';
@@ -14,18 +15,19 @@ export interface CitySceneProps {
 }
 
 /**
- * CityScene — Master React Three Fiber 3D Canvas (Milestone 1.2 Refinement)
+ * CityScene — Master React Three Fiber 3D Canvas (Milestone 2.3)
  *
  * Configured with:
- * - Wide-angle aerial/isometric framing ([48, 64, 88] targeting [0, 22, 0], fov: 48)
+ * - Wide-angle aerial/isometric framing ([58, 92, 110] targeting [0, 20, 0], fov: 50)
  * - Complete visibility of the monumental Techfest Tower from ground podium to apex at Y=68
  * - Unobstructed view of all 4 innovation districts across the matrix
- * - Natural hemisphere & directional illumination highlighting architectural details
+ * - Soft PCF shadow mapping and ACES Filmic tone mapping for photorealistic architectural visualization
  */
 export function CityScene({ className }: CitySceneProps) {
   return (
     <div className={`relative w-full h-full overflow-hidden ${className ?? ''}`}>
       <Canvas
+        shadows
         camera={{
           position: [58, 92, 110],
           fov: 50,
@@ -38,6 +40,8 @@ export function CityScene({ className }: CitySceneProps) {
           powerPreference: 'high-performance',
           stencil: false,
           depth: true,
+          toneMapping: THREE.ACESFilmicToneMapping,
+          toneMappingExposure: 1.15,
         }}
         dpr={[1, 1.75]} // High visual fidelity on retina displays without GPU exhaustion
         className="w-full h-full"

@@ -1,9 +1,12 @@
+import { DistrictProvider } from './context';
 import { AppShell } from './components/layout';
 import { CityScene } from './scene';
 
 export function App() {
   return (
-    <AppShell canvasSlot={<CityScene />} />
+    <DistrictProvider>
+      <AppShell canvasSlot={<CityScene />} />
+    </DistrictProvider>
   );
 }
 

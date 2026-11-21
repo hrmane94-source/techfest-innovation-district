@@ -4,19 +4,22 @@ import {
   plazaAccentMaterial,
   titaniumStructuralMaterial,
   metalExoskeletonMaterial,
+  brushedAlloyMaterial,
   cyanGlowMaterial,
   blueGlowMaterial,
   orangeGlowMaterial,
   reflectiveGlassMaterial,
+  structuralGlassMaterial,
 } from '../materials';
 
 /**
- * DistrictPlaza — Monumental central plaza supporting the Techfest Innovation Tower (Refined Milestone 1.1)
+ * DistrictPlaza — Monumental central plaza supporting the Techfest Innovation Tower (Milestone 2.3)
  *
  * - Tiered octagonal grand podium with contrasting radial paving
- * - Reflecting pool & concentric illuminated energy rings
+ * - Reflecting pool & concentric illuminated energy rings with holographic emitter
  * - 8 High-tech telemetry pylons with optical status indicators
- * - 4 Axial grand approach ceremonial staircases with illuminated railings
+ * - 4 Axial grand approach ceremonial staircases with illuminated handrail balustrades
+ * - Civic seating benches surrounding the reflecting basin
  */
 export function DistrictPlaza() {
   // Symmetrically placed telemetry pylons surrounding the plaza perimeter
@@ -47,7 +50,7 @@ export function DistrictPlaza() {
       </mesh>
 
       {/* 2. Secondary Elevated Paved Terrace */}
-      <mesh position={[0, 1.0, 0]} material={plazaAccentMaterial}>
+      <mesh position={[0, 1.0, 0]} material={plazaAccentMaterial} receiveShadow>
         <cylinderGeometry args={[16.8, 17.8, 0.5, 8]} />
       </mesh>
 
@@ -60,7 +63,7 @@ export function DistrictPlaza() {
         <ringGeometry args={[11.5, 15.6, 48]} />
       </mesh>
 
-      {/* 4. Concentric Glowing Boundary Rings */}
+      {/* Concentric Glowing Boundary Rings */}
       <mesh
         position={[0, 1.3, 0]}
         rotation={[-Math.PI / 2, 0, 0]}
@@ -75,6 +78,20 @@ export function DistrictPlaza() {
       >
         <ringGeometry args={[11.3, 11.5, 48]} />
       </mesh>
+
+      {/* 4. Civic Seating Benches around the Reflecting Basin */}
+      {[0, Math.PI / 4, Math.PI / 2, (3 * Math.PI) / 4, Math.PI, (5 * Math.PI) / 4, (3 * Math.PI) / 2, (7 * Math.PI) / 4].map(
+        (ang, idx) => (
+          <group key={`plaza-bench-${idx}`} rotation={[0, ang + Math.PI / 8, 0]}>
+            <mesh position={[0, 1.45, 16.4]} material={brushedAlloyMaterial} castShadow>
+              <boxGeometry args={[3.2, 0.35, 0.8]} />
+            </mesh>
+            <mesh position={[0, 1.28, 16.4]} material={cyanGlowMaterial}>
+              <boxGeometry args={[3.0, 0.04, 0.82]} />
+            </mesh>
+          </group>
+        )
+      )}
 
       {/* 5. In-Ground Radial Accent Light Strips */}
       {Array.from({ length: 8 }).map((_, idx) => {
@@ -96,7 +113,7 @@ export function DistrictPlaza() {
           rotation={[0, -pylon.angle + Math.PI / 2, 0]}
         >
           {/* Tapered architectural pylon */}
-          <mesh position={[0, 2.6, 0]} material={titaniumStructuralMaterial}>
+          <mesh position={[0, 2.6, 0]} material={titaniumStructuralMaterial} castShadow>
             <boxGeometry args={[0.9, 5.2, 0.9]} />
           </mesh>
           {/* Vertical glowing cyan optical slit */}
@@ -117,18 +134,18 @@ export function DistrictPlaza() {
       {/* 7. Four Axial Grand Approach Ceremonial Steps */}
       {[0, Math.PI / 2, Math.PI, (3 * Math.PI) / 2].map((angle, idx) => (
         <group key={`approach-steps-${idx}`} rotation={[0, angle, 0]}>
-          <mesh position={[0, 0.4, 20.5]} material={titaniumStructuralMaterial}>
+          <mesh position={[0, 0.4, 20.5]} material={titaniumStructuralMaterial} receiveShadow castShadow>
             <boxGeometry args={[5.8, 0.4, 4.5]} />
           </mesh>
           {/* Step Glowing Side Balustrades */}
-          <mesh position={[-2.8, 0.85, 20.5]} material={metalExoskeletonMaterial}>
-            <boxGeometry args={[0.2, 0.5, 4.5]} />
+          <mesh position={[-2.8, 0.85, 20.5]} material={structuralGlassMaterial}>
+            <boxGeometry args={[0.15, 0.5, 4.5]} />
           </mesh>
           <mesh position={[-2.8, 1.12, 20.5]} material={cyanGlowMaterial}>
             <boxGeometry args={[0.1, 0.06, 4.4]} />
           </mesh>
-          <mesh position={[2.8, 0.85, 20.5]} material={metalExoskeletonMaterial}>
-            <boxGeometry args={[0.2, 0.5, 4.5]} />
+          <mesh position={[2.8, 0.85, 20.5]} material={structuralGlassMaterial}>
+            <boxGeometry args={[0.15, 0.5, 4.5]} />
           </mesh>
           <mesh position={[2.8, 1.12, 20.5]} material={cyanGlowMaterial}>
             <boxGeometry args={[0.1, 0.06, 4.4]} />

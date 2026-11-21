@@ -1,6 +1,5 @@
-/**
- * Interface and HUD component declarations for subsequent milestones
- */
+export * from './DistrictInfoPanel';
+export * from './GuidedTourControls';
 
 export interface InterfaceLayerProps {
   visible?: boolean;

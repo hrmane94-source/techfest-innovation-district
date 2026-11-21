@@ -5,9 +5,11 @@ import {
   roadMaterial,
   titaniumStructuralMaterial,
   metalExoskeletonMaterial,
+  brushedAlloyMaterial,
   cyanGlowMaterial,
   blueGlowMaterial,
   orangeGlowMaterial,
+  whiteGlowMaterial,
 } from '../materials';
 
 // Deterministic traffic pulse configuration
@@ -28,8 +30,39 @@ function createTrafficPulses() {
 
 const STATIC_TRAFFIC_PULSES = createTrafficPulses();
 
+// Symmetrically placed architectural streetlights along arterial roads and ring
+function createStreetlightPositions() {
+  const positions: Array<{ pos: [number, number, number]; rotY: number }> = [];
+
+  // N-S Avenue Streetlights
+  [-55, -40, -25, 25, 40, 55].forEach((z) => {
+    positions.push({ pos: [-4.2, 0, z], rotY: Math.PI / 2 });
+    positions.push({ pos: [4.2, 0, z], rotY: -Math.PI / 2 });
+  });
+
+  // E-W Avenue Streetlights
+  [-55, -40, -25, 25, 40, 55].forEach((x) => {
+    positions.push({ pos: [x, 0, -4.2], rotY: 0 });
+    positions.push({ pos: [x, 0, 4.2], rotY: Math.PI });
+  });
+
+  // Circular Ring Road Perimeter Streetlights (8 units)
+  for (let i = 0; i < 8; i++) {
+    const ang = (i * Math.PI * 2) / 8 + Math.PI / 8;
+    const rad = 28.5;
+    positions.push({
+      pos: [Math.cos(ang) * rad, 0, Math.sin(ang) * rad],
+      rotY: -ang + Math.PI / 2,
+    });
+  }
+
+  return positions;
+}
+
+const STREETLIGHT_POSITIONS = createStreetlightPositions();
+
 /**
- * CityRoads — Primary arterial roads, transit rings, elevated skybridges, and moving transit lights (Refined Milestone 1.1)
+ * CityRoads — Primary arterial roads, transit rings, elevated skybridges, streetlights, and moving transit lights (Milestone 2.3)
  */
 export function CityRoads() {
   const trafficMeshRef = useRef<THREE.InstancedMesh>(null);
@@ -93,7 +126,7 @@ export function CityRoads() {
 
   return (
     <group name="city-roads-infrastructure">
-      {/* 1. Main North-South Arterial Road */}
+      {/* ── 1. MAIN NORTH-SOUTH ARTERIAL ROAD ── */}
       <mesh position={[0, 0.04, 0]} material={roadMaterial} receiveShadow>
         <boxGeometry args={[6.6, 0.04, 150]} />
       </mesh>
@@ -109,7 +142,7 @@ export function CityRoads() {
         <boxGeometry args={[0.08, 0.02, 146]} />
       </mesh>
 
-      {/* 2. Main East-West Arterial Road */}
+      {/* ── 2. MAIN EAST-WEST ARTERIAL ROAD ── */}
       <mesh position={[0, 0.04, 0]} material={roadMaterial} receiveShadow>
         <boxGeometry args={[150, 0.04, 6.6]} />
       </mesh>
@@ -125,11 +158,12 @@ export function CityRoads() {
         <boxGeometry args={[146, 0.02, 0.08]} />
       </mesh>
 
-      {/* 3. Circular Ring Road around Central Plaza */}
+      {/* ── 3. CIRCULAR RING ROAD AROUND CENTRAL PLAZA ── */}
       <mesh
         position={[0, 0.06, 0]}
         rotation={[-Math.PI / 2, 0, 0]}
         material={roadMaterial}
+        receiveShadow
       >
         <ringGeometry args={[23.5, 27.5, 48]} />
       </mesh>
@@ -149,7 +183,53 @@ export function CityRoads() {
         <ringGeometry args={[27.15, 27.45, 48]} />
       </mesh>
 
-      {/* 4. Elevated Skybridges with Structural Under-Trusses */}
+      {/* ── 4. DISTRICT ENTRY MONUMENT GATEWAYS ── */}
+      {[
+        { pos: [-16, 0, -16] as const, rot: Math.PI / 4, color: cyanGlowMaterial },
+        { pos: [16, 0, -16] as const, rot: -Math.PI / 4, color: orangeGlowMaterial },
+        { pos: [-16, 0, 16] as const, rot: (3 * Math.PI) / 4, color: blueGlowMaterial },
+        { pos: [16, 0, 16] as const, rot: -(3 * Math.PI) / 4, color: cyanGlowMaterial },
+      ].map((gateway, idx) => (
+        <group key={`district-gateway-${idx}`} position={[gateway.pos[0], 0, gateway.pos[1]]} rotation={[0, gateway.rot, 0]}>
+          {/* Twin Architectural Portal Pylons */}
+          <mesh position={[-2.8, 2.5, 0]} material={titaniumStructuralMaterial} castShadow>
+            <boxGeometry args={[0.5, 5.0, 0.5]} />
+          </mesh>
+          <mesh position={[2.8, 2.5, 0]} material={titaniumStructuralMaterial} castShadow>
+            <boxGeometry args={[0.5, 5.0, 0.5]} />
+          </mesh>
+          {/* Overhead Horizontal Beam */}
+          <mesh position={[0, 4.8, 0]} material={brushedAlloyMaterial} castShadow>
+            <boxGeometry args={[6.1, 0.4, 0.6]} />
+          </mesh>
+          {/* Inset Glowing Gateway Signage Line */}
+          <mesh position={[0, 4.8, 0.32]} material={gateway.color}>
+            <boxGeometry args={[5.2, 0.12, 0.04]} />
+          </mesh>
+        </group>
+      ))}
+
+      {/* ── 5. FUTURISTIC STREETLIGHT PYLONS ── */}
+      <group name="streetlights-network">
+        {STREETLIGHT_POSITIONS.map((light, idx) => (
+          <group key={`streetlight-${idx}`} position={light.pos} rotation={[0, light.rotY, 0]}>
+            {/* Vertical Tapered Mast */}
+            <mesh position={[0, 1.8, 0]} material={brushedAlloyMaterial} castShadow>
+              <cylinderGeometry args={[0.06, 0.1, 3.6, 6]} />
+            </mesh>
+            {/* Angled Cantilever Luminaire Arm */}
+            <mesh position={[0.45, 3.5, 0]} rotation={[0, 0, -0.45]} material={brushedAlloyMaterial}>
+              <boxGeometry args={[1.1, 0.06, 0.12]} />
+            </mesh>
+            {/* Luminaire Glowing Head */}
+            <mesh position={[0.85, 3.65, 0]} material={whiteGlowMaterial}>
+              <boxGeometry args={[0.35, 0.05, 0.14]} />
+            </mesh>
+          </group>
+        ))}
+      </group>
+
+      {/* ── 6. ELEVATED SKYBRIDGES WITH STRUCTURAL UNDER-TRUSSES ── */}
       {[
         { angle: Math.PI / 4, length: 22, height: 6 }, // AI District
         { angle: (3 * Math.PI) / 4, length: 22, height: 6 }, // Aerospace District
@@ -167,11 +247,11 @@ export function CityRoads() {
             rotation={[0, -skybridge.angle + Math.PI / 2, 0]}
           >
             {/* Skybridge Floor Deck */}
-            <mesh material={titaniumStructuralMaterial}>
+            <mesh material={titaniumStructuralMaterial} castShadow receiveShadow>
               <boxGeometry args={[3.4, 0.65, skybridge.length]} />
             </mesh>
             {/* Under-Deck Longitudinal Truss Spine */}
-            <mesh position={[0, -0.6, 0]} material={metalExoskeletonMaterial}>
+            <mesh position={[0, -0.6, 0]} material={metalExoskeletonMaterial} castShadow>
               <boxGeometry args={[1.4, 0.6, skybridge.length]} />
             </mesh>
 
@@ -197,7 +277,7 @@ export function CityRoads() {
             {/* Heavy Structural Support Pylons with Foundation Collars */}
             {[-skybridge.length / 3, skybridge.length / 3].map((zPos, pIdx) => (
               <group key={`pylon-${pIdx}`} position={[0, -skybridge.height / 2, zPos]}>
-                <mesh material={titaniumStructuralMaterial}>
+                <mesh material={titaniumStructuralMaterial} castShadow>
                   <cylinderGeometry args={[0.55, 0.75, skybridge.height, 8]} />
                 </mesh>
                 {/* Pylon Illuminated Collar */}
@@ -210,7 +290,7 @@ export function CityRoads() {
         );
       })}
 
-      {/* 5. Instanced Moving Transit Pulses */}
+      {/* ── 7. INSTANCED MOVING TRANSIT PULSES ── */}
       <instancedMesh
         ref={trafficMeshRef}
         args={[undefined, undefined, 48]}

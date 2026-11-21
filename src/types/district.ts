@@ -1,6 +1,14 @@
 /**
- * District section and state types for TECHFEST — The Innovation District
+ * District section and state types for TECHFEST — The Innovation District (Milestone 3.0)
  */
+
+export type DistrictId =
+  | 'overview'
+  | 'core'
+  | 'ai'
+  | 'robotics'
+  | 'aerospace'
+  | 'cyber';
 
 export type DistrictSectionId = 
   | 'arrival'
@@ -13,6 +21,21 @@ export interface DistrictCoordinates {
   x: number;
   y: number;
   z: number;
+}
+
+export interface DistrictDetails {
+  id: DistrictId;
+  code: string;
+  name: string;
+  title: string;
+  subtitle: string;
+  description: string;
+  accentColor: string;
+  cameraPosition: [number, number, number];
+  cameraTarget: [number, number, number];
+  facilities: string[];
+  keyInstallations: string[];
+  stats?: Array<{ label: string; value: string }>;
 }
 
 export interface DistrictSectionMeta {
