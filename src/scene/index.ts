@@ -5,3 +5,4 @@ export * from './architecture';
 export * from './landmarks';
 export * from './camera';
 export * from './lighting';
+export * from './models';
