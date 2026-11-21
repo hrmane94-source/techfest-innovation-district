@@ -1,0 +1,39 @@
+/**
+ * TECHFEST — THE INNOVATION DISTRICT
+ * Design Tokens & CSS Variables
+ * Direction: Premium Futuristic Architectural
+ */
+
+:root {
+  /* Core Color Palette */
+  --bg-primary: #050A14;
+  --bg-secondary: #091426;
+  --primary-blue: #246BFD;
+  --electric-cyan: #39DDF4;
+  --accent-orange: #FF9B54;
+  --text-primary: #F4F7FC;
+  --text-secondary: #8A99AD;
+  --text-muted: #4A5B73;
+
+  /* Architectural Surface & Border Tokens */
+  --surface-ground: #050A14;
+  --surface-panel: #091426;
+  --surface-overlay: rgba(9, 20, 38, 0.75);
+  --border-subtle: rgba(57, 221, 244, 0.12);
+  --border-accent: rgba(57, 221, 244, 0.35);
+  --border-bright: #39DDF4;
+
+  /* Lighting & Glows */
+  --glow-cyan: 0 0 24px rgba(57, 221, 244, 0.28);
+  --glow-blue: 0 0 28px rgba(36, 107, 253, 0.32);
+  --glow-orange: 0 0 24px rgba(255, 155, 84, 0.3);
+
+  /* Typography Stacks */
+  --font-sans: 'Space Grotesk', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --font-display: 'Syne', 'Space Grotesk', system-ui, sans-serif;
+  --font-mono: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+
+  /* Selection Colors */
+  --selection-bg: #246BFD;
+  --selection-color: #F4F7FC;
+}
