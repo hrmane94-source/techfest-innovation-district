@@ -5,29 +5,30 @@ import {
   darkTitaniumMaterial,
   titaniumStructuralMaterial,
   blueSteelMaterial,
-  glassCurtainMaterial,
+  metalExoskeletonMaterial,
   reflectiveGlassMaterial,
+  windowGridMaterial,
   cyanGlowMaterial,
   blueGlowMaterial,
   orangeGlowMaterial,
 } from '../materials';
 
 /**
- * CentralLandmark — The Monumental Techfest Innovation Tower
+ * CentralLandmark — The Monumental Techfest Innovation Tower (Refined Milestone 1.1)
  *
- * Visually dominant centerpiece featuring:
- * - Sophisticated tiered base podium & angular buttress pylons
- * - Multi-tiered tapered tower body with metallic & glass facades
- * - Continuous vertical cyan architectural illumination ribs
- * - Cantilevered mid-tower sky-lobby & observation terrace
- * - Quad-shaft upper spire structure flanking a hollow central light atrium
- * - Iconic geometric illuminated crown with floating beacon and telemetry needle
+ * Primary visual centerpiece of the Innovation District:
+ * - Layered octagonal podium with grand colonnade & entrance canopies
+ * - Articulated lower tower core with realistic window grid facades & vertical cyan ribs
+ * - Mid-level cantilevered observation sky-deck with structural under-trussing
+ * - Quad-shaft upper spire formation flanking a luminous central light chasm
+ * - Segmented architectural crown, dual rotating halos, and soaring telemetry spire to Y=68
  */
 export function CentralLandmark() {
   const crownBeaconRef = useRef<THREE.Mesh>(null);
   const crownRingRef = useRef<THREE.Group>(null);
+  const secondaryRingRef = useRef<THREE.Group>(null);
 
-  // Subtle breathing pulse on the tower's apex crown beacon
+  // Subtle breathing pulse and counter-rotating crown halo
   useFrame(({ clock }) => {
     const t = clock.getElapsedTime();
     if (crownBeaconRef.current) {
@@ -37,240 +38,336 @@ export function CentralLandmark() {
     if (crownRingRef.current) {
       crownRingRef.current.rotation.y = t * 0.05;
     }
+    if (secondaryRingRef.current) {
+      secondaryRingRef.current.rotation.y = -t * 0.035;
+    }
   });
 
   return (
     <group name="techfest-innovation-tower" position={[0, 0, 0]}>
       {/* ─────────────────────────────────────────────────────────────
-          LEVEL 1: BASE PODIUM & STRUCTURAL BUTTRESSES (Y: 1 to 7)
+          LEVEL 1: GRAND PODIUM, COLONNADE & BUTTRESSES (Y: 0.8 to 7.0)
       ────────────────────────────────────────────────────────────── */}
-      <group name="podium-level">
-        {/* Main Octagonal Base Block */}
-        <mesh position={[0, 3.5, 0]} material={darkTitaniumMaterial}>
-          <cylinderGeometry args={[8.5, 10.5, 5, 8]} />
+      <group name="podium-foundation">
+        {/* Tiered Octagonal Base Slabs */}
+        <mesh position={[0, 1.8, 0]} material={darkTitaniumMaterial}>
+          <cylinderGeometry args={[9.2, 11.2, 2.0, 8]} />
+        </mesh>
+        <mesh position={[0, 3.8, 0]} material={titaniumStructuralMaterial}>
+          <cylinderGeometry args={[8.5, 9.2, 2.0, 8]} />
+        </mesh>
+        <mesh position={[0, 5.0, 0]} material={metalExoskeletonMaterial}>
+          <cylinderGeometry args={[8.6, 8.6, 0.4, 8]} />
         </mesh>
 
-        {/* Podium Base Perimeter Trim */}
-        <mesh position={[0, 6.2, 0]} material={titaniumStructuralMaterial}>
-          <cylinderGeometry args={[8.8, 8.8, 0.4, 8]} />
-        </mesh>
+        {/* 16 Monumental Perimeter Colonnade Pillars */}
+        {Array.from({ length: 16 }).map((_, idx) => {
+          const angle = (idx * Math.PI * 2) / 16;
+          const radius = 9.8;
+          return (
+            <group
+              key={`podium-col-${idx}`}
+              position={[Math.cos(angle) * radius, 2.5, Math.sin(angle) * radius]}
+              rotation={[0, -angle, 0]}
+            >
+              <mesh material={titaniumStructuralMaterial}>
+                <boxGeometry args={[0.5, 3.4, 0.5]} />
+              </mesh>
+              {/* Pillar Base & Capital Trim */}
+              <mesh position={[0, -1.6, 0]} material={darkTitaniumMaterial}>
+                <boxGeometry args={[0.7, 0.2, 0.7]} />
+              </mesh>
+              <mesh position={[0, 1.6, 0]} material={darkTitaniumMaterial}>
+                <boxGeometry args={[0.7, 0.2, 0.7]} />
+              </mesh>
+              {/* Recessed Cyan Uplight */}
+              <mesh position={[0, -1.45, 0.26]} material={cyanGlowMaterial}>
+                <boxGeometry args={[0.2, 0.1, 0.04]} />
+              </mesh>
+            </group>
+          );
+        })}
 
-        {/* Four Grand Buttress Pylons angled into the corners */}
+        {/* Four Massive Angled Corner Buttress Pylons */}
         {[Math.PI / 4, (3 * Math.PI) / 4, (5 * Math.PI) / 4, (7 * Math.PI) / 4].map(
           (angle, idx) => (
-            <group key={`buttress-${idx}`} rotation={[0, angle, 0]}>
-              <mesh position={[8.5, 3.2, 0]} rotation={[0, 0, -Math.PI / 8]} material={blueSteelMaterial}>
-                <boxGeometry args={[1.6, 6.5, 2.0]} />
+            <group key={`buttress-pylon-${idx}`} rotation={[0, angle, 0]}>
+              <mesh
+                position={[8.8, 3.5, 0]}
+                rotation={[0, 0, -Math.PI / 8]}
+                material={blueSteelMaterial}
+              >
+                <boxGeometry args={[1.8, 7.2, 2.2]} />
               </mesh>
-              {/* Buttress illuminated edge strip */}
-              <mesh position={[9.1, 3.2, 0]} rotation={[0, 0, -Math.PI / 8]} material={cyanGlowMaterial}>
-                <boxGeometry args={[0.08, 6.4, 0.2]} />
+              {/* Illuminated Edge Ridge */}
+              <mesh
+                position={[9.45, 3.5, 0]}
+                rotation={[0, 0, -Math.PI / 8]}
+                material={cyanGlowMaterial}
+              >
+                <boxGeometry args={[0.08, 7.1, 0.25]} />
               </mesh>
             </group>
           )
         )}
 
-        {/* Four Recessed Ground Entrance Porticos with glowing cyan portals */}
+        {/* Four Grand Axial Entrance Portals & Canopies */}
         {[0, Math.PI / 2, Math.PI, (3 * Math.PI) / 2].map((angle, idx) => (
-          <group key={`entrance-${idx}`} rotation={[0, angle, 0]}>
-            <mesh position={[0, 2.8, 8.6]} material={glassCurtainMaterial}>
-              <boxGeometry args={[3.2, 3.5, 0.6]} />
+          <group key={`entrance-portal-${idx}`} rotation={[0, angle, 0]}>
+            {/* Recessed Entrance Glass Screen */}
+            <mesh position={[0, 3.2, 8.5]} material={reflectiveGlassMaterial}>
+              <boxGeometry args={[4.2, 4.0, 0.4]} />
             </mesh>
-            {/* Entrance Cyan Frame */}
-            <mesh position={[0, 4.6, 8.7]} material={cyanGlowMaterial}>
-              <boxGeometry args={[3.4, 0.15, 0.2]} />
+            {/* Projecting High-Tech Canopy */}
+            <mesh position={[0, 5.2, 9.6]} material={titaniumStructuralMaterial}>
+              <boxGeometry args={[4.8, 0.35, 2.2]} />
             </mesh>
-            <mesh position={[-1.65, 2.8, 8.7]} material={cyanGlowMaterial}>
-              <boxGeometry args={[0.15, 3.6, 0.2]} />
+            {/* Canopy Glowing Cyan Soffit Trim */}
+            <mesh position={[0, 5.0, 9.6]} material={cyanGlowMaterial}>
+              <boxGeometry args={[4.6, 0.05, 2.0]} />
             </mesh>
-            <mesh position={[1.65, 2.8, 8.7]} material={cyanGlowMaterial}>
-              <boxGeometry args={[0.15, 3.6, 0.2]} />
+            {/* Entrance Portal Cyan Frame */}
+            <mesh position={[-2.1, 3.2, 8.7]} material={cyanGlowMaterial}>
+              <boxGeometry args={[0.15, 3.8, 0.2]} />
+            </mesh>
+            <mesh position={[2.1, 3.2, 8.7]} material={cyanGlowMaterial}>
+              <boxGeometry args={[0.15, 3.8, 0.2]} />
             </mesh>
           </group>
         ))}
       </group>
 
       {/* ─────────────────────────────────────────────────────────────
-          LEVEL 2: LOWER TOWER CORE & VERTICAL RIBS (Y: 6.5 to 25)
+          LEVEL 2: LOWER TOWER CORE & FACADE ARTICULATION (Y: 6.5 to 25.5)
       ────────────────────────────────────────────────────────────── */}
       <group name="lower-tower-core">
-        {/* Core Tower Shaft */}
-        <mesh position={[0, 15.5, 0]} material={darkTitaniumMaterial}>
-          <boxGeometry args={[7.2, 18, 7.2]} />
+        {/* Core Structural Mass */}
+        <mesh position={[0, 16.0, 0]} material={darkTitaniumMaterial}>
+          <boxGeometry args={[7.4, 19.0, 7.4]} />
         </mesh>
 
-        {/* Glass Facade Insets (N, S, E, W faces) */}
+        {/* Realistic Window Grid Curtain Facades (All 4 faces) */}
         {[0, Math.PI / 2, Math.PI, (3 * Math.PI) / 2].map((angle, idx) => (
-          <group key={`lower-facade-${idx}`} rotation={[0, angle, 0]}>
-            <mesh position={[0, 15.5, 3.65]} material={reflectiveGlassMaterial}>
-              <boxGeometry args={[4.6, 17.5, 0.1]} />
+          <group key={`lower-facade-grid-${idx}`} rotation={[0, angle, 0]}>
+            {/* Window Grid Inset Screen */}
+            <mesh position={[0, 16.0, 3.72]} material={windowGridMaterial}>
+              <boxGeometry args={[5.2, 18.0, 0.06]} />
             </mesh>
-            {/* Vertical Cyan Ribs traversing up the facade */}
-            <mesh position={[-1.6, 15.5, 3.75]} material={cyanGlowMaterial}>
-              <boxGeometry args={[0.12, 17.5, 0.1]} />
+
+            {/* Continuous Vertical Cyan Illumination Ribs */}
+            <mesh position={[-1.8, 16.0, 3.82]} material={cyanGlowMaterial}>
+              <boxGeometry args={[0.14, 18.5, 0.12]} />
             </mesh>
-            <mesh position={[1.6, 15.5, 3.75]} material={cyanGlowMaterial}>
-              <boxGeometry args={[0.12, 17.5, 0.1]} />
+            <mesh position={[1.8, 16.0, 3.82]} material={cyanGlowMaterial}>
+              <boxGeometry args={[0.14, 18.5, 0.12]} />
             </mesh>
-            {/* Center Blue Accent Spine */}
-            <mesh position={[0, 15.5, 3.75]} material={blueGlowMaterial}>
-              <boxGeometry args={[0.08, 17.5, 0.1]} />
+            {/* Central Blue Structural Spine */}
+            <mesh position={[0, 16.0, 3.82]} material={blueGlowMaterial}>
+              <boxGeometry args={[0.08, 18.5, 0.12]} />
+            </mesh>
+
+            {/* Horizontal Mechanical Service Belts with Louvers */}
+            <mesh position={[0, 12.0, 3.8]} material={titaniumStructuralMaterial}>
+              <boxGeometry args={[5.4, 0.7, 0.2]} />
+            </mesh>
+            <mesh position={[0, 12.0, 3.88]} material={cyanGlowMaterial}>
+              <boxGeometry args={[5.0, 0.1, 0.06]} />
+            </mesh>
+
+            <mesh position={[0, 20.0, 3.8]} material={titaniumStructuralMaterial}>
+              <boxGeometry args={[5.4, 0.7, 0.2]} />
+            </mesh>
+            <mesh position={[0, 20.0, 3.88]} material={cyanGlowMaterial}>
+              <boxGeometry args={[5.0, 0.1, 0.06]} />
             </mesh>
           </group>
         ))}
 
-        {/* Four Massive Corner Pylons / Vertical Structural Fins */}
+        {/* Four Massive Structural Titanium Corner Pylons */}
         {[
-          [-3.7, 3.7],
-          [3.7, 3.7],
-          [3.7, -3.7],
-          [-3.7, -3.7],
+          [-3.8, 3.8],
+          [3.8, 3.8],
+          [3.8, -3.8],
+          [-3.8, -3.8],
         ].map(([cx, cz], idx) => (
-          <group key={`corner-fin-${idx}`} position={[cx, 15.5, cz]}>
+          <group key={`tower-corner-pylon-${idx}`} position={[cx, 16.0, cz]}>
             <mesh material={titaniumStructuralMaterial}>
-              <boxGeometry args={[1.4, 18.5, 1.4]} />
+              <boxGeometry args={[1.6, 19.4, 1.6]} />
             </mesh>
-            {/* Corner glowing chamfer strip */}
+            {/* Corner Chamfer Lighting Slot */}
             <mesh position={[0, 0, 0]} material={cyanGlowMaterial}>
-              <boxGeometry args={[1.45, 18.2, 0.1]} />
+              <boxGeometry args={[1.66, 19.0, 0.12]} />
             </mesh>
           </group>
         ))}
       </group>
 
       {/* ─────────────────────────────────────────────────────────────
-          LEVEL 3: CANTILEVERED SKY-DECK & TRANSITION (Y: 24.5 to 28)
+          LEVEL 3: CANTILEVERED SKY-DECK & OBSERVATION GALLERY (Y: 25.5 to 29.5)
       ────────────────────────────────────────────────────────────── */}
-      <group name="mid-tower-sky-deck" position={[0, 25.5, 0]}>
-        {/* Cantilevered Octagonal Observation Platform */}
+      <group name="mid-tower-sky-deck" position={[0, 26.5, 0]}>
+        {/* Cantilevered Octagonal Deck Body */}
         <mesh material={darkTitaniumMaterial}>
-          <cylinderGeometry args={[5.8, 4.8, 1.8, 8]} />
+          <cylinderGeometry args={[6.4, 5.0, 2.2, 8]} />
         </mesh>
-        {/* Illuminated Platform Edge Ribbon */}
-        <mesh position={[0, 0, 0]} material={cyanGlowMaterial}>
-          <cylinderGeometry args={[5.85, 4.85, 0.25, 8]} />
+        {/* 360-Degree Panoramic Glass Observation Gallery */}
+        <mesh position={[0, 0.2, 0]} material={reflectiveGlassMaterial}>
+          <cylinderGeometry args={[6.45, 5.8, 1.2, 8]} />
         </mesh>
-        {/* Underside Structural Gantry Brackets */}
+        {/* Perimeter Glowing Cyan Ribbon */}
+        <mesh position={[0, -0.6, 0]} material={cyanGlowMaterial}>
+          <cylinderGeometry args={[6.48, 6.48, 0.25, 8]} />
+        </mesh>
+        <mesh position={[0, 0.9, 0]} material={blueGlowMaterial}>
+          <cylinderGeometry args={[6.1, 6.1, 0.15, 8]} />
+        </mesh>
+
+        {/* Under-Deck Structural Diagrid Struts */}
         {[0, Math.PI / 4, Math.PI / 2, (3 * Math.PI) / 4, Math.PI, (5 * Math.PI) / 4, (3 * Math.PI) / 2, (7 * Math.PI) / 4].map(
           (angle, idx) => (
             <mesh
-              key={`deck-bracket-${idx}`}
-              position={[Math.cos(angle) * 4.2, -1.2, Math.sin(angle) * 4.2]}
-              rotation={[0, -angle, 0.4]}
-              material={titaniumStructuralMaterial}
+              key={`diagrid-strut-${idx}`}
+              position={[Math.cos(angle) * 4.6, -1.6, Math.sin(angle) * 4.6]}
+              rotation={[0, -angle, 0.45]}
+              material={metalExoskeletonMaterial}
             >
-              <boxGeometry args={[0.6, 1.5, 0.6]} />
+              <boxGeometry args={[0.7, 1.8, 0.7]} />
             </mesh>
           )
         )}
       </group>
 
       {/* ─────────────────────────────────────────────────────────────
-          LEVEL 4: UPPER TOWER QUAD-SHAFT CLUSTER (Y: 27.5 to 52)
+          LEVEL 4: UPPER TOWER QUAD-SHAFT SPACING & ATRIUM (Y: 28.5 to 53.0)
       ────────────────────────────────────────────────────────────── */}
       <group name="upper-tower-quad-shafts">
-        {/* Quad Spire Shafts flanking central negative space */}
+        {/* Quad Spire Shafts with window grid texturing */}
         {[
-          { x: -1.8, z: -1.8, name: 'NW' },
-          { x: 1.8, z: -1.8, name: 'NE' },
-          { x: 1.8, z: 1.8, name: 'SE' },
-          { x: -1.8, z: 1.8, name: 'SW' },
+          { x: -1.9, z: -1.9 },
+          { x: 1.9, z: -1.9 },
+          { x: 1.9, z: 1.9 },
+          { x: -1.9, z: 1.9 },
         ].map((shaft, idx) => (
-          <group key={`upper-shaft-${idx}`} position={[shaft.x, 39, shaft.z]}>
-            {/* Tapering vertical shaft body */}
+          <group key={`upper-quad-shaft-${idx}`} position={[shaft.x, 40.5, shaft.z]}>
+            {/* Tapered Titanium Shaft Body */}
             <mesh material={titaniumStructuralMaterial}>
-              <boxGeometry args={[2.2, 23, 2.2]} />
+              <boxGeometry args={[2.4, 25.0, 2.4]} />
             </mesh>
-            {/* Outer Glass Facade */}
+            {/* Outer Facade Window Grid */}
             <mesh
-              position={[shaft.x > 0 ? 0.95 : -0.95, 0, shaft.z > 0 ? 0.95 : -0.95]}
-              material={reflectiveGlassMaterial}
+              position={[shaft.x > 0 ? 1.05 : -1.05, 0, shaft.z > 0 ? 1.05 : -1.05]}
+              material={windowGridMaterial}
             >
-              <boxGeometry args={[0.8, 22.8, 0.8]} />
+              <boxGeometry args={[0.9, 24.5, 0.9]} />
             </mesh>
-            {/* Ascending Cyan Illumination Rib */}
+            {/* Ascending Illuminated Cyan Corner Rib */}
             <mesh
-              position={[shaft.x > 0 ? 1.15 : -1.15, 0, shaft.z > 0 ? 1.15 : -1.15]}
+              position={[shaft.x > 0 ? 1.25 : -1.25, 0, shaft.z > 0 ? 1.25 : -1.25]}
               material={cyanGlowMaterial}
             >
-              <boxGeometry args={[0.15, 23, 0.15]} />
+              <boxGeometry args={[0.18, 25.0, 0.18]} />
             </mesh>
           </group>
         ))}
 
-        {/* Central Luminous Core inside the hollow canyon */}
-        <mesh position={[0, 39, 0]} material={blueGlowMaterial}>
-          <boxGeometry args={[1.2, 22.5, 1.2]} />
+        {/* Central Luminous Energy Core inside the light canyon */}
+        <mesh position={[0, 40.5, 0]} material={blueGlowMaterial}>
+          <boxGeometry args={[1.4, 24.5, 1.4]} />
         </mesh>
 
-        {/* Horizontal Structural Sky-Rings binding the four shafts */}
-        {[34, 42, 48].map((yPos, idx) => (
-          <group key={`sky-ring-${idx}`} position={[0, yPos, 0]}>
+        {/* Structural Cross-Bracing Sky-Rings binding the four shafts */}
+        {[34, 41, 48].map((yPos, idx) => (
+          <group key={`quad-sky-ring-${idx}`} position={[0, yPos, 0]}>
             <mesh material={darkTitaniumMaterial}>
-              <cylinderGeometry args={[3.2, 3.2, 0.7, 8]} />
+              <cylinderGeometry args={[3.4, 3.4, 0.8, 8]} />
             </mesh>
             <mesh position={[0, 0, 0]} material={cyanGlowMaterial}>
-              <cylinderGeometry args={[3.25, 3.25, 0.15, 8]} />
+              <cylinderGeometry args={[3.45, 3.45, 0.18, 8]} />
             </mesh>
           </group>
         ))}
       </group>
 
       {/* ─────────────────────────────────────────────────────────────
-          LEVEL 5: MONUMENTAL CROWN, BEACON & TELEMETRY SPIRE (Y: 51 to 68)
+          LEVEL 5: ARCHITECTURAL CROWN, ROTATING HALOS & SPIRE (Y: 53.0 to 68.0)
       ────────────────────────────────────────────────────────────── */}
-      <group name="tower-crown" position={[0, 52, 0]}>
-        {/* Crown Podium Platform */}
-        <mesh position={[0, 0.6, 0]} material={darkTitaniumMaterial}>
-          <cylinderGeometry args={[2.8, 3.4, 1.2, 8]} />
+      <group name="monumental-crown" position={[0, 53.5, 0]}>
+        {/* Crown Podium Platform with mechanical louvers */}
+        <mesh position={[0, 0.8, 0]} material={darkTitaniumMaterial}>
+          <cylinderGeometry args={[3.0, 3.6, 1.6, 8]} />
+        </mesh>
+        <mesh position={[0, 0.8, 0]} material={titaniumStructuralMaterial}>
+          <cylinderGeometry args={[3.05, 3.05, 0.4, 8]} />
         </mesh>
 
-        {/* Rotating / Faceted Architectural Crown Halo */}
-        <group ref={crownRingRef} position={[0, 3.2, 0]}>
-          <mesh material={titaniumStructuralMaterial}>
-            <torusGeometry args={[3.2, 0.35, 8, 8]} />
+        {/* Primary Segmented Architectural Crown Halo (Rotating) */}
+        <group ref={crownRingRef} position={[0, 3.6, 0]}>
+          <mesh material={metalExoskeletonMaterial}>
+            <torusGeometry args={[3.4, 0.38, 8, 8]} />
           </mesh>
-          {/* Cyan crown accent tabs */}
-          {[0, Math.PI / 4, Math.PI / 2, (3 * Math.PI) / 4, Math.PI, (5 * Math.PI) / 4, (3 * Math.PI) / 2, (7 * Math.PI) / 4].map(
-            (ang, idx) => (
+          {/* Eight Cyan Crown Emitter Fins */}
+          {Array.from({ length: 8 }).map((_, idx) => {
+            const ang = (idx * Math.PI * 2) / 8;
+            return (
               <mesh
-                key={`crown-tab-${idx}`}
-                position={[Math.cos(ang) * 3.2, 0.3, Math.sin(ang) * 3.2]}
+                key={`crown-fin-${idx}`}
+                position={[Math.cos(ang) * 3.4, 0.35, Math.sin(ang) * 3.4]}
+                rotation={[0, -ang, 0]}
                 material={cyanGlowMaterial}
               >
-                <boxGeometry args={[0.2, 0.8, 0.4]} />
+                <boxGeometry args={[0.2, 0.9, 0.45]} />
               </mesh>
-            )
-          )}
+            );
+          })}
         </group>
 
-        {/* Floating Pulsing Energy Beacon Core */}
-        <mesh ref={crownBeaconRef} position={[0, 3.2, 0]} material={cyanGlowMaterial}>
-          <octahedronGeometry args={[1.3, 0]} />
+        {/* Secondary Inner Counter-Rotating Halo */}
+        <group ref={secondaryRingRef} position={[0, 3.6, 0]}>
+          <mesh material={titaniumStructuralMaterial}>
+            <torusGeometry args={[2.2, 0.22, 6, 8]} />
+          </mesh>
+          <mesh material={blueGlowMaterial}>
+            <torusGeometry args={[2.22, 0.08, 6, 8]} />
+          </mesh>
+        </group>
+
+        {/* Floating Pulsing Quantum Energy Beacon Core */}
+        <mesh ref={crownBeaconRef} position={[0, 3.6, 0]} material={cyanGlowMaterial}>
+          <octahedronGeometry args={[1.4, 0]} />
         </mesh>
 
-        {/* Inner Blue Halo */}
-        <mesh position={[0, 3.2, 0]} material={blueGlowMaterial}>
-          <icosahedronGeometry args={[0.8, 0]} />
+        {/* Inner Luminous Core */}
+        <mesh position={[0, 3.6, 0]} material={blueGlowMaterial}>
+          <icosahedronGeometry args={[0.85, 0]} />
         </mesh>
 
         {/* Soaring High-Altitude Telemetry Spire Needle */}
-        <group name="telemetry-needle" position={[0, 5.0, 0]}>
-          {/* Base needle column */}
+        <group name="telemetry-needle" position={[0, 5.5, 0]}>
+          {/* Lower Mast Column with structural collar */}
           <mesh position={[0, 3.5, 0]} material={titaniumStructuralMaterial}>
-            <cylinderGeometry args={[0.3, 0.7, 7, 8]} />
+            <cylinderGeometry args={[0.35, 0.75, 7.0, 8]} />
           </mesh>
-          {/* Spire mid-station collar */}
-          <mesh position={[0, 7.2, 0]} material={cyanGlowMaterial}>
-            <cylinderGeometry args={[0.55, 0.55, 0.3, 8]} />
+          {/* Microwave Communication Drums */}
+          <mesh position={[0, 5.5, 0]} material={metalExoskeletonMaterial}>
+            <cylinderGeometry args={[0.8, 0.8, 0.6, 8]} />
           </mesh>
-          {/* Upper thin antenna mast */}
-          <mesh position={[0, 10.5, 0]} material={titaniumStructuralMaterial}>
-            <cylinderGeometry args={[0.08, 0.25, 6.5, 8]} />
+          <mesh position={[0, 5.5, 0]} material={cyanGlowMaterial}>
+            <cylinderGeometry args={[0.82, 0.82, 0.1, 8]} />
           </mesh>
-          {/* Amber Apex Warning Beacon Light */}
-          <mesh position={[0, 14.0, 0]} material={orangeGlowMaterial}>
-            <sphereGeometry args={[0.35, 12, 12]} />
+
+          {/* Spire Mid-Station Emitter Collar */}
+          <mesh position={[0, 7.5, 0]} material={cyanGlowMaterial}>
+            <cylinderGeometry args={[0.6, 0.6, 0.35, 8]} />
+          </mesh>
+
+          {/* Upper Slender Antenna Mast */}
+          <mesh position={[0, 11.0, 0]} material={titaniumStructuralMaterial}>
+            <cylinderGeometry args={[0.08, 0.28, 7.0, 8]} />
+          </mesh>
+
+          {/* Amber Apex Air Navigation Strobe Beacon Light */}
+          <mesh position={[0, 14.6, 0]} material={orangeGlowMaterial}>
+            <sphereGeometry args={[0.38, 12, 12]} />
           </mesh>
         </group>
       </group>

@@ -35,7 +35,7 @@ function createParticleData() {
 const STATIC_PARTICLE_DATA = createParticleData();
 
 /**
- * CityEnvironment — Atmospheric fog, background color, and subtle floating energy dust
+ * CityEnvironment — Atmospheric fog, background color, and subtle floating energy dust (Refined M1.2)
  */
 export function CityEnvironment() {
   const pointsRef = useRef<THREE.Points>(null);
@@ -58,7 +58,8 @@ export function CityEnvironment() {
   return (
     <>
       <color attach="background" args={[CITY_COLORS.bgPrimary]} />
-      <fog attach="fog" args={[CITY_COLORS.bgPrimary, 45, 230]} />
+      {/* Calibrated fog range (65 to 280) preserves full city clarity while softly blending horizon */}
+      <fog attach="fog" args={[CITY_COLORS.bgPrimary, 65, 280]} />
 
       <points ref={pointsRef}>
         <bufferGeometry>
@@ -72,10 +73,10 @@ export function CityEnvironment() {
           />
         </bufferGeometry>
         <pointsMaterial
-          size={0.6}
+          size={0.55}
           vertexColors
           transparent
-          opacity={0.5}
+          opacity={0.45}
           sizeAttenuation
           blending={THREE.AdditiveBlending}
           depthWrite={false}

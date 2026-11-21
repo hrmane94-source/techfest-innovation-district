@@ -14,18 +14,23 @@ export interface CitySceneProps {
 }
 
 /**
- * CityScene — Master React Three Fiber 3D Canvas
- * Renders the complete procedural architectural city for TECHFEST — The Innovation District
+ * CityScene — Master React Three Fiber 3D Canvas (Milestone 1.2 Refinement)
+ *
+ * Configured with:
+ * - Wide-angle aerial/isometric framing ([48, 64, 88] targeting [0, 22, 0], fov: 48)
+ * - Complete visibility of the monumental Techfest Tower from ground podium to apex at Y=68
+ * - Unobstructed view of all 4 innovation districts across the matrix
+ * - Natural hemisphere & directional illumination highlighting architectural details
  */
 export function CityScene({ className }: CitySceneProps) {
   return (
     <div className={`relative w-full h-full overflow-hidden ${className ?? ''}`}>
       <Canvas
         camera={{
-          position: [68, 50, 75],
-          fov: 42,
+          position: [58, 92, 110],
+          fov: 50,
           near: 0.5,
-          far: 500,
+          far: 600,
         }}
         gl={{
           antialias: true,
@@ -41,11 +46,11 @@ export function CityScene({ className }: CitySceneProps) {
           {/* Atmospheric Environment & Fog */}
           <CityEnvironment />
 
-          {/* Architectural Key, Rim & Accent Lighting */}
+          {/* Architectural Key, Hemisphere Ambient, Rim & Accent Lighting */}
           <CityLighting />
 
-          {/* Cinematic Three-Quarter Camera Rig */}
-          <CityCamera target={[0, 16, 0]} />
+          {/* Wide-Angle Aerial/Isometric Camera Rig */}
+          <CityCamera target={[0, 20, 0]} />
 
           {/* City Foundations & Ground Podiums */}
           <CityGround />

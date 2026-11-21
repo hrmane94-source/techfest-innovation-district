@@ -5,9 +5,9 @@ import type { DistrictSectionId } from '../../types/district';
 
 export const CAMERA_PRESETS: Record<DistrictSectionId, CameraPreset> = {
   arrival: {
-    position: [68, 50, 75],
-    target: [0, 16, 0],
-    fov: 42,
+    position: [58, 92, 110],
+    target: [0, 20, 0],
+    fov: 50,
   },
   district: {
     position: [45, 30, 45],

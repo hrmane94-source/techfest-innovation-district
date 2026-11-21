@@ -9,22 +9,25 @@ export interface CityCameraProps {
 }
 
 /**
- * CityCamera — Cinematic Three-Quarter Camera with smooth OrbitControls and mouse parallax
+ * CityCamera — Wide-angle aerial/isometric camera with smooth OrbitControls and parallax (Milestone 1.2)
+ *
+ * Focuses on Y=22 to encompass the entire Techfest Innovation Tower (from base at Y=0 to apex at Y=68)
+ * and all 4 innovation districts with balanced headroom and zero foreground obstruction.
  */
 export function CityCamera({
-  target = [0, 16, 0],
+  target = [0, 20, 0],
 }: CityCameraProps) {
   const controlsRef = useRef<OrbitControlsImpl>(null);
   const { camera } = useThree();
   const baseTarget = useRef(new THREE.Vector3(...target));
 
-  // Subtle mouse parallax effect to give architectural depth
+  // Subtle mouse parallax effect providing cinematic architectural depth
   useFrame(({ pointer }) => {
     if (!controlsRef.current) return;
 
-    // Dampen target offset slightly based on cursor position (-1 to 1)
-    const targetX = baseTarget.current.x + pointer.x * 2.5;
-    const targetY = baseTarget.current.y + pointer.y * 1.5;
+    // Gentle target offset based on cursor position (-1 to 1)
+    const targetX = baseTarget.current.x + pointer.x * 2.2;
+    const targetY = baseTarget.current.y + pointer.y * 1.2;
 
     controlsRef.current.target.x = THREE.MathUtils.lerp(
       controlsRef.current.target.x,
@@ -48,8 +51,8 @@ export function CityCamera({
       enableDamping
       dampingFactor={0.06}
       minDistance={35}
-      maxDistance={190}
-      minPolarAngle={Math.PI / 8}
+      maxDistance={220}
+      minPolarAngle={Math.PI / 10}
       maxPolarAngle={Math.PI / 2.05} // Prevent dipping below ground
       enablePan={false}
       rotateSpeed={0.65}
