@@ -12,6 +12,8 @@ export function DistrictSelectorDock({ visible = true }: DistrictSelectorDockPro
 
   const districtButtons: Array<{ id: DistrictId; code: string; label: string; accent: string }> = [
     { id: 'core', code: 'CORE', label: 'Central Innovation Tower', accent: '#00E5FF' },
+    { id: 'plaza', code: 'PLAZA', label: 'Central Academic Plaza', accent: '#39DDF4' },
+    { id: 'library', code: 'LIB-01', label: 'Central Library & Commons', accent: '#38BDF8' },
     { id: 'ai', code: 'SEC-01', label: 'AI & Computation', accent: '#246BFD' },
     { id: 'robotics', code: 'SEC-02', label: 'Robotics & Automation', accent: '#FF7A00' },
     { id: 'aerospace', code: 'SEC-03', label: 'Aerospace & Space', accent: '#00E5FF' },

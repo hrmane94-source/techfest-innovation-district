@@ -5,6 +5,7 @@ import {
   CybersecurityComplex,
 } from '../architecture/DistrictBuildings';
 import { TowerGenerator } from '../architecture/TowerGenerator';
+import { UniversityLibrary } from '../architecture/UniversityLibrary';
 import {
   darkTitaniumMaterial,
   titaniumStructuralMaterial,
@@ -484,6 +485,12 @@ export function InnovationDistrict() {
           accentColor="blue"
         />
       </group>
+
+      {/* ─────────────────────────────────────────────────────────────
+          CENTRAL CAMPUS CIVIC ANCHOR: UNIVERSITY CENTRAL LIBRARY
+          Location centered around [-28, 0.9, 1] on West Concourse
+      ────────────────────────────────────────────────────────────── */}
+      <UniversityLibrary position={[-28, 0.9, 1]} rotation={0} />
     </group>
   );
 }

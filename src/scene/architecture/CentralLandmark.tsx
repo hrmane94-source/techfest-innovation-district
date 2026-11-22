@@ -7,9 +7,10 @@ import {
   metalExoskeletonMaterial,
   brushedAlloyMaterial,
   pearlWhiteMaterial,
+  precastConcreteMaterial,
   softSilverMaterial,
   reflectiveGlassMaterial,
-  structuralGlassMaterial,
+  clearLobbyGlassMaterial,
   windowGridMaterial,
   cyanGlowMaterial,
   blueGlowMaterial,
@@ -157,7 +158,7 @@ export function CentralLandmark() {
       ────────────────────────────────────────────────────────────── */}
       <group name="podium-foundation">
         {/* Tiered Octagonal Base Slabs */}
-        <mesh position={[0, 1.8, 0]} material={softSilverMaterial} receiveShadow={settings.shadows} castShadow={settings.shadowCasting !== 'none'}>
+        <mesh position={[0, 1.8, 0]} material={precastConcreteMaterial} receiveShadow={settings.shadows} castShadow={settings.shadowCasting !== 'none'}>
           <cylinderGeometry args={[9.2, 11.2, 2.0, 8]} />
         </mesh>
         <mesh position={[0, 3.8, 0]} material={pearlWhiteMaterial} receiveShadow={settings.shadows} castShadow={settings.shadowCasting !== 'none'}>
@@ -198,7 +199,7 @@ export function CentralLandmark() {
         {[0, Math.PI / 2, Math.PI, (3 * Math.PI) / 2].map((angle, idx) => (
           <group key={`entrance-portal-${idx}`} rotation={[0, angle, 0]}>
             {/* Double-Height Glazed Entrance Lobby */}
-            <mesh position={[0, 3.2, 8.5]} material={structuralGlassMaterial}>
+            <mesh position={[0, 3.2, 8.5]} material={clearLobbyGlassMaterial}>
               <boxGeometry args={[4.4, 4.0, 0.4]} />
             </mesh>
             {/* Interior Warm Lobby Illumination Core */}
@@ -232,6 +233,18 @@ export function CentralLandmark() {
         <mesh position={[0, 16.0, 0]} material={darkTitaniumMaterial} castShadow receiveShadow>
           <boxGeometry args={[7.4, 19.0, 7.4]} />
         </mesh>
+
+        {/* Express Horizontal Precast Floor Slabs with Shadow Reveals */}
+        {[10.0, 14.0, 18.0, 22.0].map((slabY, sIdx) => (
+          <group key={`core-express-slab-${sIdx}`} position={[0, slabY, 0]}>
+            <mesh material={pearlWhiteMaterial} castShadow receiveShadow>
+              <boxGeometry args={[7.85, 0.28, 7.85]} />
+            </mesh>
+            <mesh position={[0, -0.16, 0]} material={darkTitaniumMaterial}>
+              <boxGeometry args={[7.7, 0.04, 7.7]} />
+            </mesh>
+          </group>
+        ))}
 
         {/* Realistic Window Grid Curtain Facades (All 4 faces) */}
         {[0, Math.PI / 2, Math.PI, (3 * Math.PI) / 2].map((angle, idx) => (

@@ -1,6 +1,7 @@
 export * from './CentralLandmark';
 export * from './DistrictBuildings';
 export * from './TowerGenerator';
+export * from './UniversityLibrary';
 
 import type { SceneArchitectureLayer } from '../../types/scene';
 

@@ -9,6 +9,8 @@ export type DistrictId =
   | 'robotics'
   | 'aerospace'
   | 'cyber'
+  | 'library'
+  | 'plaza'
   | 'nasa-rover'
   | 'nasa-dish'
   | 'nasa-jwst';

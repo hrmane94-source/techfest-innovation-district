@@ -7,13 +7,16 @@ import {
   metalExoskeletonMaterial,
   brushedAlloyMaterial,
   pearlWhiteMaterial,
+  precastConcreteMaterial,
   softSilverMaterial,
+  darkTitaniumMaterial,
   cyanGlowMaterial,
   blueGlowMaterial,
   orangeGlowMaterial,
   warmGlowMaterial,
   reflectiveGlassMaterial,
   structuralGlassMaterial,
+  clearLobbyGlassMaterial,
   campusLawnMaterial,
   campusWoodBenchMaterial,
   bioluminescentFloraMaterial,
@@ -132,53 +135,90 @@ export function DistrictPlaza() {
         ))}
       </group>
 
-      {/* ── 5. STUDENT COMMONS GATHERING PAVILION (South-West Quadrant) ── */}
+      {/* ── 5. UNIVERSITY STUDENT COMMONS & READING PAVILION (South-West Quadrant) ── */}
       <group name="student-commons-pavilion" position={[-11.5, 1.0, 11.5]} rotation={[0, Math.PI / 4, 0]}>
-        {/* Shaded Pergola Canopy Roof */}
-        <mesh position={[0, 3.6, 0]} material={structuralGlassMaterial} castShadow={shouldCastShadow}>
-          <boxGeometry args={[7.2, 0.15, 5.2]} />
+        {/* Ground Floor Transparent Study Lounge */}
+        <mesh position={[0, 1.6, 0]} material={clearLobbyGlassMaterial}>
+          <boxGeometry args={[7.6, 3.2, 5.6]} />
         </mesh>
-        <mesh position={[0, 3.68, 0]} material={cyanGlowMaterial}>
-          <boxGeometry args={[7.0, 0.02, 5.0]} />
+        {/* Interior Warm Study Light Core & Reading Stacks */}
+        <mesh position={[0, 1.5, 0]} material={warmGlowMaterial}>
+          <boxGeometry args={[5.8, 2.6, 3.8]} />
         </mesh>
-        {/* Canopy Architectural Support Columns */}
-        {[
-          [-3.2, -2.2],
-          [3.2, -2.2],
-          [-3.2, 2.2],
-          [3.2, 2.2],
-        ].map(([cx, cz], cIdx) => (
-          <group key={`commons-col-${cIdx}`} position={[cx, 1.8, cz]}>
-            <mesh material={softSilverMaterial} castShadow={shouldCastShadow}>
-              <cylinderGeometry args={[0.1, 0.14, 3.6, 8]} />
+
+        {/* Structural Precast Columns flanking the glass curtain wall */}
+        {[-3.6, 3.6].map((cx, idx) => (
+          <group key={`commons-portal-col-${idx}`}>
+            <mesh position={[cx, 1.6, -2.6]} material={precastConcreteMaterial} castShadow={shouldCastShadow}>
+              <boxGeometry args={[0.5, 3.2, 0.5]} />
             </mesh>
-            <mesh position={[0, -1.75, 0]} material={metalExoskeletonMaterial}>
-              <boxGeometry args={[0.35, 0.1, 0.35]} />
+            <mesh position={[cx, 1.6, 2.6]} material={precastConcreteMaterial} castShadow={shouldCastShadow}>
+              <boxGeometry args={[0.5, 3.2, 0.5]} />
             </mesh>
           </group>
         ))}
-        {/* Shaded Study Desks & Campus Benches */}
-        {[-1.6, 1.6].map((tx, idx) => (
+
+        {/* Cantilevered Reading Terrace Floor Slab (Level 2) */}
+        <mesh position={[0, 3.2, 0]} material={pearlWhiteMaterial} castShadow={shouldCastShadow}>
+          <boxGeometry args={[8.4, 0.28, 6.4]} />
+        </mesh>
+        <mesh position={[0, 3.05, 0]} material={darkTitaniumMaterial}>
+          <boxGeometry args={[8.2, 0.04, 6.2]} />
+        </mesh>
+
+        {/* Level 2 Transparent Glass Balustrade */}
+        <mesh position={[0, 3.8, 3.1]} material={structuralGlassMaterial}>
+          <boxGeometry args={[8.2, 0.9, 0.08]} />
+        </mesh>
+        <mesh position={[0, 4.25, 3.1]} material={brushedAlloyMaterial}>
+          <boxGeometry args={[8.3, 0.06, 0.1]} />
+        </mesh>
+
+        {/* Level 2 Shaded Solar Pergola Roof */}
+        <mesh position={[0, 5.4, 0]} material={structuralGlassMaterial} castShadow={shouldCastShadow}>
+          <boxGeometry args={[8.6, 0.14, 6.6]} />
+        </mesh>
+        <mesh position={[0, 5.48, 0]} material={cyanGlowMaterial}>
+          <boxGeometry args={[8.4, 0.02, 6.4]} />
+        </mesh>
+
+        {/* Level 2 Pergola Slender Architectural Aluminium Columns */}
+        {[
+          [-3.8, -2.8],
+          [3.8, -2.8],
+          [-3.8, 2.8],
+          [3.8, 2.8],
+        ].map(([px, pz], pIdx) => (
+          <mesh key={`pergola-col-${pIdx}`} position={[px, 4.3, pz]} material={softSilverMaterial}>
+            <cylinderGeometry args={[0.08, 0.1, 2.2, 8]} />
+          </mesh>
+        ))}
+
+        {/* Shaded Study Desks & Campus Wood Benches on Ground Level */}
+        {[-1.8, 1.8].map((tx, idx) => (
           <group key={`commons-desk-${idx}`} position={[tx, 0, 0]}>
             {/* Modern Collaborative Work Table */}
             <mesh position={[0, 0.75, 0]} material={brushedAlloyMaterial} castShadow={shouldCastShadow}>
-              <boxGeometry args={[1.1, 0.08, 2.8]} />
+              <boxGeometry args={[1.2, 0.08, 2.8]} />
             </mesh>
-            <mesh position={[0, 0.38, 0]} material={metalExoskeletonMaterial}>
+            <mesh position={[0, 0.38, 0]} material={titaniumStructuralMaterial}>
               <boxGeometry args={[0.08, 0.72, 2.2]} />
             </mesh>
             {/* Flanking Campus Wood Benches */}
             <mesh position={[-0.8, 0.42, 0]} material={campusWoodBenchMaterial} castShadow={shouldCastShadow}>
-              <boxGeometry args={[0.4, 0.06, 2.6]} />
+              <boxGeometry args={[0.42, 0.06, 2.6]} />
             </mesh>
             <mesh position={[0.8, 0.42, 0]} material={campusWoodBenchMaterial} castShadow={shouldCastShadow}>
-              <boxGeometry args={[0.4, 0.06, 2.6]} />
-            </mesh>
-            {/* Soft Warm Task Downlight */}
-            <mesh position={[0, 3.52, 0]} material={warmGlowMaterial}>
-              <boxGeometry args={[0.6, 0.04, 2.0]} />
+              <boxGeometry args={[0.42, 0.06, 2.6]} />
             </mesh>
           </group>
+        ))}
+
+        {/* Cantilevered Reading Terrace Wood Loungers on Level 2 */}
+        {[-2.0, 2.0].map((lx, idx) => (
+          <mesh key={`terrace-bench-${idx}`} position={[lx, 3.45, 1.2]} material={campusWoodBenchMaterial} castShadow={shouldCastShadow}>
+            <boxGeometry args={[1.2, 0.12, 1.8]} />
+          </mesh>
         ))}
       </group>
 

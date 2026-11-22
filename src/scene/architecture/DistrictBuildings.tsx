@@ -5,10 +5,13 @@ import {
   metalExoskeletonMaterial,
   brushedAlloyMaterial,
   pearlWhiteMaterial,
+  precastConcreteMaterial,
   softSilverMaterial,
   reflectiveGlassMaterial,
-  structuralGlassMaterial,
-  windowGridMaterial,
+  clearLobbyGlassMaterial,
+  ribbonWindowMaterial,
+  industrialWindowMaterial,
+  louverAlloyMaterial,
   hazardStripeMaterial,
   solarPanelMaterial,
   cyanGlowMaterial,
@@ -21,7 +24,7 @@ import { ModelLoader } from '../models';
 import { useDistrict, useGraphicsQuality } from '../../context';
 
 /* =========================================================================
-   1. AI DISTRICT: INTELLIGENT STEPPED COMPUTATIONAL RESEARCH TOWER
+   1. AI DISTRICT: AI & COMPUTATIONAL SCIENCES CENTRE (CONTEMPORARY RESEARCH ACADEMY)
    ========================================================================= */
 export interface SteppedTowerProps {
   position: [number, number, number];
@@ -33,144 +36,163 @@ export interface SteppedTowerProps {
 export function SteppedTower({
   position,
   baseSize = [7.5, 7.5],
-  height = 36,
+  height = 18,
   rotation = 0,
 }: SteppedTowerProps) {
   const { settings } = useGraphicsQuality();
   const shouldCastShadow = settings.shadowCasting === 'all';
+  const castGeneralShadow = settings.shadowCasting !== 'none';
   const [w, d] = baseSize;
   const h1 = height * 0.44;
   const h2 = height * 0.34;
   const h3 = height * 0.22;
 
+  // Number of architectural sun-shading fins
+  const finCount = Math.max(3, Math.floor(w / 1.5));
+
   return (
     <group position={position} rotation={[0, rotation, 0]}>
-      {/* ── TIER 1: BASE RESEARCH PLATFORM & LOBBY ── */}
+      {/* ── TIER 1: GROUND ATRIUM & COMPUTATIONAL RESEARCH WING ── */}
       <group position={[0, 0, 0]}>
-        {/* Core Mass */}
-        <mesh position={[0, h1 / 2, 0]} material={pearlWhiteMaterial} castShadow={settings.shadowCasting !== 'none'} receiveShadow={settings.shadows}>
+        {/* Core Structural Mass with Matte Precast Concrete Cladding */}
+        <mesh position={[0, h1 / 2, 0]} material={pearlWhiteMaterial} castShadow={castGeneralShadow} receiveShadow={settings.shadows}>
           <boxGeometry args={[w, h1, d]} />
         </mesh>
 
-        {/* Double-Height Glazed Entrance Lobby */}
-        <mesh position={[0, 2.0, d / 2 + 0.08]} material={structuralGlassMaterial}>
-          <boxGeometry args={[w * 0.65, 3.2, 0.15]} />
+        {/* Double-Height Transparent Entrance Atrium / Glazed Lobby */}
+        <mesh position={[0, 1.8, d / 2 + 0.08]} material={clearLobbyGlassMaterial}>
+          <boxGeometry args={[w * 0.68, 3.2, 0.15]} />
         </mesh>
-        <mesh position={[0, 1.8, d / 2 + 0.05]} material={warmGlowMaterial}>
-          <boxGeometry args={[w * 0.55, 2.4, 0.05]} />
-        </mesh>
-        <mesh position={[0, 3.7, d / 2 + 0.65]} material={pearlWhiteMaterial} castShadow={shouldCastShadow}>
-          <boxGeometry args={[w * 0.75, 0.2, 1.2]} />
-        </mesh>
-        <mesh position={[0, 3.6, d / 2 + 0.65]} material={cyanGlowMaterial}>
-          <boxGeometry args={[w * 0.7, 0.04, 1.1]} />
-        </mesh>
-
-        {/* Window Grid Inset Facades (Front & Back above lobby) */}
-        <mesh position={[0, (h1 + 4) / 2, d / 2 + 0.05]} material={windowGridMaterial}>
-          <boxGeometry args={[w - 1.2, h1 - 4.4, 0.1]} />
-        </mesh>
-        <mesh position={[0, h1 / 2, -d / 2 - 0.05]} material={windowGridMaterial}>
-          <boxGeometry args={[w - 1.2, h1 - 1.2, 0.1]} />
-        </mesh>
-
-        {/* Vertical Optical Cooling Fins extending past the tier */}
-        {[-w / 2, w / 2].map((xPos, idx) => (
-          <group key={`t1-fin-${idx}`} position={[xPos, (h1 + 1.2) / 2, d / 2]}>
-            <mesh material={pearlWhiteMaterial} castShadow>
-              <boxGeometry args={[0.25, h1 + 1.2, 0.4]} />
-            </mesh>
-            <mesh position={[0, 0, 0.22]} material={cyanGlowMaterial}>
-              <boxGeometry args={[0.08, h1 + 1.2, 0.05]} />
-            </mesh>
-          </group>
+        {/* Interior Lobby Structural Columns visible through glass */}
+        {[-w * 0.22, w * 0.22].map((cx, idx) => (
+          <mesh key={`atrium-col-${idx}`} position={[cx, 1.8, d / 2 - 0.2]} material={precastConcreteMaterial}>
+            <cylinderGeometry args={[0.15, 0.18, 3.2, 8]} />
+          </mesh>
         ))}
-
-        {/* Tier 1 Setback Roof Terrace with Solar Panels & Planters */}
-        <mesh position={[0, h1 + 0.1, 0]} material={softSilverMaterial}>
-          <boxGeometry args={[w + 0.3, 0.2, d + 0.3]} />
+        {/* Soft Warm Interior Lobby Light Core */}
+        <mesh position={[0, 1.8, d / 2 + 0.05]} material={warmGlowMaterial}>
+          <boxGeometry args={[w * 0.55, 2.2, 0.05]} />
         </mesh>
-        <mesh position={[0, h1 + 0.12, 0]} material={cyanGlowMaterial}>
-          <boxGeometry args={[w + 0.35, 0.04, d + 0.35]} />
+
+        {/* Cantilevered Entrance Canopy with Slate Fascia & Cyan Soffit */}
+        <mesh position={[0, 3.4, d / 2 + 0.75]} material={darkTitaniumMaterial} castShadow={shouldCastShadow}>
+          <boxGeometry args={[w * 0.78, 0.22, 1.4]} />
+        </mesh>
+        <mesh position={[0, 3.28, d / 2 + 0.75]} material={cyanGlowMaterial}>
+          <boxGeometry args={[w * 0.72, 0.02, 1.3]} />
+        </mesh>
+
+        {/* Horizontal Concrete Floor Slab with Shadow Reveal */}
+        <mesh position={[0, 3.5, 0]} material={precastConcreteMaterial} castShadow={shouldCastShadow}>
+          <boxGeometry args={[w + 0.25, 0.28, d + 0.25]} />
+        </mesh>
+
+        {/* Recessed Academic Ribbon Glazing (Front & Back) */}
+        <mesh position={[0, (h1 + 3.8) / 2, d / 2 + 0.04]} material={ribbonWindowMaterial}>
+          <boxGeometry args={[w - 1.2, h1 - 4.0, 0.08]} />
+        </mesh>
+        <mesh position={[0, h1 / 2, -d / 2 - 0.04]} material={ribbonWindowMaterial}>
+          <boxGeometry args={[w - 1.2, h1 - 1.0, 0.08]} />
+        </mesh>
+
+        {/* Vertical Architectural Sun-Shading Brise-Soleil Fins */}
+        {Array.from({ length: finCount }).map((_, idx) => {
+          const fx = -w / 2 + 0.8 + (idx * (w - 1.6)) / Math.max(1, finCount - 1);
+          return (
+            <mesh
+              key={`t1-fin-${idx}`}
+              position={[fx, (h1 + 3.8) / 2, d / 2 + 0.16]}
+              material={louverAlloyMaterial}
+              castShadow={shouldCastShadow}
+            >
+              <boxGeometry args={[0.08, h1 - 4.0, 0.35]} />
+            </mesh>
+          );
+        })}
+
+        {/* Tier 1 Setback Roof Terrace with Solar Panels & Student Study Greenery */}
+        <mesh position={[0, h1 + 0.1, 0]} material={precastConcreteMaterial} castShadow={shouldCastShadow}>
+          <boxGeometry args={[w + 0.35, 0.22, d + 0.35]} />
         </mesh>
         {/* Photovoltaic Terrace Strip */}
-        <mesh position={[0, h1 + 0.22, -d * 0.35]} rotation={[-Math.PI / 2, 0, 0]} material={solarPanelMaterial}>
-          <planeGeometry args={[w * 0.75, d * 0.2]} />
+        <mesh position={[0, h1 + 0.22, -d * 0.32]} rotation={[-Math.PI / 2, 0, 0]} material={solarPanelMaterial}>
+          <planeGeometry args={[w * 0.75, d * 0.22]} />
         </mesh>
-        {/* Rooftop Terrace Mini-Planter */}
+        {/* Rooftop Terrace Student Study Planter */}
         <mesh position={[w / 3, h1 + 0.45, d / 3]} material={bioluminescentFloraMaterial}>
-          <boxGeometry args={[0.8, 0.5, 0.8]} />
+          <boxGeometry args={[0.9, 0.45, 0.9]} />
         </mesh>
       </group>
 
-      {/* ── TIER 2: COMPUTATIONAL CORE & CANTILEVERED LAB POD ── */}
+      {/* ── TIER 2: ADVANCED NEURAL LABS & CANTILEVERED RESEARCH POD ── */}
       <group position={[0, h1, 0]}>
         {/* Mid-Tier Core */}
-        <mesh position={[0, h2 / 2, 0]} material={softSilverMaterial} castShadow receiveShadow>
-          <boxGeometry args={[w * 0.76, h2, d * 0.76]} />
+        <mesh position={[0, h2 / 2, 0]} material={softSilverMaterial} castShadow={castGeneralShadow} receiveShadow={settings.shadows}>
+          <boxGeometry args={[w * 0.78, h2, d * 0.78]} />
         </mesh>
-        {/* Window Grid Insets */}
-        <mesh position={[0, h2 / 2, (d * 0.76) / 2 + 0.05]} material={windowGridMaterial}>
-          <boxGeometry args={[w * 0.76 - 0.8, h2 - 0.8, 0.08]} />
+        {/* Recessed Ribbon Window Insets */}
+        <mesh position={[0, h2 / 2, (d * 0.78) / 2 + 0.04]} material={ribbonWindowMaterial}>
+          <boxGeometry args={[w * 0.78 - 0.8, h2 - 0.8, 0.08]} />
         </mesh>
-        <mesh position={[0, h2 / 2, -(d * 0.76) / 2 - 0.05]} material={windowGridMaterial}>
-          <boxGeometry args={[w * 0.76 - 0.8, h2 - 0.8, 0.08]} />
+        <mesh position={[0, h2 / 2, -(d * 0.78) / 2 - 0.04]} material={ribbonWindowMaterial}>
+          <boxGeometry args={[w * 0.78 - 0.8, h2 - 0.8, 0.08]} />
         </mesh>
 
-        {/* Projecting Cantilevered Observation/Lab Pod */}
+        {/* Projecting Cantilevered Observation / Deep-Learning Pod */}
         <mesh
-          position={[w * 0.42, h2 * 0.55, 0]}
+          position={[w * 0.42, h2 * 0.52, 0]}
           material={reflectiveGlassMaterial}
-          castShadow
+          castShadow={shouldCastShadow}
         >
-          <boxGeometry args={[1.6, 2.6, 2.8]} />
+          <boxGeometry args={[1.6, 2.4, 2.8]} />
         </mesh>
-        <mesh position={[w * 0.42, h2 * 0.55, 0]} material={cyanGlowMaterial}>
-          <boxGeometry args={[1.2, 1.8, 2.2]} />
+        <mesh position={[w * 0.42, h2 * 0.52, 0]} material={cyanGlowMaterial}>
+          <boxGeometry args={[1.2, 1.6, 2.2]} />
         </mesh>
-        <mesh position={[w * 0.42, h2 * 0.55 - 1.35, 0]} material={pearlWhiteMaterial}>
+        {/* Cantilever Structural Steel Support Brackets */}
+        <mesh position={[w * 0.42, h2 * 0.52 - 1.25, 0]} material={darkTitaniumMaterial}>
           <boxGeometry args={[1.65, 0.15, 2.85]} />
         </mesh>
 
-        {/* Tier 2 Terrace Roof Trim */}
-        <mesh position={[0, h2 + 0.1, 0]} material={pearlWhiteMaterial}>
-          <boxGeometry args={[w * 0.78 + 0.2, 0.2, d * 0.78 + 0.2]} />
+        {/* Tier 2 Terrace Roof Trim & Parapet */}
+        <mesh position={[0, h2 + 0.1, 0]} material={pearlWhiteMaterial} castShadow={shouldCastShadow}>
+          <boxGeometry args={[w * 0.8 + 0.2, 0.2, d * 0.8 + 0.2]} />
         </mesh>
       </group>
 
-      {/* ── TIER 3: QUANTUM PROCESSOR PENTHOUSE & ROOF ARRAYS ── */}
+      {/* ── TIER 3: COMPUTATIONAL CLUSTER & ROOFTOP TELEMETRY ── */}
       <group position={[0, h1 + h2, 0]}>
-        <mesh position={[0, h3 / 2, 0]} material={pearlWhiteMaterial} castShadow>
-          <boxGeometry args={[w * 0.52, h3, d * 0.52]} />
+        <mesh position={[0, h3 / 2, 0]} material={pearlWhiteMaterial} castShadow={castGeneralShadow}>
+          <boxGeometry args={[w * 0.54, h3, d * 0.54]} />
         </mesh>
         {/* Vertical Data Ribbon */}
-        <mesh position={[0, h3 / 2, (d * 0.52) / 2 + 0.06]} material={cyanGlowMaterial}>
+        <mesh position={[0, h3 / 2, (d * 0.54) / 2 + 0.06]} material={cyanGlowMaterial}>
           <boxGeometry args={[0.15, h3, 0.04]} />
         </mesh>
 
-        {/* Rooftop Quantum Server Radiator & Microwave Uplink Dish */}
+        {/* Rooftop Computational Cooling Radiator & Uplink Terminal */}
         <group position={[0, h3, 0]}>
-          <mesh position={[-0.8, 0.6, -0.6]} material={metalExoskeletonMaterial} castShadow>
-            <cylinderGeometry args={[0.7, 0.8, 1.2, 8]} />
+          <mesh position={[-0.8, 0.5, -0.6]} material={louverAlloyMaterial} castShadow={shouldCastShadow}>
+            <cylinderGeometry args={[0.65, 0.75, 1.0, 8]} />
           </mesh>
-          <mesh position={[-0.8, 1.25, -0.6]} material={cyanGlowMaterial}>
-            <cylinderGeometry args={[0.65, 0.65, 0.1, 8]} />
+          <mesh position={[-0.8, 1.05, -0.6]} material={cyanGlowMaterial}>
+            <cylinderGeometry args={[0.6, 0.6, 0.1, 8]} />
           </mesh>
-          {/* Parabolic Satellite Dish */}
-          <group position={[0.8, 0.8, 0.6]} rotation={[0.4, 0.3, 0]}>
+          {/* Parabolic Telecommunications Dish */}
+          <group position={[0.8, 0.7, 0.6]} rotation={[0.4, 0.3, 0]}>
             <mesh material={titaniumStructuralMaterial}>
-              <cylinderGeometry args={[0.7, 0.1, 0.4, 12, 1, true]} />
+              <cylinderGeometry args={[0.65, 0.1, 0.35, 12, 1, true]} />
             </mesh>
-            <mesh position={[0, 0.4, 0]} material={blueGlowMaterial}>
-              <cylinderGeometry args={[0.04, 0.04, 0.6, 6]} />
+            <mesh position={[0, 0.35, 0]} material={blueGlowMaterial}>
+              <cylinderGeometry args={[0.04, 0.04, 0.5, 6]} />
             </mesh>
           </group>
           {/* Telemetry Mast */}
-          <mesh position={[0, 2.2, 0]} material={titaniumStructuralMaterial}>
-            <cylinderGeometry args={[0.08, 0.2, 3.0, 6]} />
+          <mesh position={[0, 1.8, 0]} material={titaniumStructuralMaterial}>
+            <cylinderGeometry args={[0.06, 0.15, 2.4, 6]} />
           </mesh>
-          <mesh position={[0, 3.8, 0]} material={cyanGlowMaterial}>
-            <sphereGeometry args={[0.22, 8, 8]} />
+          <mesh position={[0, 3.1, 0]} material={cyanGlowMaterial}>
+            <sphereGeometry args={[0.18, 8, 8]} />
           </mesh>
         </group>
       </group>
@@ -179,7 +201,7 @@ export function SteppedTower({
 }
 
 /* =========================================================================
-   2. ROBOTICS DISTRICT: HEAVY FABRICATION COMPLEX & GANTRY RUNWAY
+   2. ROBOTICS DISTRICT: HIGH-BAY ROBOTICS ENGINEERING & WORKSHOP COMPLEX
    ========================================================================= */
 export interface IndustrialComplexProps {
   position: [number, number, number];
@@ -189,24 +211,25 @@ export interface IndustrialComplexProps {
 export function IndustrialComplex({ position, rotation = 0 }: IndustrialComplexProps) {
   const { settings } = useGraphicsQuality();
   const shouldCastShadow = settings.shadowCasting === 'all';
+  const castGeneralShadow = settings.shadowCasting !== 'none';
 
   return (
     <group position={position} rotation={[0, rotation, 0]}>
-      {/* ── 1. ADVANCED ROBOTIC FABRICATION CORE (CYLINDER + EXOSKELETON) ── */}
+      {/* ── 1. ROBOTIC PROTOTYPING & MECHATRONICS CORE (CYLINDRICAL TANK WITH EXOSKELETON) ── */}
       <group position={[-5.5, 0, -2.5]}>
-        {/* Core Cylinder Body */}
-        <mesh position={[0, 9.5, 0]} material={softSilverMaterial} castShadow={settings.shadowCasting !== 'none'} receiveShadow={settings.shadows}>
-          <cylinderGeometry args={[5.4, 6.0, 19, 16]} />
+        {/* Core Cylinder Body (High-Bay Scale 14M) */}
+        <mesh position={[0, 7.0, 0]} material={softSilverMaterial} castShadow={castGeneralShadow} receiveShadow={settings.shadows}>
+          <cylinderGeometry args={[4.8, 5.2, 14, 16]} />
         </mesh>
         {/* Structural External Exoskeleton Bands */}
-        {[3.5, 8.5, 13.5, 18.0].map((y, idx) => (
+        {[2.5, 6.5, 10.5, 13.5].map((y, idx) => (
           <group key={`fab-band-${idx}`} position={[0, y, 0]}>
             <mesh material={pearlWhiteMaterial}>
-              <cylinderGeometry args={[5.7, 5.7, 0.75, 16]} />
+              <cylinderGeometry args={[5.0, 5.0, 0.6, 16]} />
             </mesh>
             {/* Embedded Orange Status Illumination Ring */}
             <mesh position={[0, 0, 0]} material={orangeGlowMaterial}>
-              <cylinderGeometry args={[5.75, 5.75, 0.15, 16]} />
+              <cylinderGeometry args={[5.05, 5.05, 0.12, 16]} />
             </mesh>
           </group>
         ))}
@@ -216,55 +239,61 @@ export function IndustrialComplex({ position, rotation = 0 }: IndustrialComplexP
           return (
             <mesh
               key={`fab-stanchion-${idx}`}
-              position={[Math.cos(ang) * 5.75, 9.5, Math.sin(ang) * 5.75]}
-              material={pearlWhiteMaterial}
+              position={[Math.cos(ang) * 5.05, 7.0, Math.sin(ang) * 5.05]}
+              material={titaniumStructuralMaterial}
               castShadow={shouldCastShadow}
             >
-              <boxGeometry args={[0.4, 19.5, 0.4]} />
+              <boxGeometry args={[0.35, 14.2, 0.35]} />
             </mesh>
           );
         })}
-        {/* Rooftop Industrial Ventilation Fan Bank */}
-        <mesh position={[0, 19.5, 0]} material={softSilverMaterial} castShadow={shouldCastShadow}>
-          <cylinderGeometry args={[3.2, 4.0, 1.4, 8]} />
+        {/* Rooftop Industrial Ventilation Penthouse */}
+        <mesh position={[0, 14.5, 0]} material={louverAlloyMaterial} castShadow={shouldCastShadow}>
+          <cylinderGeometry args={[2.8, 3.4, 1.2, 8]} />
         </mesh>
-        <mesh position={[0, 20.3, 0]} material={orangeGlowMaterial}>
-          <cylinderGeometry args={[2.8, 2.8, 0.2, 8]} />
+        <mesh position={[0, 15.2, 0]} material={orangeGlowMaterial}>
+          <cylinderGeometry args={[2.4, 2.4, 0.15, 8]} />
         </mesh>
       </group>
 
-      {/* ── 2. HIGH-BAY ROBOTIC ASSEMBLY & TESTING HALL ── */}
+      {/* ── 2. HIGH-BAY ROBOTIC ASSEMBLY & MECHATRONICS TESTING HALL ── */}
       <group position={[5.5, 0, 3.5]}>
-        {/* Main Hall Volume */}
-        <mesh position={[0, 7.5, 0]} material={pearlWhiteMaterial} castShadow receiveShadow>
-          <boxGeometry args={[12, 15, 14]} />
+        {/* Main Hall Volume (13M High Bay Clearance) */}
+        <mesh position={[0, 6.5, 0]} material={pearlWhiteMaterial} castShadow={castGeneralShadow} receiveShadow={settings.shadows}>
+          <boxGeometry args={[12, 13, 14]} />
         </mesh>
-        {/* Side Facade Structural X-Bracing */}
-        {[-6.05, 6.05].map((xPos, idx) => (
-          <group key={`hall-x-brace-${idx}`} position={[xPos, 7.5, 0]}>
-            <mesh rotation={[0, 0, 0.6]} material={softSilverMaterial}>
-              <boxGeometry args={[0.3, 14, 0.4]} />
+
+        {/* Industrial High-Bay Clerestory Glazing (Continuous Top Band) */}
+        <mesh position={[0, 10.5, 7.05]} material={industrialWindowMaterial}>
+          <boxGeometry args={[11.2, 3.2, 0.1]} />
+        </mesh>
+        <mesh position={[0, 10.5, -7.05]} material={industrialWindowMaterial}>
+          <boxGeometry args={[11.2, 3.2, 0.1]} />
+        </mesh>
+
+        {/* Side Facade Structural Portal Frames / Columns */}
+        {[-4.0, 0, 4.0].map((zPos, idx) => (
+          <group key={`portal-col-${idx}`}>
+            <mesh position={[-6.1, 6.5, zPos]} material={titaniumStructuralMaterial} castShadow={shouldCastShadow}>
+              <boxGeometry args={[0.35, 13.2, 0.6]} />
             </mesh>
-            <mesh rotation={[0, 0, -0.6]} material={softSilverMaterial}>
-              <boxGeometry args={[0.3, 14, 0.4]} />
+            <mesh position={[6.1, 6.5, zPos]} material={titaniumStructuralMaterial} castShadow={shouldCastShadow}>
+              <boxGeometry args={[0.35, 13.2, 0.6]} />
             </mesh>
           </group>
-        ))}
-
-        {/* Industrial Louver Ventilation Slots */}
-        {[3.5, 6.5, 9.5, 12.5].map((y, idx) => (
-          <mesh key={`assembly-louver-${idx}`} position={[0, y, 7.05]} material={blueSteelMaterial}>
-            <boxGeometry args={[10.5, 0.45, 0.2]} />
-          </mesh>
         ))}
 
         {/* High-Bay Heavy Cargo Roll-Up Doors with Hazard Striping */}
         <mesh position={[0, 2.5, 7.1]} material={darkTitaniumMaterial}>
           <boxGeometry args={[5.2, 4.5, 0.15]} />
         </mesh>
+        {/* Weather Canopy over High-Bay Delivery Portal */}
+        <mesh position={[0, 5.0, 7.8]} material={precastConcreteMaterial} castShadow={shouldCastShadow}>
+          <boxGeometry args={[5.8, 0.25, 1.4]} />
+        </mesh>
         {/* Authentic Industrial Hazard Striping Border */}
-        <mesh position={[0, 4.9, 7.2]} material={hazardStripeMaterial}>
-          <boxGeometry args={[5.4, 0.45, 0.1]} />
+        <mesh position={[0, 4.85, 7.2]} material={hazardStripeMaterial}>
+          <boxGeometry args={[5.4, 0.35, 0.1]} />
         </mesh>
         <mesh position={[-2.6, 2.5, 7.2]} material={hazardStripeMaterial}>
           <boxGeometry args={[0.35, 4.5, 0.1]} />
@@ -272,32 +301,52 @@ export function IndustrialComplex({ position, rotation = 0 }: IndustrialComplexP
         <mesh position={[2.6, 2.5, 7.2]} material={hazardStripeMaterial}>
           <boxGeometry args={[0.35, 4.5, 0.1]} />
         </mesh>
+
+        {/* Mezzanine Observation Windows above Bay Door */}
+        <mesh position={[0, 7.2, 7.08]} material={clearLobbyGlassMaterial}>
+          <boxGeometry args={[7.2, 1.8, 0.1]} />
+        </mesh>
+        <mesh position={[0, 7.2, 7.05]} material={warmGlowMaterial}>
+          <boxGeometry args={[6.8, 1.4, 0.05]} />
+        </mesh>
+
+        {/* Sawtooth Roof Monitor Skylights */}
+        {[-3.0, 3.0].map((sx, idx) => (
+          <group key={`sawtooth-${idx}`} position={[sx, 13.4, 0]}>
+            <mesh rotation={[0, 0, 0.4]} material={precastConcreteMaterial} castShadow={shouldCastShadow}>
+              <boxGeometry args={[3.2, 0.2, 13.2]} />
+            </mesh>
+            <mesh position={[-0.8, 0.4, 0]} material={industrialWindowMaterial}>
+              <boxGeometry args={[0.1, 0.9, 13.0]} />
+            </mesh>
+          </group>
+        ))}
       </group>
 
       {/* ── 3. OVERHEAD GANTRY CRANE RUNWAY & HOIST TROLLEY ── */}
-      <group position={[0, 14.5, 0]}>
+      <group position={[0, 12.0, 0]}>
         {/* Main Double Crane Rails */}
         <mesh position={[0, 0, -1.0]} material={blueSteelMaterial} castShadow>
-          <boxGeometry args={[18, 0.8, 0.5]} />
+          <boxGeometry args={[18, 0.7, 0.4]} />
         </mesh>
         <mesh position={[0, 0, 1.0]} material={blueSteelMaterial} castShadow>
-          <boxGeometry args={[18, 0.8, 0.5]} />
+          <boxGeometry args={[18, 0.7, 0.4]} />
         </mesh>
         {/* Orange Warning Safety Rail */}
-        <mesh position={[0, 0.6, 0]} material={orangeGlowMaterial}>
-          <boxGeometry args={[17.5, 0.12, 2.2]} />
+        <mesh position={[0, 0.5, 0]} material={orangeGlowMaterial}>
+          <boxGeometry args={[17.5, 0.1, 2.1]} />
         </mesh>
         {/* Mobile Hoist Trolley Unit */}
-        <mesh position={[2.0, -0.5, 0]} material={metalExoskeletonMaterial} castShadow>
-          <boxGeometry args={[2.4, 1.4, 2.4]} />
+        <mesh position={[2.0, -0.4, 0]} material={metalExoskeletonMaterial} castShadow>
+          <boxGeometry args={[2.2, 1.2, 2.2]} />
         </mesh>
-        {/* Trolley Floodlights */}
-        <mesh position={[2.0, -1.25, 0]} material={orangeGlowMaterial}>
-          <boxGeometry args={[1.8, 0.1, 1.8]} />
+        {/* Trolley Task Floodlights */}
+        <mesh position={[2.0, -1.05, 0]} material={orangeGlowMaterial}>
+          <boxGeometry args={[1.6, 0.08, 1.6]} />
         </mesh>
         {/* Heavy Gantry Structural A-Frame Pillar */}
-        <mesh position={[8.5, -7.0, 0]} material={titaniumStructuralMaterial} castShadow>
-          <boxGeometry args={[1.4, 14.5, 1.4]} />
+        <mesh position={[8.5, -5.8, 0]} material={titaniumStructuralMaterial} castShadow>
+          <boxGeometry args={[1.2, 12.0, 1.2]} />
         </mesh>
       </group>
     </group>
@@ -316,14 +365,15 @@ export function AerospaceComplex({ position, rotation = 0 }: AerospaceComplexPro
   const { selectDistrict } = useDistrict();
   const { settings } = useGraphicsQuality();
   const shouldCastShadow = settings.shadowCasting === 'all';
+  const castGeneralShadow = settings.shadowCasting !== 'none';
 
   return (
     <group position={position} rotation={[0, rotation, 0]}>
       {/* ── 1. AERODYNAMIC TESTING HANGAR WITH EXPOSED ARCH RIBS ── */}
       <group position={[0, 0, -4.5]}>
         {/* Main Hangar Fuselage Body */}
-        <mesh position={[0, 5.5, 0]} material={pearlWhiteMaterial} castShadow={settings.shadowCasting !== 'none'} receiveShadow={settings.shadows}>
-          <boxGeometry args={[24, 11, 11]} />
+        <mesh position={[0, 5.5, 0]} material={pearlWhiteMaterial} castShadow={castGeneralShadow} receiveShadow={settings.shadows}>
+          <boxGeometry args={[24, 11, 12]} />
         </mesh>
         {/* Vaulted Chamfered Roof */}
         <mesh position={[0, 12, 0]} rotation={[0, 0, Math.PI / 4]} material={softSilverMaterial} castShadow={shouldCastShadow}>
@@ -335,7 +385,7 @@ export function AerospaceComplex({ position, rotation = 0 }: AerospaceComplexPro
             key={`hangar-arch-${idx}`}
             position={[xPos, 12, 0]}
             rotation={[0, 0, Math.PI / 4]}
-            material={pearlWhiteMaterial}
+            material={titaniumStructuralMaterial}
             castShadow={shouldCastShadow}
           >
             <cylinderGeometry args={[8.05, 8.05, 0.6, 4]} />
@@ -343,16 +393,20 @@ export function AerospaceComplex({ position, rotation = 0 }: AerospaceComplexPro
         ))}
 
         {/* Continuous Horizontal Blue Glazing Ribbon */}
-        <mesh position={[0, 6.5, 5.55]} material={reflectiveGlassMaterial}>
-          <boxGeometry args={[20, 1.8, 0.1]} />
+        <mesh position={[0, 6.5, 6.05]} material={ribbonWindowMaterial}>
+          <boxGeometry args={[20, 2.0, 0.1]} />
         </mesh>
-        {/* Illuminated Runway Guidance Strip */}
-        <mesh position={[0, 4.2, 5.6]} material={cyanGlowMaterial}>
-          <boxGeometry args={[21, 0.15, 0.05]} />
+        {/* Cleanroom Observation Gallery (Rear Facade) */}
+        <mesh position={[0, 6.5, -6.05]} material={ribbonWindowMaterial}>
+          <boxGeometry args={[20, 2.0, 0.1]} />
+        </mesh>
+        {/* Illuminated Guidance Strip */}
+        <mesh position={[0, 4.2, 6.1]} material={cyanGlowMaterial}>
+          <boxGeometry args={[21, 0.12, 0.05]} />
         </mesh>
 
         {/* Giant Segmented Sliding Hangar Portal */}
-        <mesh position={[11.9, 5.0, 0]} material={pearlWhiteMaterial} castShadow>
+        <mesh position={[11.9, 5.0, 0]} material={precastConcreteMaterial} castShadow>
           <boxGeometry args={[0.35, 8.5, 8.0]} />
         </mesh>
         <mesh position={[12.15, 9.4, 0]} material={cyanGlowMaterial}>
@@ -360,9 +414,9 @@ export function AerospaceComplex({ position, rotation = 0 }: AerospaceComplexPro
         </mesh>
       </group>
 
-      {/* ── 2. FLIGHT OPERATIONS OBSERVATION TOWER (CANTED GLASS CAB) ── */}
+      {/* ── 2. FLIGHT OPERATIONS OBSERVATION TOWER (CANTED GLASS CAB - ACADEMIC 24M) ── */}
       <group position={[9.0, 0, 7.5]}>
-        {/* Tapered Slender Mast (Academic Scale 24M) */}
+        {/* Tapered Slender Mast */}
         <mesh position={[0, 11.5, 0]} material={pearlWhiteMaterial} castShadow>
           <cylinderGeometry args={[1.1, 2.2, 23, 12]} />
         </mesh>
@@ -410,7 +464,7 @@ export function AerospaceComplex({ position, rotation = 0 }: AerospaceComplexPro
         }}
       >
         {/* Heavy Reinforced Architectural Pedestal Base */}
-        <mesh position={[0, 2.0, 0]} material={softSilverMaterial} castShadow receiveShadow>
+        <mesh position={[0, 2.0, 0]} material={precastConcreteMaterial} castShadow receiveShadow>
           <cylinderGeometry args={[2.4, 3.0, 4.0, 12]} />
         </mesh>
         {/* Azimuth Rotation Turntable Ring */}
@@ -466,13 +520,14 @@ export function CybersecurityComplex({
 }: CybersecurityComplexProps) {
   const { settings } = useGraphicsQuality();
   const shouldCastShadow = settings.shadowCasting === 'all';
+  const castGeneralShadow = settings.shadowCasting !== 'none';
 
   return (
     <group position={position} rotation={[0, rotation, 0]}>
       {/* ── 1. DIGITAL INFRASTRUCTURE RESEARCH PAVILION (3-STORY ACADEMIC WING) ── */}
       <group position={[-2.5, 0, 0]}>
-        {/* Level 1-2 Base Academic Block */}
-        <mesh position={[0, 4.25, 0]} rotation={[0, Math.PI / 4, 0]} material={softSilverMaterial} castShadow={settings.shadowCasting !== 'none'} receiveShadow={settings.shadows}>
+        {/* Level 1-2 Base Academic Block with Architectural Precast Concrete */}
+        <mesh position={[0, 4.25, 0]} rotation={[0, Math.PI / 4, 0]} material={softSilverMaterial} castShadow={castGeneralShadow} receiveShadow={settings.shadows}>
           <boxGeometry args={[12, 8.5, 12]} />
         </mesh>
         {/* Mid-Level Shaded Architectural Overhang Floor */}
@@ -504,7 +559,7 @@ export function CybersecurityComplex({
         ))}
 
         {/* Angular Geometric Penthouse Cap */}
-        <mesh position={[0, 16.5, 0]} rotation={[0, Math.PI / 4, 0]} material={softSilverMaterial} castShadow>
+        <mesh position={[0, 16.5, 0]} rotation={[0, Math.PI / 4, 0]} material={darkTitaniumMaterial} castShadow>
           <cylinderGeometry args={[2.0, 5.0, 1.8, 4]} />
         </mesh>
       </group>
@@ -513,6 +568,10 @@ export function CybersecurityComplex({
       <group position={[7.5, 0, -4.0]}>
         <mesh position={[0, 7.0, 0]} material={pearlWhiteMaterial} castShadow receiveShadow>
           <boxGeometry args={[5.2, 14, 6.0]} />
+        </mesh>
+        {/* Recessed Ribbon Window Inset */}
+        <mesh position={[0, 7.0, 3.04]} material={ribbonWindowMaterial}>
+          <boxGeometry args={[4.4, 12.0, 0.08]} />
         </mesh>
         {/* Angular Solar Slanted Roof */}
         <mesh position={[0, 14.5, 0]} rotation={[0.35, 0, 0]} material={darkTitaniumMaterial} castShadow>
@@ -523,7 +582,7 @@ export function CybersecurityComplex({
           <boxGeometry args={[0.1, 13.5, 0.8]} />
         </mesh>
         {/* Student Study / Sensor Aperture */}
-        <mesh position={[0, 2.5, 3.05]} material={orangeGlowMaterial}>
+        <mesh position={[0, 2.5, 3.08]} material={orangeGlowMaterial}>
           <boxGeometry args={[2.0, 2.8, 0.1]} />
         </mesh>
       </group>
