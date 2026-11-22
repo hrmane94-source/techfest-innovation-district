@@ -35,7 +35,7 @@ export function CityScene({ className }: CitySceneProps) {
       <Canvas
         shadows={settings.shadows}
         camera={{
-          position: [82, 118, 142],
+          position: [96, 126, 122],
           fov: 50,
           near: 0.5,
           far: 750,
@@ -47,7 +47,7 @@ export function CityScene({ className }: CitySceneProps) {
           stencil: false,
           depth: true,
           toneMapping: THREE.ACESFilmicToneMapping,
-          toneMappingExposure: 1.32,
+          toneMappingExposure: 1.42,
         }}
         dpr={settings.dpr}
         className="w-full h-full"

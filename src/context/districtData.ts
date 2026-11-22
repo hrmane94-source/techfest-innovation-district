@@ -20,8 +20,8 @@ export const DISTRICT_DATA: Record<DistrictId, DistrictDetails> = {
     description:
       'An expansive, master-planned futuristic academic city engineered for Techfest IIT Bombay across 280 meters. Integrates six distinct districts: Central Innovation, Academic Faculty & Auditorium, Advanced Research & NASA Space Assets, Student Life & Residence, Knowledge & Startup Incubation, and Campus Lake Recreation.',
     accentColor: '#39DDF4',
-    cameraPosition: [82, 118, 142],
-    cameraTarget: [0, 16, 0],
+    cameraPosition: [96, 126, 122],
+    cameraTarget: [0, 14, 0],
     facilities: [
       'District A: Central Innovation Tower (68m Apex) & Grand Plaza',
       'District B: Academic Auditorium, Lecture Halls & Faculty Blocks',

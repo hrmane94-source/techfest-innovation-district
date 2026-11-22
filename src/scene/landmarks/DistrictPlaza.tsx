@@ -1,8 +1,10 @@
 import { useMemo } from 'react';
 import { useGraphicsQuality } from '../../context';
 import {
-  plazaMaterial,
+  warmPlazaPavingMaterial,
   plazaAccentMaterial,
+  azureWaterMaterial,
+  champagneSilverMaterial,
   titaniumStructuralMaterial,
   metalExoskeletonMaterial,
   brushedAlloyMaterial,
@@ -14,7 +16,6 @@ import {
   blueGlowMaterial,
   orangeGlowMaterial,
   warmGlowMaterial,
-  reflectiveGlassMaterial,
   structuralGlassMaterial,
   clearLobbyGlassMaterial,
   campusLawnMaterial,
@@ -57,11 +58,11 @@ export function DistrictPlaza() {
   return (
     <group name="central-district-plaza" position={[0, 0, 0]}>
       {/* ── 1. BASE STEPPED OCTAGONAL PODIUM DECK ── */}
-      <mesh position={[0, 0.4, 0]} material={plazaMaterial} receiveShadow={settings.shadows}>
+      <mesh position={[0, 0.4, 0]} material={warmPlazaPavingMaterial} receiveShadow={settings.shadows}>
         <cylinderGeometry args={[23.5, 25.0, 0.8, 8]} />
       </mesh>
       {/* Outer Podium Coping Trim */}
-      <mesh position={[0, 0.82, 0]} material={metalExoskeletonMaterial}>
+      <mesh position={[0, 0.82, 0]} material={champagneSilverMaterial}>
         <cylinderGeometry args={[23.6, 23.6, 0.08, 8]} />
       </mesh>
 
@@ -70,29 +71,29 @@ export function DistrictPlaza() {
         <cylinderGeometry args={[17.2, 18.2, 0.5, 8]} />
       </mesh>
 
-      {/* ── 3. CIRCULAR REFLECTING POOL / WATER FEATURE ── */}
+      {/* ── 3. CIRCULAR REFLECTING POOL / WATER FEATURE (PBR Azure Water) ── */}
       <mesh
-        position={[0, 1.28, 0]}
+        position={[0, 1.27, 0]}
         rotation={[-Math.PI / 2, 0, 0]}
-        material={reflectiveGlassMaterial}
+        material={azureWaterMaterial}
       >
         <ringGeometry args={[11.2, 15.6, 48]} />
       </mesh>
 
-      {/* Concentric Glowing Boundary Rings */}
+      {/* Champagne Silver Coping Curbs (Inner & Outer Pool Rim) */}
       <mesh
-        position={[0, 1.3, 0]}
+        position={[0, 1.29, 0]}
         rotation={[-Math.PI / 2, 0, 0]}
-        material={cyanGlowMaterial}
+        material={champagneSilverMaterial}
       >
-        <ringGeometry args={[15.4, 15.7, 48]} />
+        <ringGeometry args={[15.55, 15.75, 48]} />
       </mesh>
       <mesh
-        position={[0, 1.3, 0]}
+        position={[0, 1.29, 0]}
         rotation={[-Math.PI / 2, 0, 0]}
-        material={blueGlowMaterial}
+        material={champagneSilverMaterial}
       >
-        <ringGeometry args={[11.0, 11.2, 48]} />
+        <ringGeometry args={[11.05, 11.25, 48]} />
       </mesh>
 
       {/* ── 4. OUTDOOR STUDENT AMPHITHEATER (South-East Quadrant) ── */}

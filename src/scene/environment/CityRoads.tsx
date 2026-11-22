@@ -4,6 +4,9 @@ import { useFrame } from '@react-three/fiber';
 import { useGraphicsQuality } from '../../context';
 import {
   roadMaterial,
+  roadMarkingWhiteMaterial,
+  roadMarkingYellowMaterial,
+  crosswalkMarkingMaterial,
   titaniumStructuralMaterial,
   metalExoskeletonMaterial,
   brushedAlloyMaterial,
@@ -208,74 +211,80 @@ export function CityRoads() {
       <mesh position={[0, 0.04, 0]} material={roadMaterial} receiveShadow={settings.shadows}>
         <boxGeometry args={[6.6, 0.04, 240]} />
       </mesh>
-      {/* N-S Center Illuminated Marking Ribbon */}
-      <mesh position={[0, 0.08, 0]} material={cyanGlowMaterial}>
-        <boxGeometry args={[0.22, 0.02, 236]} />
+      {/* N-S Center Double Yellow Marking Ribbon */}
+      <mesh position={[-0.08, 0.065, 0]} material={roadMarkingYellowMaterial}>
+        <boxGeometry args={[0.07, 0.01, 236]} />
       </mesh>
-      {/* N-S Outer Lane Boundary Markers */}
-      <mesh position={[-3.1, 0.07, 0]} material={blueGlowMaterial}>
-        <boxGeometry args={[0.08, 0.02, 236]} />
+      <mesh position={[0.08, 0.065, 0]} material={roadMarkingYellowMaterial}>
+        <boxGeometry args={[0.07, 0.01, 236]} />
       </mesh>
-      <mesh position={[3.1, 0.07, 0]} material={blueGlowMaterial}>
-        <boxGeometry args={[0.08, 0.02, 236]} />
+      {/* N-S Outer Lane Boundary Paint Lines */}
+      <mesh position={[-3.0, 0.065, 0]} material={roadMarkingWhiteMaterial}>
+        <boxGeometry args={[0.08, 0.01, 236]} />
+      </mesh>
+      <mesh position={[3.0, 0.065, 0]} material={roadMarkingWhiteMaterial}>
+        <boxGeometry args={[0.08, 0.01, 236]} />
       </mesh>
 
       {/* ── 2. MAIN EAST-WEST ARTERIAL ROAD (240m) ── */}
       <mesh position={[0, 0.04, 0]} material={roadMaterial} receiveShadow={settings.shadows}>
         <boxGeometry args={[240, 0.04, 6.6]} />
       </mesh>
-      {/* E-W Center Illuminated Marking Ribbon */}
-      <mesh position={[0, 0.08, 0]} material={cyanGlowMaterial}>
-        <boxGeometry args={[236, 0.02, 0.22]} />
+      {/* E-W Center Double Yellow Marking Ribbon */}
+      <mesh position={[0, 0.065, -0.08]} material={roadMarkingYellowMaterial}>
+        <boxGeometry args={[236, 0.01, 0.07]} />
       </mesh>
-      {/* E-W Outer Lane Boundary Markers */}
-      <mesh position={[0, 0.07, -3.1]} material={blueGlowMaterial}>
-        <boxGeometry args={[236, 0.02, 0.08]} />
+      <mesh position={[0, 0.065, 0.08]} material={roadMarkingYellowMaterial}>
+        <boxGeometry args={[236, 0.01, 0.07]} />
       </mesh>
-      <mesh position={[0, 0.07, 3.1]} material={blueGlowMaterial}>
-        <boxGeometry args={[236, 0.02, 0.08]} />
+      {/* E-W Outer Lane Boundary Paint Lines */}
+      <mesh position={[0, 0.065, -3.0]} material={roadMarkingWhiteMaterial}>
+        <boxGeometry args={[236, 0.01, 0.08]} />
+      </mesh>
+      <mesh position={[0, 0.065, 3.0]} material={roadMarkingWhiteMaterial}>
+        <boxGeometry args={[236, 0.01, 0.08]} />
       </mesh>
 
       {/* ── 3. CIRCULAR TRANSIT RING ROAD AROUND CENTRAL PLAZA ── */}
       <mesh position={[0, 0.05, 0]} rotation={[-Math.PI / 2, 0, 0]} material={roadMaterial} receiveShadow={settings.shadows}>
         <ringGeometry args={[23.5, 27.5, 48]} />
       </mesh>
-      {/* Concentric Illuminated Lane Divider */}
-      <mesh position={[0, 0.07, 0]} rotation={[-Math.PI / 2, 0, 0]} material={cyanGlowMaterial}>
-        <ringGeometry args={[25.4, 25.6, 48]} />
+      {/* Concentric Painted Lane Divider */}
+      <mesh position={[0, 0.065, 0]} rotation={[-Math.PI / 2, 0, 0]} material={roadMarkingWhiteMaterial}>
+        <ringGeometry args={[25.4, 25.56, 48]} />
       </mesh>
 
       {/* ── 4. OUTER CAMPUS PERIMETER RING ROAD (R = 72m, connects all 6 districts) ── */}
       <mesh position={[0, 0.045, 0]} rotation={[-Math.PI / 2, 0, 0]} material={roadMaterial} receiveShadow={settings.shadows}>
         <ringGeometry args={[69.0, 75.0, 64]} />
       </mesh>
-      {/* Perimeter Ring Cyan Center Marking */}
-      <mesh position={[0, 0.065, 0]} rotation={[-Math.PI / 2, 0, 0]} material={cyanGlowMaterial}>
+      {/* Perimeter Ring Center Painted Divider */}
+      <mesh position={[0, 0.06, 0]} rotation={[-Math.PI / 2, 0, 0]} material={roadMarkingWhiteMaterial}>
         <ringGeometry args={[71.9, 72.1, 64]} />
       </mesh>
-      {/* Perimeter Ring Outer Blue Curbs */}
-      <mesh position={[0, 0.06, 0]} rotation={[-Math.PI / 2, 0, 0]} material={blueGlowMaterial}>
-        <ringGeometry args={[69.1, 69.3, 64]} />
+      {/* Perimeter Ring Outer Curb Trims */}
+      <mesh position={[0, 0.055, 0]} rotation={[-Math.PI / 2, 0, 0]} material={roadMarkingWhiteMaterial}>
+        <ringGeometry args={[69.1, 69.25, 64]} />
       </mesh>
-      <mesh position={[0, 0.06, 0]} rotation={[-Math.PI / 2, 0, 0]} material={blueGlowMaterial}>
-        <ringGeometry args={[74.7, 74.9, 64]} />
+      <mesh position={[0, 0.055, 0]} rotation={[-Math.PI / 2, 0, 0]} material={roadMarkingWhiteMaterial}>
+        <ringGeometry args={[74.75, 74.9, 64]} />
       </mesh>
 
-      {/* ── 5. PEDESTRIAN ZEBRA CROSSWALKS ── */}
+      {/* ── 5. PEDESTRIAN ZEBRA CROSSWALKS (High-Fidelity Thermoplastic Paint) ── */}
       {[-38, 38].map((crossZ, idx) => (
-        <group key={`crosswalk-ns-${idx}`} position={[0, 0.075, crossZ]}>
+        <group key={`crosswalk-ns-${idx}`} position={[0, 0.07, crossZ]}>
           {[-2.2, -1.4, -0.6, 0.2, 1.0, 1.8].map((barX, bIdx) => (
-            <mesh key={`cw-bar-ns-${bIdx}`} position={[barX, 0, 0]} material={whiteGlowMaterial}>
-              <boxGeometry args={[0.4, 0.01, 2.8]} />
+            <mesh key={`cw-bar-ns-${bIdx}`} position={[barX, 0, 0]} material={crosswalkMarkingMaterial}>
+              <boxGeometry args={[0.42, 0.01, 2.8]} />
             </mesh>
           ))}
         </group>
       ))}
       {[-38, 38].map((crossX, idx) => (
-        <group key={`crosswalk-ew-${idx}`} position={[crossX, 0.075, 0]}>
+        <group key={`crosswalk-ew-${idx}`} position={[crossX, 0.07, 0]}>
           {[-2.2, -1.4, -0.6, 0.2, 1.0, 1.8].map((barZ, bIdx) => (
-            <mesh key={`cw-bar-ew-${bIdx}`} position={[0, 0, barZ]} material={whiteGlowMaterial}>
-              <boxGeometry args={[2.8, 0.01, 0.4]} />
+            <mesh key={`cw-bar-ew-${bIdx}`} position={[0, 0, barZ]} material={crosswalkMarkingMaterial}>
+              <boxGeometry args={[2.8, 0.01, 0.42]} />
             </mesh>
           ))}
         </group>

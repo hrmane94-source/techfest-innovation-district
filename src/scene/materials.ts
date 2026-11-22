@@ -12,32 +12,32 @@ import * as THREE from 'three';
  */
 
 export const CITY_COLORS = {
-  bgPrimary: '#070E1C',         // Luminous deep space navy
-  bgSecondary: '#0E1A2E',       // Raised podium fill
+  bgPrimary: '#d2e5f5',         // Radiant atmospheric daylight sky
+  bgSecondary: '#DFD9CE',       // Warm architectural limestone podium fill
   metalDark: '#1E293B',         // Architectural slate titanium
   metalTitanium: '#475569',     // Sculpted titanium with crisp diffuse readability
   metalSteelBlue: '#334155',    // Structural steel with subtle navy tint
   metalAccent: '#94A3B8',       // Mechanical brackets & mullions
   metalExoskeleton: '#60A5FA',  // Exposed diagrids & external trusses
   metalBrushed: '#CBD5E1',      // Polished structural alloy
-  pearlWhite: '#F8FAFC',        // Pearl white architectural precast concrete
-  softSilver: '#E2E8F0',        // Satin metallic silver accents
-  lightTitanium: '#CBD5E1',     // Light titanium alloy
-  glassFacade: '#1E3A5F',       // Tinted architectural curtain glazing
-  glassReflective: '#1E40AF',   // High-reflectance sky-deck glass
+  pearlWhite: '#E6EAEF',        // Authentic architectural precast limestone concrete
+  softSilver: '#D8DEE7',        // Satin metallic silver accents
+  lightTitanium: '#C2CBD6',     // Light titanium alloy
+  glassFacade: '#18314a',       // Tinted architectural curtain glazing
+  glassReflective: '#14293f',   // Specular architectural glass
   glassClear: '#93C5FD',        // Clear transparent observation & lobby glass
   primaryBlue: '#246BFD',       // Techfest signature electric blue
   electricCyan: '#00E5FF',      // Luminous cyan accent
   accentOrange: '#FF7A00',      // Industrial / telemetry amber
   accentWarm: '#FFD8A8',        // Warm architectural interior accent
   accentRed: '#FF4757',         // Aviation beacon / warning light
-  roadSurface: '#131E32',       // Refined asphalt road with diffuse readability
-  roadMarking: '#38BDF8',       // Road lane divider
-  plazaPaving: '#1E293B',       // Architectural granite paving
+  roadSurface: '#161F2C',       // Fine-grain architectural asphalt
+  roadMarking: '#E2E8F0',       // Matte architectural white lane marking
+  plazaPaving: '#222F40',       // Honed architectural granite paving
   plazaAccent: '#334155',       // Raised terrace paving
-  vegetationDark: '#0D2622',    // Bio-pod soil & planters
-  vegetationNeon: '#147D75',    // Bioluminescent foliage
-  vegetationCyan: '#22F4D5',    // Glowing flora tip
+  vegetationDark: '#1A2228',    // Architectural planter stone
+  vegetationNeon: '#204E30',    // Natural botanical foliage
+  vegetationCyan: '#38784C',    // Foliage canopy highlight
 } as const;
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -415,17 +415,17 @@ export const hazardStripeTexture = createHazardStripeTexture();
 export const solarPanelTexture = createSolarPanelTexture();
 
 // ─────────────────────────────────────────────────────────────────────────────
-// REFINED ARCHITECTURAL MATERIAL INSTANCES (Physically Plausible & Grounded)
+// REFINED ARCHITECTURAL MATERIAL INSTANCES (Physically Based Rendering — PBR)
 // ─────────────────────────────────────────────────────────────────────────────
 
-// Standard Window Curtain Wall Material (Vibrant Architectural Glow & Crisp Definition)
+// Standard Window Curtain Wall Material (Dielectric Architectural Glazing with Warm Floor Glow)
 export const windowGridMaterial = new THREE.MeshStandardMaterial({
   map: windowDiffuseTexture,
   emissiveMap: windowEmissiveTexture,
   emissive: new THREE.Color(0xffffff),
-  emissiveIntensity: 0.68,
-  roughness: 0.18,
-  metalness: 0.78,
+  emissiveIntensity: 0.35,
+  roughness: 0.12,
+  metalness: 0.08,
 });
 
 // Academic Ribbon Window Material (AI, Cyber, Library Facades)
@@ -433,9 +433,9 @@ export const ribbonWindowMaterial = new THREE.MeshStandardMaterial({
   map: ribbonDiffuseTexture,
   emissiveMap: ribbonEmissiveTexture,
   emissive: new THREE.Color(0xffffff),
-  emissiveIntensity: 0.65,
-  roughness: 0.22,
-  metalness: 0.65,
+  emissiveIntensity: 0.32,
+  roughness: 0.15,
+  metalness: 0.06,
 });
 
 // Industrial High-Bay Clerestory Glazing (Robotics & Engineering Bay)
@@ -443,146 +443,157 @@ export const industrialWindowMaterial = new THREE.MeshStandardMaterial({
   map: clerestoryDiffuseTexture,
   emissiveMap: clerestoryEmissiveTexture,
   emissive: new THREE.Color(0xffffff),
-  emissiveIntensity: 0.60,
-  roughness: 0.25,
-  metalness: 0.72,
+  emissiveIntensity: 0.28,
+  roughness: 0.20,
+  metalness: 0.08,
 });
 
-// Architectural Cladding: Matte Pearl-White Precast Concrete (Realistic Architectural Texture)
+// Architectural Cladding: Matte Pearl-White Precast Limestone Concrete (Non-reflective, soft bounce)
 export const pearlWhiteMaterial = new THREE.MeshStandardMaterial({
   color: new THREE.Color(CITY_COLORS.pearlWhite),
-  roughness: 0.45,
-  metalness: 0.12,
+  roughness: 0.82,
+  metalness: 0.02,
 });
 export const pearlWhiteConcreteMaterial = pearlWhiteMaterial;
 
 // Light Grey Precast Structural Concrete
 export const precastConcreteMaterial = new THREE.MeshStandardMaterial({
-  color: new THREE.Color('#CBD5E1'),
-  roughness: 0.65,
-  metalness: 0.08,
+  color: new THREE.Color('#B0BAC7'),
+  roughness: 0.85,
+  metalness: 0.02,
 });
 
 // Satin Architectural Aluminium Cladding
 export const softSilverMaterial = new THREE.MeshStandardMaterial({
   color: new THREE.Color(CITY_COLORS.softSilver),
-  roughness: 0.32,
+  roughness: 0.35,
   metalness: 0.65,
 });
 
 // Light Titanium Alloy
 export const lightTitaniumMaterial = new THREE.MeshStandardMaterial({
   color: new THREE.Color(CITY_COLORS.lightTitanium),
-  roughness: 0.28,
-  metalness: 0.58,
+  roughness: 0.32,
+  metalness: 0.62,
 });
 
-// Foundation and Ground Materials
+// Foundation and Ground Materials (Natural Campus Park & Welcoming Stone Podiums)
 export const groundBaseMaterial = new THREE.MeshStandardMaterial({
-  color: new THREE.Color(CITY_COLORS.bgPrimary),
-  roughness: 0.75,
-  metalness: 0.28,
+  color: new THREE.Color('#2A6B3D'),
+  roughness: 0.94,
+  metalness: 0.01,
 });
 
 export const districtPlatformMaterial = new THREE.MeshStandardMaterial({
-  color: new THREE.Color(CITY_COLORS.bgSecondary),
-  roughness: 0.48,
-  metalness: 0.45,
+  color: new THREE.Color('#E3DDD2'),
+  roughness: 0.78,
+  metalness: 0.02,
 });
 
 export const platformBorderMaterial = new THREE.MeshStandardMaterial({
-  color: new THREE.Color(CITY_COLORS.metalTitanium),
-  roughness: 0.28,
-  metalness: 0.75,
+  color: new THREE.Color('#B8AFA0'),
+  roughness: 0.65,
+  metalness: 0.15,
 });
 
 // Architectural Metallic Structures
 export const darkTitaniumMaterial = new THREE.MeshStandardMaterial({
   color: new THREE.Color(CITY_COLORS.metalDark),
-  roughness: 0.38,
-  metalness: 0.55,
+  roughness: 0.42,
+  metalness: 0.60,
 });
 
 export const titaniumStructuralMaterial = new THREE.MeshStandardMaterial({
   color: new THREE.Color(CITY_COLORS.metalTitanium),
-  roughness: 0.32,
-  metalness: 0.72,
+  roughness: 0.35,
+  metalness: 0.68,
 });
 
 export const satinTitaniumMaterial = new THREE.MeshStandardMaterial({
-  color: new THREE.Color('#64748B'),
-  roughness: 0.30,
-  metalness: 0.70,
+  color: new THREE.Color('#556579'),
+  roughness: 0.32,
+  metalness: 0.68,
 });
 
 export const blueSteelMaterial = new THREE.MeshStandardMaterial({
   color: new THREE.Color(CITY_COLORS.metalSteelBlue),
-  roughness: 0.32,
-  metalness: 0.65,
+  roughness: 0.35,
+  metalness: 0.62,
 });
 
 export const metalExoskeletonMaterial = new THREE.MeshStandardMaterial({
   color: new THREE.Color(CITY_COLORS.metalExoskeleton),
   roughness: 0.35,
-  metalness: 0.68,
+  metalness: 0.65,
 });
 
 export const brushedAlloyMaterial = new THREE.MeshStandardMaterial({
   color: new THREE.Color(CITY_COLORS.metalBrushed),
-  roughness: 0.26,
-  metalness: 0.82,
+  roughness: 0.28,
+  metalness: 0.75,
 });
 
 export const louverAlloyMaterial = new THREE.MeshStandardMaterial({
   color: new THREE.Color(CITY_COLORS.metalAccent),
-  roughness: 0.35,
-  metalness: 0.65,
+  roughness: 0.38,
+  metalness: 0.62,
 });
 
 export const carbonFiberMaterial = new THREE.MeshStandardMaterial({
-  color: new THREE.Color('#0c131d'),
-  roughness: 0.6,
-  metalness: 0.25,
+  color: new THREE.Color('#101622'),
+  roughness: 0.65,
+  metalness: 0.20,
 });
 
-// Glass & Glazing Materials (Believable Reflections, Clean Transparency)
+// Glass & Glazing Materials (Dielectric PBR Glass: controlled reflection, genuine transmission)
 export const glassCurtainMaterial = new THREE.MeshStandardMaterial({
   color: new THREE.Color(CITY_COLORS.glassFacade),
-  roughness: 0.08,
-  metalness: 0.85,
+  roughness: 0.12,
+  metalness: 0.08,
   transparent: true,
-  opacity: 0.82,
+  opacity: 0.78,
 });
 
 export const reflectiveGlassMaterial = new THREE.MeshStandardMaterial({
   color: new THREE.Color(CITY_COLORS.glassReflective),
-  roughness: 0.04,
-  metalness: 0.94,
+  roughness: 0.05,
+  metalness: 0.08,
+  transparent: true,
+  opacity: 0.90,
 });
 
 export const clearGlassMaterial = new THREE.MeshStandardMaterial({
   color: new THREE.Color(CITY_COLORS.glassClear),
-  roughness: 0.05,
-  metalness: 0.30,
+  roughness: 0.04,
+  metalness: 0.02,
   transparent: true,
-  opacity: 0.60,
+  opacity: 0.45,
 });
 
 export const clearLobbyGlassMaterial = new THREE.MeshStandardMaterial({
-  color: new THREE.Color('#BFDBFE'),
+  color: new THREE.Color('#CBE4FE'),
   roughness: 0.04,
-  metalness: 0.15,
+  metalness: 0.02,
   transparent: true,
-  opacity: 0.42,
+  opacity: 0.35,
   depthWrite: false,
 });
 
 export const structuralGlassMaterial = new THREE.MeshStandardMaterial({
-  color: new THREE.Color('#1c426e'),
+  color: new THREE.Color('#163554'),
   roughness: 0.08,
-  metalness: 0.80,
+  metalness: 0.06,
   transparent: true,
-  opacity: 0.68,
+  opacity: 0.65,
+});
+
+// Realistic Campus Water PBR Material (Dielectric aquatic depth & specular reflections)
+export const campusWaterMaterial = new THREE.MeshStandardMaterial({
+  color: new THREE.Color('#0c2f42'),
+  roughness: 0.06,
+  metalness: 0.04,
+  transparent: true,
+  opacity: 0.90,
 });
 
 // Emissive Illumination Materials (Architectural Accents)
@@ -613,42 +624,60 @@ export const redBeaconMaterial = new THREE.MeshBasicMaterial({
 export const subtleCyanEmissiveMaterial = new THREE.MeshStandardMaterial({
   color: new THREE.Color(CITY_COLORS.metalDark),
   emissive: new THREE.Color(CITY_COLORS.electricCyan),
-  emissiveIntensity: 0.40,
-  roughness: 0.32,
-  metalness: 0.65,
+  emissiveIntensity: 0.25,
+  roughness: 0.42,
+  metalness: 0.55,
 });
 
 export const subtleOrangeEmissiveMaterial = new THREE.MeshStandardMaterial({
   color: new THREE.Color(CITY_COLORS.metalDark),
   emissive: new THREE.Color(CITY_COLORS.accentOrange),
-  emissiveIntensity: 0.40,
-  roughness: 0.32,
-  metalness: 0.65,
+  emissiveIntensity: 0.25,
+  roughness: 0.42,
+  metalness: 0.55,
 });
 
-// Infrastructure & Road Materials
+// Infrastructure & Road Materials (Dielectric Fine-Grain Asphalt & Pavement)
 export const roadMaterial = new THREE.MeshStandardMaterial({
   color: new THREE.Color(CITY_COLORS.roadSurface),
-  roughness: 0.78,
-  metalness: 0.28,
+  roughness: 0.88,
+  metalness: 0.02,
+});
+
+export const roadMarkingWhiteMaterial = new THREE.MeshStandardMaterial({
+  color: new THREE.Color(CITY_COLORS.roadMarking),
+  roughness: 0.60,
+  metalness: 0.02,
+});
+
+export const roadMarkingYellowMaterial = new THREE.MeshStandardMaterial({
+  color: new THREE.Color('#F59E0B'),
+  roughness: 0.55,
+  metalness: 0.02,
+});
+
+export const crosswalkMarkingMaterial = new THREE.MeshStandardMaterial({
+  color: new THREE.Color('#FFFFFF'),
+  roughness: 0.58,
+  metalness: 0.02,
 });
 
 export const plazaMaterial = new THREE.MeshStandardMaterial({
   color: new THREE.Color(CITY_COLORS.plazaPaving),
-  roughness: 0.52,
-  metalness: 0.48,
+  roughness: 0.75,
+  metalness: 0.04,
 });
 
 export const plazaAccentMaterial = new THREE.MeshStandardMaterial({
   color: new THREE.Color(CITY_COLORS.plazaAccent),
-  roughness: 0.44,
-  metalness: 0.54,
+  roughness: 0.68,
+  metalness: 0.04,
 });
 
 export const hazardStripeMaterial = new THREE.MeshStandardMaterial({
   map: hazardStripeTexture,
-  roughness: 0.42,
-  metalness: 0.48,
+  roughness: 0.45,
+  metalness: 0.40,
 });
 
 export const solarPanelMaterial = new THREE.MeshStandardMaterial({
@@ -657,29 +686,216 @@ export const solarPanelMaterial = new THREE.MeshStandardMaterial({
   metalness: 0.85,
 });
 
-// Campus Landscape & Turf
+// Campus Landscape & Organic Botanical Foliage
 export const campusLawnMaterial = new THREE.MeshStandardMaterial({
-  color: new THREE.Color('#163c2c'),
-  roughness: 0.88,
-  metalness: 0.08,
+  color: new THREE.Color('#224c30'),
+  roughness: 0.92,
+  metalness: 0.01,
 });
 
 export const campusWoodBenchMaterial = new THREE.MeshStandardMaterial({
-  color: new THREE.Color('#8b5a2b'),
-  roughness: 0.72,
-  metalness: 0.12,
+  color: new THREE.Color('#6b4423'),
+  roughness: 0.78,
+  metalness: 0.04,
 });
 
 export const futuristicPlanterMaterial = new THREE.MeshStandardMaterial({
-  color: new THREE.Color(CITY_COLORS.vegetationDark),
-  roughness: 0.65,
-  metalness: 0.28,
+  color: new THREE.Color('#24303d'),
+  roughness: 0.72,
+  metalness: 0.10,
 });
 
-export const bioluminescentFloraMaterial = new THREE.MeshStandardMaterial({
-  color: new THREE.Color(CITY_COLORS.vegetationNeon),
-  emissive: new THREE.Color(CITY_COLORS.vegetationCyan),
-  emissiveIntensity: 0.32,
-  roughness: 0.45,
+export const soilBedMaterial = new THREE.MeshStandardMaterial({
+  color: new THREE.Color('#1c1612'),
+  roughness: 0.96,
+  metalness: 0.0,
+});
+
+export const treeBarkMaterial = new THREE.MeshStandardMaterial({
+  color: new THREE.Color('#3d2e24'),
+  roughness: 0.88,
+  metalness: 0.01,
+});
+
+export const naturalFoliagePrimaryMaterial = new THREE.MeshStandardMaterial({
+  color: new THREE.Color('#255432'),
+  roughness: 0.84,
+  metalness: 0.01,
+});
+
+export const naturalFoliageSecondaryMaterial = new THREE.MeshStandardMaterial({
+  color: new THREE.Color('#1b4225'),
+  roughness: 0.88,
+  metalness: 0.01,
+});
+
+export const naturalFoliageAccentMaterial = new THREE.MeshStandardMaterial({
+  color: new THREE.Color('#356e43'),
+  roughness: 0.80,
+  metalness: 0.01,
+});
+
+export const bioluminescentFloraMaterial = naturalFoliagePrimaryMaterial;
+
+// ─────────────────────────────────────────────────────────────────────────────
+// DISTRICT-SPECIFIC ARCHITECTURAL COLOUR SYSTEM (Milestone 7.1)
+// ─────────────────────────────────────────────────────────────────────────────
+
+// 1. Central Innovation District (Pearl white, Cobalt blue glass, Champagne silver)
+export const champagneSilverMaterial = new THREE.MeshStandardMaterial({
+  color: new THREE.Color('#E8E0D5'),
+  roughness: 0.28,
+  metalness: 0.75,
+});
+
+export const cobaltGlassMaterial = new THREE.MeshStandardMaterial({
+  color: new THREE.Color('#1D4ED8'),
+  roughness: 0.06,
+  metalness: 0.12,
+  transparent: true,
+  opacity: 0.82,
+});
+
+// 2. Academic District (Warm ivory, Sandstone, Muted terracotta, Natural concrete)
+export const warmIvoryMaterial = new THREE.MeshStandardMaterial({
+  color: new THREE.Color('#F7F4EC'),
+  roughness: 0.82,
+  metalness: 0.02,
+});
+
+export const sandstoneMaterial = new THREE.MeshStandardMaterial({
+  color: new THREE.Color('#D8C3A5'),
+  roughness: 0.86,
+  metalness: 0.02,
+});
+
+export const terracottaMaterial = new THREE.MeshStandardMaterial({
+  color: new THREE.Color('#C8644A'),
+  roughness: 0.80,
+  metalness: 0.02,
+});
+
+export const terracottaAccentMaterial = new THREE.MeshStandardMaterial({
+  color: new THREE.Color('#DC7356'),
+  roughness: 0.78,
+  metalness: 0.02,
+});
+
+// 3. Advanced Research District (Cool white, Deep blue glass, Titanium, Controlled cyan)
+export const coolWhiteMaterial = new THREE.MeshStandardMaterial({
+  color: new THREE.Color('#F1F5F9'),
+  roughness: 0.80,
+  metalness: 0.02,
+});
+
+export const deepBlueGlassMaterial = new THREE.MeshStandardMaterial({
+  color: new THREE.Color('#0F2A48'),
+  roughness: 0.08,
+  metalness: 0.10,
+  transparent: true,
+  opacity: 0.85,
+});
+
+export const architecturalCyanMaterial = new THREE.MeshStandardMaterial({
+  color: new THREE.Color('#0284C7'),
+  roughness: 0.42,
+  metalness: 0.20,
+});
+
+// 4. Student Life District (Warm beige, Natural timber, Sage green, Warm glazing)
+export const warmBeigeMaterial = new THREE.MeshStandardMaterial({
+  color: new THREE.Color('#EFE6D8'),
+  roughness: 0.82,
+  metalness: 0.02,
+});
+
+export const naturalTimberMaterial = new THREE.MeshStandardMaterial({
+  color: new THREE.Color('#8A5A36'),
+  roughness: 0.74,
+  metalness: 0.03,
+});
+
+export const sageGreenMaterial = new THREE.MeshStandardMaterial({
+  color: new THREE.Color('#6E927A'),
+  roughness: 0.78,
+  metalness: 0.02,
+});
+
+export const warmGlazingMaterial = new THREE.MeshStandardMaterial({
+  color: new THREE.Color('#FDE68A'),
+  roughness: 0.14,
+  metalness: 0.06,
+  transparent: true,
+  opacity: 0.65,
+});
+
+// 5. Knowledge & Incubation District (Cream stone, Teal accents, Blonde wood)
+export const creamStoneMaterial = new THREE.MeshStandardMaterial({
+  color: new THREE.Color('#FAF3E0'),
+  roughness: 0.84,
+  metalness: 0.02,
+});
+
+export const tealAccentMaterial = new THREE.MeshStandardMaterial({
+  color: new THREE.Color('#0D9488'),
+  roughness: 0.44,
   metalness: 0.18,
+});
+
+export const blondeWoodMaterial = new THREE.MeshStandardMaterial({
+  color: new THREE.Color('#C89D6C'),
+  roughness: 0.74,
+  metalness: 0.03,
+});
+
+// 6. Recreation & Lake District (Natural stone, Botanical green, Warm stone, Azure water, Timber)
+export const azureWaterMaterial = new THREE.MeshStandardMaterial({
+  color: new THREE.Color('#0284C7'),
+  roughness: 0.06,
+  metalness: 0.04,
+  transparent: true,
+  opacity: 0.88,
+});
+
+export const warmStoneMaterial = new THREE.MeshStandardMaterial({
+  color: new THREE.Color('#D3C8B8'),
+  roughness: 0.82,
+  metalness: 0.03,
+});
+
+export const teakTimberMaterial = new THREE.MeshStandardMaterial({
+  color: new THREE.Color('#784622'),
+  roughness: 0.74,
+  metalness: 0.03,
+});
+
+// 7. Campus Landscape & Botanical Flowering Materials
+export const campusTurfMaterial = new THREE.MeshStandardMaterial({
+  color: new THREE.Color('#2D7040'),
+  roughness: 0.92,
+  metalness: 0.01,
+});
+
+export const warmPlazaPavingMaterial = new THREE.MeshStandardMaterial({
+  color: new THREE.Color('#E8E1D5'),
+  roughness: 0.78,
+  metalness: 0.03,
+});
+
+export const floweringLavenderMaterial = new THREE.MeshStandardMaterial({
+  color: new THREE.Color('#7C3AED'),
+  roughness: 0.85,
+  metalness: 0.01,
+});
+
+export const floweringMagentaMaterial = new THREE.MeshStandardMaterial({
+  color: new THREE.Color('#BE185D'),
+  roughness: 0.85,
+  metalness: 0.01,
+});
+
+export const floweringGoldMaterial = new THREE.MeshStandardMaterial({
+  color: new THREE.Color('#F59E0B'),
+  roughness: 0.85,
+  metalness: 0.01,
 });

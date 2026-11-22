@@ -91,19 +91,19 @@ export function CityLighting() {
 
   return (
     <group name="city-lighting">
-      {/* 1. Natural Sky/Ground Hemisphere Ambient (Bright Futurism Elevation) */}
+      {/* 1. Natural Sky/Ground Hemisphere Ambient (Bright Sunny Daylight & Green Turf Bounce) */}
       <hemisphereLight
-        args={['#7dc5ff', '#1e293b', 2.1]}
+        args={['#e0f2fe', '#86a88e', 2.2]}
       />
 
-      {/* 2. Soft Omnidirectional Fill */}
-      <ambientLight color="#254b77" intensity={1.15} />
+      {/* 2. Soft Ambient Architectural Daylight Fill */}
+      <ambientLight color="#e2ecf5" intensity={1.15} />
 
-      {/* 3. Primary Key Directional Light with Adaptive Shadows */}
+      {/* 3. Primary Key Directional Sunlight (Warm 5500K Sun with Crisp Shadows) */}
       <directionalLight
-        position={[80, 115, 75]}
-        intensity={3.4}
-        color="#ffffff"
+        position={[75, 120, 65]}
+        intensity={3.5}
+        color="#fffbf0"
         castShadow={settings.shadows}
         shadow-mapSize={settings.shadowMapSize}
         shadow-camera-near={15}
@@ -112,22 +112,22 @@ export function CityLighting() {
         shadow-camera-right={140}
         shadow-camera-top={140}
         shadow-camera-bottom={-140}
-        shadow-bias={-0.0002}
-        shadow-normalBias={0.03}
+        shadow-bias={-0.00015}
+        shadow-normalBias={0.035}
       />
 
-      {/* 4. Opposing Cool Sky Fill Light (Eliminates Pitch-Black Shadow Facets) */}
+      {/* 4. Opposing Cool Sky Dome Fill Light (Natural Skylight Ambient) */}
       <directionalLight
-        position={[-75, 65, -75]}
-        intensity={2.0}
-        color="#60a5fa"
+        position={[-75, 65, -65]}
+        intensity={1.6}
+        color="#bae6fd"
       />
 
-      {/* 5. Low-Angle Warm Architectural Edge Rake (Adds Depth & Specular Contrast) */}
+      {/* 5. Subtle Low-Angle Warm Architectural Edge Fill */}
       <directionalLight
-        position={[65, 30, -65]}
-        intensity={1.25}
-        color="#fef08a"
+        position={[60, 25, -60]}
+        intensity={0.95}
+        color="#fde68a"
       />
 
       {/* 6. Adaptive Accent Lights */}

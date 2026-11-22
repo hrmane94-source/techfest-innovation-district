@@ -4,12 +4,12 @@ import { useFrame } from '@react-three/fiber';
 import { CITY_COLORS } from '../materials';
 import { useGraphicsQuality } from '../../context';
 
-// Pre-generate deterministic particle data outside component render
-function createParticleData(maxCount = 250) {
+// Pre-generate deterministic natural atmospheric dust motes
+function createParticleData(maxCount = 200) {
   const pos = new Float32Array(maxCount * 3);
   const col = new Float32Array(maxCount * 3);
-  const cyan = new THREE.Color(CITY_COLORS.electricCyan);
-  const blue = new THREE.Color(CITY_COLORS.primaryBlue);
+  const softWhite = new THREE.Color('#f8fafc');
+  const softSky = new THREE.Color('#93c5fd');
 
   let seed = 12345;
   const prng = () => {
@@ -18,11 +18,11 @@ function createParticleData(maxCount = 250) {
   };
 
   for (let i = 0; i < maxCount; i++) {
-    pos[i * 3] = (prng() - 0.5) * 140;
-    pos[i * 3 + 1] = 2 + prng() * 55;
-    pos[i * 3 + 2] = (prng() - 0.5) * 140;
+    pos[i * 3] = (prng() - 0.5) * 160;
+    pos[i * 3 + 1] = 2 + prng() * 45;
+    pos[i * 3 + 2] = (prng() - 0.5) * 160;
 
-    const chosenColor = prng() > 0.4 ? cyan : prng() > 0.2 ? blue : new THREE.Color('#FFFFFF');
+    const chosenColor = prng() > 0.4 ? softWhite : softSky;
     col[i * 3] = chosenColor.r;
     col[i * 3 + 1] = chosenColor.g;
     col[i * 3 + 2] = chosenColor.b;
@@ -31,17 +31,17 @@ function createParticleData(maxCount = 250) {
   return { positions: pos, colors: col };
 }
 
-const STATIC_PARTICLE_DATA = createParticleData(250);
+const STATIC_PARTICLE_DATA = createParticleData(200);
 
 /**
- * CityEnvironment — Atmospheric fog, background color, and optimized floating energy dust
+ * CityEnvironment — Atmospheric fog, background color, and subtle floating daylight motes
  */
 export function CityEnvironment() {
   const pointsRef = useRef<THREE.Points>(null);
   const { settings } = useGraphicsQuality();
 
   const particleData = useMemo(() => {
-    const count = Math.min(250, settings.particleCount);
+    const count = Math.min(200, settings.particleCount);
     if (count <= 0) return null;
     return {
       positions: STATIC_PARTICLE_DATA.positions.subarray(0, count * 3),
@@ -52,14 +52,14 @@ export function CityEnvironment() {
   // Zero-CPU-allocation particle motion (rotates object matrix, no GPU buffer re-upload)
   useFrame((_, delta) => {
     if (!pointsRef.current || !settings.enableSecondaryAnimations) return;
-    pointsRef.current.rotation.y += delta * 0.015;
+    pointsRef.current.rotation.y += delta * 0.010;
   });
 
   return (
     <>
       <color attach="background" args={[CITY_COLORS.bgPrimary]} />
-      {/* Broad calibrated fog range (140 to 560) ensures crystal-clear architecture across 280m while gently blending deep horizon */}
-      <fog attach="fog" args={[CITY_COLORS.bgPrimary, 140, 560]} />
+      {/* Broad calibrated fog range (150 to 580) ensures crystal-clear architecture across 280m while gently blending deep horizon */}
+      <fog attach="fog" args={[CITY_COLORS.bgPrimary, 150, 580]} />
 
       {particleData && (
         <points ref={pointsRef}>
@@ -74,12 +74,12 @@ export function CityEnvironment() {
             />
           </bufferGeometry>
           <pointsMaterial
-            size={0.55}
+            size={0.35}
             vertexColors
             transparent
-            opacity={0.45}
+            opacity={0.22}
             sizeAttenuation
-            blending={THREE.AdditiveBlending}
+            blending={THREE.NormalBlending}
             depthWrite={false}
           />
         </points>

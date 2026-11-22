@@ -9,7 +9,8 @@ import {
   pearlWhiteMaterial,
   precastConcreteMaterial,
   softSilverMaterial,
-  reflectiveGlassMaterial,
+  champagneSilverMaterial,
+  cobaltGlassMaterial,
   clearLobbyGlassMaterial,
   windowGridMaterial,
   cyanGlowMaterial,
@@ -51,7 +52,7 @@ function ColonnadePillarsInstanced({ castShadow }: { castShadow: boolean }) {
       <instancedMesh
         ref={meshRef}
         args={[undefined, undefined, 16]}
-        material={softSilverMaterial}
+        material={champagneSilverMaterial}
         castShadow={castShadow}
       >
         <boxGeometry args={[0.55, 3.4, 0.55]} />
@@ -314,16 +315,16 @@ export function CentralLandmark() {
             <boxGeometry args={[0.04, 18.5, 0.04]} />
           </mesh>
           <group ref={elevatorNorthRef} position={[0, 10, 0.35]}>
-            <mesh material={reflectiveGlassMaterial}>
+            <mesh material={cobaltGlassMaterial}>
               <boxGeometry args={[1.2, 1.8, 0.9]} />
             </mesh>
             <mesh position={[0, 0, 0]} material={whiteGlowMaterial}>
               <boxGeometry args={[0.8, 1.2, 0.6]} />
             </mesh>
-            <mesh position={[0, -0.9, 0]} material={brushedAlloyMaterial}>
+            <mesh position={[0, -0.9, 0]} material={champagneSilverMaterial}>
               <boxGeometry args={[1.25, 0.15, 0.95]} />
             </mesh>
-            <mesh position={[0, 0.9, 0]} material={brushedAlloyMaterial}>
+            <mesh position={[0, 0.9, 0]} material={champagneSilverMaterial}>
               <boxGeometry args={[1.25, 0.15, 0.95]} />
             </mesh>
           </group>
@@ -341,16 +342,16 @@ export function CentralLandmark() {
             <boxGeometry args={[0.04, 18.5, 0.04]} />
           </mesh>
           <group ref={elevatorSouthRef} position={[0, 20, 0.35]}>
-            <mesh material={reflectiveGlassMaterial}>
+            <mesh material={cobaltGlassMaterial}>
               <boxGeometry args={[1.2, 1.8, 0.9]} />
             </mesh>
             <mesh position={[0, 0, 0]} material={cyanGlowMaterial}>
               <boxGeometry args={[0.8, 1.2, 0.6]} />
             </mesh>
-            <mesh position={[0, -0.9, 0]} material={brushedAlloyMaterial}>
+            <mesh position={[0, -0.9, 0]} material={champagneSilverMaterial}>
               <boxGeometry args={[1.25, 0.15, 0.95]} />
             </mesh>
-            <mesh position={[0, 0.9, 0]} material={brushedAlloyMaterial}>
+            <mesh position={[0, 0.9, 0]} material={champagneSilverMaterial}>
               <boxGeometry args={[1.25, 0.15, 0.95]} />
             </mesh>
           </group>
@@ -362,11 +363,11 @@ export function CentralLandmark() {
       ────────────────────────────────────────────────────────────── */}
       <group name="mid-tower-sky-deck" position={[0, 26.5, 0]}>
         {/* Cantilevered Octagonal Deck Body */}
-        <mesh material={softSilverMaterial} castShadow>
+        <mesh material={champagneSilverMaterial} castShadow>
           <cylinderGeometry args={[6.4, 5.0, 2.2, 8]} />
         </mesh>
-        {/* 360-Degree Panoramic Glass Observation Gallery */}
-        <mesh position={[0, 0.2, 0]} material={reflectiveGlassMaterial}>
+        {/* 360-Degree Panoramic Glass Observation Gallery (Cobalt Blue Glass) */}
+        <mesh position={[0, 0.2, 0]} material={cobaltGlassMaterial}>
           <cylinderGeometry args={[6.45, 5.8, 1.2, 8]} />
         </mesh>
         {/* Interior Observation Deck Warm Ambient Core */}
@@ -458,7 +459,7 @@ export function CentralLandmark() {
 
         {/* Primary Segmented Architectural Crown Halo (Rotating) */}
         <group ref={crownRingRef} position={[0, 3.6, 0]}>
-          <mesh material={metalExoskeletonMaterial}>
+          <mesh material={champagneSilverMaterial}>
             <torusGeometry args={[3.4, 0.38, 8, 8]} />
           </mesh>
           {Array.from({ length: 8 }).map((_, idx) => {

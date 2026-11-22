@@ -1,15 +1,15 @@
 import {
-  pearlWhiteMaterial,
+  creamStoneMaterial,
+  tealAccentMaterial,
+  blondeWoodMaterial,
   precastConcreteMaterial,
   softSilverMaterial,
   darkTitaniumMaterial,
   clearLobbyGlassMaterial,
   structuralGlassMaterial,
   ribbonWindowMaterial,
-  campusWoodBenchMaterial,
   louverAlloyMaterial,
   solarPanelMaterial,
-  cyanGlowMaterial,
   warmGlowMaterial,
 } from '../materials';
 import { useGraphicsQuality } from '../../context';
@@ -67,16 +67,16 @@ export function UniversityLibrary({
           </group>
         ))}
 
-        {/* Generous Cantilevered Entrance Portal & Canopy */}
+        {/* Generous Cantilevered Entrance Portal & Canopy in Cream Stone with Teal Accent */}
         <group position={[0, 4.0, depth / 2 + 1.0]}>
-          <mesh material={pearlWhiteMaterial} castShadow={shouldCastShadow}>
+          <mesh material={creamStoneMaterial} castShadow={shouldCastShadow}>
             <boxGeometry args={[width * 0.55, 0.3, 2.2]} />
           </mesh>
-          {/* Cyan Soffit Reveal */}
-          <mesh position={[0, -0.16, 0]} material={cyanGlowMaterial}>
+          {/* Teal Soffit Reveal */}
+          <mesh position={[0, -0.16, 0]} material={tealAccentMaterial}>
             <boxGeometry args={[width * 0.5, 0.04, 2.0]} />
           </mesh>
-          {/* Canopy Structural Titanium Support Columns */}
+          {/* Canopy Structural Support Columns */}
           {[-width * 0.24, width * 0.24].map((px, idx) => (
             <mesh key={`canopy-col-${idx}`} position={[px, -2.0, 0.9]} material={softSilverMaterial}>
               <cylinderGeometry args={[0.08, 0.12, 4.0, 8]} />
@@ -84,10 +84,10 @@ export function UniversityLibrary({
           ))}
         </group>
 
-        {/* Ground-Level Outdoor Study Benches along Facade */}
+        {/* Ground-Level Outdoor Blonde Wood Study Benches along Facade */}
         {[-width * 0.35, width * 0.35].map((bx, idx) => (
           <group key={`lib-bench-${idx}`} position={[bx, 0, depth / 2 + 0.6]}>
-            <mesh position={[0, 0.42, 0]} material={campusWoodBenchMaterial} castShadow={shouldCastShadow}>
+            <mesh position={[0, 0.42, 0]} material={blondeWoodMaterial} castShadow={shouldCastShadow}>
               <boxGeometry args={[2.4, 0.08, 0.5]} />
             </mesh>
             <mesh position={[0, 0.2, 0]} material={darkTitaniumMaterial}>
@@ -99,16 +99,16 @@ export function UniversityLibrary({
 
       {/* ── 2. UPPER LEVEL: ADVANCED KNOWLEDGE ARCHIVE & READING TERRACE ── */}
       <group name="library-upper-wings" position={[0, 4.0, 0]}>
-        {/* Level 2 Express Floor Slab with Overhang */}
-        <mesh position={[0, 0.15, 0]} material={pearlWhiteMaterial} castShadow={shouldCastShadow} receiveShadow={settings.shadows}>
+        {/* Level 2 Express Floor Slab with Overhang in Cream Stone */}
+        <mesh position={[0, 0.15, 0]} material={creamStoneMaterial} castShadow={shouldCastShadow} receiveShadow={settings.shadows}>
           <boxGeometry args={[width + 0.6, 0.35, depth + 0.6]} />
         </mesh>
         <mesh position={[0, -0.05, 0]} material={darkTitaniumMaterial}>
           <boxGeometry args={[width + 0.5, 0.06, depth + 0.5]} />
         </mesh>
 
-        {/* Core Upper Academic Mass */}
-        <mesh position={[0, 3.8, 0]} material={pearlWhiteMaterial} castShadow={castGeneralShadow} receiveShadow={settings.shadows}>
+        {/* Core Upper Academic Mass in Cream Stone */}
+        <mesh position={[0, 3.8, 0]} material={creamStoneMaterial} castShadow={castGeneralShadow} receiveShadow={settings.shadows}>
           <boxGeometry args={[width - 0.4, 7.0, depth - 0.4]} />
         </mesh>
 
@@ -128,11 +128,11 @@ export function UniversityLibrary({
           <boxGeometry args={[depth - 1.4, 6.2, 0.1]} />
         </mesh>
 
-        {/* Vertical Architectural Shading Louvers on South/East Facades */}
+        {/* Vertical Architectural Shading Louvers on Facades in Teal */}
         {Array.from({ length: 6 }).map((_, i) => {
           const lx = -width / 2 + 1.2 + (i * (width - 2.4)) / 5;
           return (
-            <mesh key={`lib-louver-${i}`} position={[lx, 3.8, depth / 2 + 0.12]} material={louverAlloyMaterial} castShadow={shouldCastShadow}>
+            <mesh key={`lib-louver-${i}`} position={[lx, 3.8, depth / 2 + 0.12]} material={tealAccentMaterial} castShadow={shouldCastShadow}>
               <boxGeometry args={[0.08, 6.2, 0.4]} />
             </mesh>
           );
@@ -140,7 +140,7 @@ export function UniversityLibrary({
 
         {/* Cantilevered Outdoor Quiet Reading Terrace (East End) */}
         <group position={[width / 2 + 0.6, 0.15, 0]}>
-          <mesh material={pearlWhiteMaterial} castShadow={shouldCastShadow}>
+          <mesh material={creamStoneMaterial} castShadow={shouldCastShadow}>
             <boxGeometry args={[1.6, 0.35, depth - 1.2]} />
           </mesh>
           {/* Glass Safety Balustrade */}
