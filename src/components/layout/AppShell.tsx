@@ -2,7 +2,7 @@ import { useState, useRef, type ReactNode } from 'react';
 import { useDistrict } from '../../context';
 import { Navbar } from '../navigation';
 import { HeroOverlay } from '../hero/HeroOverlay';
-import { DistrictSelectorDock, DistrictInfoDrawer, GuidedTourPill } from '../interface';
+import { DistrictSelectorDock, DistrictInfoDrawer, GuidedTourPill, CampusMinimap } from '../interface';
 import { ScrollStorytelling } from '../storytelling';
 
 export interface AppShellProps {
@@ -99,6 +99,9 @@ export function AppShell({ children, canvasSlot }: AppShellProps) {
 
           {/* Slide-In District Information Drawer (Right) */}
           <DistrictInfoDrawer />
+
+          {/* Spatial Campus Orientation Minimap */}
+          <CampusMinimap />
 
           {/* Return to Story Quick Switcher (Top Right floating pill) */}
           <div className="pointer-events-auto absolute top-20 sm:top-24 right-4 sm:right-8 z-20 hidden md:block">

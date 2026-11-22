@@ -107,11 +107,11 @@ export function CityLighting() {
         castShadow={settings.shadows}
         shadow-mapSize={settings.shadowMapSize}
         shadow-camera-near={15}
-        shadow-camera-far={280}
-        shadow-camera-left={-100}
-        shadow-camera-right={100}
-        shadow-camera-top={100}
-        shadow-camera-bottom={-100}
+        shadow-camera-far={360}
+        shadow-camera-left={-140}
+        shadow-camera-right={140}
+        shadow-camera-top={140}
+        shadow-camera-bottom={-140}
         shadow-bias={-0.0002}
         shadow-normalBias={0.03}
       />

@@ -24,25 +24,25 @@ export function HeroOverlay({
       {/* ── 1. CINEMATIC HERO EDITORIAL CONTENT ── */}
       <div className="max-w-2xl lg:max-w-3xl space-y-5 sm:space-y-6 pointer-events-auto animate-in fade-in slide-in-from-bottom-6 duration-700">
         {/* Identity Kicker Badge */}
-        <div className="inline-flex items-center gap-2.5 px-3 py-1.5 rounded-full border border-cyan-400/30 bg-[#091426]/80 backdrop-blur-md shadow-[0_0_20px_rgba(0,229,255,0.15)]">
+        <div className="inline-flex items-center gap-2.5 px-3.5 py-1.5 rounded-full border border-cyan-400/30 bg-[#091426]/85 backdrop-blur-md shadow-[0_0_24px_rgba(0,229,255,0.2)]">
           <span className="relative flex h-2 w-2">
             <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-cyan-400 opacity-75" />
             <span className="relative inline-flex rounded-full h-2 w-2 bg-cyan-400" />
           </span>
           <span className="font-mono text-[10px] sm:text-xs font-semibold tracking-wider text-cyan-300 uppercase">
-            TECHFEST 2026 • IIT BOMBAY • CAMPUS VISION
+            TECHFEST • THE UNIVERSITY OF TOMORROW • IIT BOMBAY
           </span>
         </div>
 
         {/* Monumental Headline */}
         <h1 className="font-display font-extrabold text-3xl sm:text-5xl lg:text-6xl tracking-tight leading-[1.08] text-gradient-pearl drop-shadow-2xl">
-          WELCOME TO THE <br />
-          <span className="text-gradient-cyan">UNIVERSITY OF TOMORROW.</span>
+          TECHFEST <br />
+          <span className="text-gradient-cyan">WHERE IDEAS BECOME THE FUTURE.</span>
         </h1>
 
         {/* Supporting Copy */}
         <p className="text-sm sm:text-base lg:text-lg text-[#CBD5E1] font-normal leading-relaxed max-w-xl drop-shadow-md">
-          Explore a futuristic campus where artificial intelligence, robotics, aerospace and cybersecurity come together through research, engineering, learning and innovation. A conceptual academic vision inspired by Techfest IIT Bombay.
+          Explore a living innovation ecosystem where research, technology, creativity and human imagination converge across six master-planned districts at the University of Tomorrow.
         </p>
 
         {/* CTA Button Row */}
@@ -53,7 +53,7 @@ export function HeroOverlay({
             className="group relative overflow-hidden px-6 sm:px-8 py-3.5 rounded-xl bg-gradient-to-r from-blue-600 via-cyan-500 to-blue-500 font-display font-bold text-xs sm:text-sm text-white tracking-widest uppercase shadow-[0_0_32px_rgba(0,229,255,0.4)] hover:shadow-[0_0_48px_rgba(0,229,255,0.7)] transition-all duration-300 hover:scale-[1.02] cursor-pointer"
           >
             <span className="relative z-10 flex items-center gap-2.5">
-              <span>EXPLORE THE CAMPUS</span>
+              <span>EXPLORE CAMPUS</span>
               <svg
                 className="h-4 w-4 transition-transform group-hover:translate-x-1"
                 fill="none"
@@ -82,48 +82,68 @@ export function HeroOverlay({
           </button>
         </div>
 
-        {/* Quick Academic Department Tags */}
+        {/* Quick Master District Tags */}
         <div className="pt-2 flex flex-wrap items-center gap-2 font-mono text-[10px] text-[#94A3B8]">
-          <span className="uppercase text-slate-400">Research Centres:</span>
+          <span className="uppercase text-slate-400">Campus Districts:</span>
           <button
             type="button"
             onClick={() => {
-              selectDistrict('ai');
-              onExploreClick();
-            }}
-            className="px-2 py-0.5 rounded bg-blue-500/10 border border-blue-500/30 text-blue-300 hover:text-white hover:bg-blue-500/20 cursor-pointer"
-          >
-            AI & Computation
-          </button>
-          <button
-            type="button"
-            onClick={() => {
-              selectDistrict('robotics');
-              onExploreClick();
-            }}
-            className="px-2 py-0.5 rounded bg-amber-500/10 border border-amber-500/30 text-amber-300 hover:text-white hover:bg-amber-500/20 cursor-pointer"
-          >
-            Robotics Lab
-          </button>
-          <button
-            type="button"
-            onClick={() => {
-              selectDistrict('aerospace');
+              selectDistrict('core');
               onExploreClick();
             }}
             className="px-2 py-0.5 rounded bg-cyan-500/10 border border-cyan-500/30 text-cyan-300 hover:text-white hover:bg-cyan-500/20 cursor-pointer"
           >
-            Aerospace & Space
+            DIST-A // Central Innovation
           </button>
           <button
             type="button"
             onClick={() => {
-              selectDistrict('cyber');
+              selectDistrict('academic');
+              onExploreClick();
+            }}
+            className="px-2 py-0.5 rounded bg-sky-500/10 border border-sky-500/30 text-sky-300 hover:text-white hover:bg-sky-500/20 cursor-pointer"
+          >
+            DIST-B // Academic
+          </button>
+          <button
+            type="button"
+            onClick={() => {
+              selectDistrict('research');
               onExploreClick();
             }}
             className="px-2 py-0.5 rounded bg-blue-500/10 border border-blue-500/30 text-blue-300 hover:text-white hover:bg-blue-500/20 cursor-pointer"
           >
-            Cybersecurity
+            DIST-C // Advanced Research
+          </button>
+          <button
+            type="button"
+            onClick={() => {
+              selectDistrict('student-life');
+              onExploreClick();
+            }}
+            className="px-2 py-0.5 rounded bg-amber-500/10 border border-amber-500/30 text-amber-300 hover:text-white hover:bg-amber-500/20 cursor-pointer"
+          >
+            DIST-D // Student Life
+          </button>
+          <button
+            type="button"
+            onClick={() => {
+              selectDistrict('knowledge');
+              onExploreClick();
+            }}
+            className="px-2 py-0.5 rounded bg-sky-500/10 border border-sky-500/30 text-sky-300 hover:text-white hover:bg-sky-500/20 cursor-pointer"
+          >
+            DIST-E // Knowledge
+          </button>
+          <button
+            type="button"
+            onClick={() => {
+              selectDistrict('recreation');
+              onExploreClick();
+            }}
+            className="px-2 py-0.5 rounded bg-emerald-500/10 border border-emerald-500/30 text-emerald-300 hover:text-white hover:bg-emerald-500/20 cursor-pointer"
+          >
+            DIST-F // Recreation
           </button>
         </div>
       </div>
@@ -134,19 +154,19 @@ export function HeroOverlay({
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-6 w-full md:w-auto font-mono">
           <div className="border-l-2 border-cyan-400 pl-3">
             <div className="font-display font-bold text-lg sm:text-xl text-white">68M</div>
-            <div className="text-[10px] uppercase tracking-wider text-[#94A3B8]">Central Landmark</div>
+            <div className="text-[10px] uppercase tracking-wider text-[#94A3B8]">Central Landmark Apex</div>
           </div>
-          <div className="border-l-2 border-blue-500 pl-3">
-            <div className="font-display font-bold text-lg sm:text-xl text-white">04</div>
-            <div className="text-[10px] uppercase tracking-wider text-[#94A3B8]">Academic Centres</div>
+          <div className="border-l-2 border-sky-400 pl-3">
+            <div className="font-display font-bold text-lg sm:text-xl text-white">06</div>
+            <div className="text-[10px] uppercase tracking-wider text-[#94A3B8]">Master Districts</div>
           </div>
-          <div className="border-l-2 border-cyan-400 pl-3">
-            <div className="font-display font-bold text-lg sm:text-xl text-white">03</div>
-            <div className="text-[10px] uppercase tracking-wider text-[#94A3B8]">NASA Research Exhibits</div>
+          <div className="border-l-2 border-blue-400 pl-3">
+            <div className="font-display font-bold text-lg sm:text-xl text-white">280M</div>
+            <div className="text-[10px] uppercase tracking-wider text-[#94A3B8]">Master Campus Territory</div>
           </div>
           <div className="border-l-2 border-amber-400 pl-3">
-            <div className="font-display font-bold text-lg sm:text-xl text-white">100%</div>
-            <div className="text-[10px] uppercase tracking-wider text-[#94A3B8]">Pedestrian Campus</div>
+            <div className="font-display font-bold text-lg sm:text-xl text-white">160+</div>
+            <div className="text-[10px] uppercase tracking-wider text-[#94A3B8]">Living Campus Population</div>
           </div>
         </div>
 
