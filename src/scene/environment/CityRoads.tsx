@@ -13,13 +13,13 @@ import {
   whiteGlowMaterial,
 } from '../materials';
 
-// Deterministic traffic pulse configuration
+// Deterministic traffic pulse configuration across expanded campus network
 function createTrafficPulses() {
-  const count = 48;
+  const count = 56;
   const items = [];
 
   for (let i = 0; i < count; i++) {
-    const routeType = i % 4; // 0: N-S, 1: E-W, 2: Ring, 3: Skyway
+    const routeType = i % 5; // 0: N-S, 1: E-W, 2: Inner Ring, 3: Skyway, 4: Outer Perimeter Ring
     const speed = 6.0 + (i % 5) * 1.5;
     const progress = (i * 0.137) % 1; // Deterministic initial spread
     const color = i % 3 === 0 ? 'cyan' : i % 3 === 1 ? 'blue' : 'orange';
@@ -31,26 +31,36 @@ function createTrafficPulses() {
 
 const STATIC_TRAFFIC_PULSES = createTrafficPulses();
 
-// Symmetrically placed architectural streetlights along arterial roads and ring
+// Symmetrically placed architectural streetlights along extended arterial roads and rings
 function createStreetlightPositions() {
   const positions: Array<{ pos: [number, number, number]; rotY: number }> = [];
 
-  // N-S Avenue Streetlights
-  [-55, -40, -25, 25, 40, 55].forEach((z) => {
+  // Extended N-S Avenue Streetlights (out to 105m)
+  [-100, -85, -70, -55, -40, -25, 25, 40, 55, 70, 85, 100].forEach((z) => {
     positions.push({ pos: [-4.2, 0, z], rotY: Math.PI / 2 });
     positions.push({ pos: [4.2, 0, z], rotY: -Math.PI / 2 });
   });
 
-  // E-W Avenue Streetlights
-  [-55, -40, -25, 25, 40, 55].forEach((x) => {
+  // Extended E-W Avenue Streetlights (out to 105m)
+  [-100, -85, -70, -55, -40, -25, 25, 40, 55, 70, 85, 100].forEach((x) => {
     positions.push({ pos: [x, 0, -4.2], rotY: 0 });
     positions.push({ pos: [x, 0, 4.2], rotY: Math.PI });
   });
 
-  // Circular Ring Road Perimeter Streetlights (8 units)
+  // Circular Inner Plaza Ring Road Streetlights (8 units)
   for (let i = 0; i < 8; i++) {
     const ang = (i * Math.PI * 2) / 8 + Math.PI / 8;
     const rad = 28.5;
+    positions.push({
+      pos: [Math.cos(ang) * rad, 0, Math.sin(ang) * rad],
+      rotY: -ang + Math.PI / 2,
+    });
+  }
+
+  // Outer Campus Perimeter Ring Road Streetlights (12 units)
+  for (let i = 0; i < 12; i++) {
+    const ang = (i * Math.PI * 2) / 12 + Math.PI / 12;
+    const rad = 75.5;
     positions.push({
       pos: [Math.cos(ang) * rad, 0, Math.sin(ang) * rad],
       rotY: -ang + Math.PI / 2,
@@ -63,7 +73,7 @@ function createStreetlightPositions() {
 const STREETLIGHT_POSITIONS = createStreetlightPositions();
 
 /**
- * High-performance batched streetlights using InstancedMesh (2 draw calls instead of 160)
+ * High-performance batched streetlights using InstancedMesh (2 draw calls)
  */
 function StreetlightsInstanced({ castShadow }: { castShadow: boolean }) {
   const mastRef = useRef<THREE.InstancedMesh>(null);
@@ -118,7 +128,7 @@ function StreetlightsInstanced({ castShadow }: { castShadow: boolean }) {
 }
 
 /**
- * CityRoads — Primary arterial roads, transit rings, elevated skybridges, batched streetlights, and moving transit lights
+ * CityRoads — Primary arterial roads, transit rings, outer perimeter loop, batched streetlights, and transit pulses
  */
 export function CityRoads() {
   const { settings } = useGraphicsQuality();
@@ -140,29 +150,29 @@ export function CityRoads() {
       let rotY: number;
 
       if (pulse.routeType === 0) {
-        // North-South Arterial
+        // Extended North-South Arterial
         const dir = pulse.index % 2 === 0 ? 1 : -1;
         const laneOffset = dir > 0 ? 1.5 : -1.5;
-        z = -65 + pulse.progress * 130 * dir;
-        if (dir < 0) z = 65 - pulse.progress * 130;
+        z = -105 + pulse.progress * 210 * dir;
+        if (dir < 0) z = 105 - pulse.progress * 210;
         x = laneOffset;
         rotY = dir > 0 ? 0 : Math.PI;
       } else if (pulse.routeType === 1) {
-        // East-West Arterial
+        // Extended East-West Arterial
         const dir = pulse.index % 2 === 0 ? 1 : -1;
         const laneOffset = dir > 0 ? 1.5 : -1.5;
-        x = -65 + pulse.progress * 130 * dir;
-        if (dir < 0) x = 65 - pulse.progress * 130;
+        x = -105 + pulse.progress * 210 * dir;
+        if (dir < 0) x = 105 - pulse.progress * 210;
         z = laneOffset;
         rotY = dir > 0 ? Math.PI / 2 : -Math.PI / 2;
       } else if (pulse.routeType === 2) {
-        // Circular Plaza Ring
+        // Circular Inner Plaza Ring
         const angle = pulse.progress * Math.PI * 2 + pulse.index * 0.2;
         const radius = 25.5;
         x = Math.cos(angle) * radius;
         z = Math.sin(angle) * radius;
         rotY = angle + Math.PI / 2;
-      } else {
+      } else if (pulse.routeType === 3) {
         // Elevated Skyway
         const angle = ((pulse.index % 4) * Math.PI) / 2 + Math.PI / 4;
         const dist = 14 + pulse.progress * 24;
@@ -170,6 +180,13 @@ export function CityRoads() {
         z = Math.sin(angle) * dist;
         y = 6.3;
         rotY = angle;
+      } else {
+        // Outer Campus Perimeter Ring Road
+        const angle = pulse.progress * Math.PI * 2 + pulse.index * 0.15;
+        const radius = 72;
+        x = Math.cos(angle) * radius;
+        z = Math.sin(angle) * radius;
+        rotY = angle + Math.PI / 2;
       }
 
       dummy.position.set(x, y, z);
@@ -187,36 +204,36 @@ export function CityRoads() {
 
   return (
     <group name="city-roads-infrastructure">
-      {/* ── 1. MAIN NORTH-SOUTH ARTERIAL ROAD ── */}
+      {/* ── 1. MAIN NORTH-SOUTH ARTERIAL ROAD (240m) ── */}
       <mesh position={[0, 0.04, 0]} material={roadMaterial} receiveShadow={settings.shadows}>
-        <boxGeometry args={[6.6, 0.04, 150]} />
+        <boxGeometry args={[6.6, 0.04, 240]} />
       </mesh>
       {/* N-S Center Illuminated Marking Ribbon */}
       <mesh position={[0, 0.08, 0]} material={cyanGlowMaterial}>
-        <boxGeometry args={[0.22, 0.02, 146]} />
+        <boxGeometry args={[0.22, 0.02, 236]} />
       </mesh>
       {/* N-S Outer Lane Boundary Markers */}
       <mesh position={[-3.1, 0.07, 0]} material={blueGlowMaterial}>
-        <boxGeometry args={[0.08, 0.02, 146]} />
+        <boxGeometry args={[0.08, 0.02, 236]} />
       </mesh>
       <mesh position={[3.1, 0.07, 0]} material={blueGlowMaterial}>
-        <boxGeometry args={[0.08, 0.02, 146]} />
+        <boxGeometry args={[0.08, 0.02, 236]} />
       </mesh>
 
-      {/* ── 2. MAIN EAST-WEST ARTERIAL ROAD ── */}
+      {/* ── 2. MAIN EAST-WEST ARTERIAL ROAD (240m) ── */}
       <mesh position={[0, 0.04, 0]} material={roadMaterial} receiveShadow={settings.shadows}>
-        <boxGeometry args={[150, 0.04, 6.6]} />
+        <boxGeometry args={[240, 0.04, 6.6]} />
       </mesh>
       {/* E-W Center Illuminated Marking Ribbon */}
       <mesh position={[0, 0.08, 0]} material={cyanGlowMaterial}>
-        <boxGeometry args={[146, 0.02, 0.22]} />
+        <boxGeometry args={[236, 0.02, 0.22]} />
       </mesh>
       {/* E-W Outer Lane Boundary Markers */}
       <mesh position={[0, 0.07, -3.1]} material={blueGlowMaterial}>
-        <boxGeometry args={[146, 0.02, 0.08]} />
+        <boxGeometry args={[236, 0.02, 0.08]} />
       </mesh>
       <mesh position={[0, 0.07, 3.1]} material={blueGlowMaterial}>
-        <boxGeometry args={[146, 0.02, 0.08]} />
+        <boxGeometry args={[236, 0.02, 0.08]} />
       </mesh>
 
       {/* ── 3. CIRCULAR TRANSIT RING ROAD AROUND CENTRAL PLAZA ── */}
@@ -228,7 +245,43 @@ export function CityRoads() {
         <ringGeometry args={[25.4, 25.6, 48]} />
       </mesh>
 
-      {/* ── 4. FOUR CEREMONIAL DISTRICT PORTAL GATEWAYS ── */}
+      {/* ── 4. OUTER CAMPUS PERIMETER RING ROAD (R = 72m, connects all 6 districts) ── */}
+      <mesh position={[0, 0.045, 0]} rotation={[-Math.PI / 2, 0, 0]} material={roadMaterial} receiveShadow={settings.shadows}>
+        <ringGeometry args={[69.0, 75.0, 64]} />
+      </mesh>
+      {/* Perimeter Ring Cyan Center Marking */}
+      <mesh position={[0, 0.065, 0]} rotation={[-Math.PI / 2, 0, 0]} material={cyanGlowMaterial}>
+        <ringGeometry args={[71.9, 72.1, 64]} />
+      </mesh>
+      {/* Perimeter Ring Outer Blue Curbs */}
+      <mesh position={[0, 0.06, 0]} rotation={[-Math.PI / 2, 0, 0]} material={blueGlowMaterial}>
+        <ringGeometry args={[69.1, 69.3, 64]} />
+      </mesh>
+      <mesh position={[0, 0.06, 0]} rotation={[-Math.PI / 2, 0, 0]} material={blueGlowMaterial}>
+        <ringGeometry args={[74.7, 74.9, 64]} />
+      </mesh>
+
+      {/* ── 5. PEDESTRIAN ZEBRA CROSSWALKS ── */}
+      {[-38, 38].map((crossZ, idx) => (
+        <group key={`crosswalk-ns-${idx}`} position={[0, 0.075, crossZ]}>
+          {[-2.2, -1.4, -0.6, 0.2, 1.0, 1.8].map((barX, bIdx) => (
+            <mesh key={`cw-bar-ns-${bIdx}`} position={[barX, 0, 0]} material={whiteGlowMaterial}>
+              <boxGeometry args={[0.4, 0.01, 2.8]} />
+            </mesh>
+          ))}
+        </group>
+      ))}
+      {[-38, 38].map((crossX, idx) => (
+        <group key={`crosswalk-ew-${idx}`} position={[crossX, 0.075, 0]}>
+          {[-2.2, -1.4, -0.6, 0.2, 1.0, 1.8].map((barZ, bIdx) => (
+            <mesh key={`cw-bar-ew-${bIdx}`} position={[0, 0, barZ]} material={whiteGlowMaterial}>
+              <boxGeometry args={[2.8, 0.01, 0.4]} />
+            </mesh>
+          ))}
+        </group>
+      ))}
+
+      {/* ── 6. FOUR CEREMONIAL DISTRICT PORTAL GATEWAYS ── */}
       {[
         { pos: [-16, 0, -16] as const, rot: Math.PI / 4, color: cyanGlowMaterial },
         { pos: [16, 0, -16] as const, rot: -Math.PI / 4, color: orangeGlowMaterial },
@@ -254,10 +307,10 @@ export function CityRoads() {
         </group>
       ))}
 
-      {/* ── 5. BATCHED INSTANCED STREETLIGHTS (2 draw calls total) ── */}
+      {/* ── 7. BATCHED INSTANCED STREETLIGHTS (2 draw calls total) ── */}
       <StreetlightsInstanced castShadow={shouldCastShadow} />
 
-      {/* ── 6. ELEVATED SKYBRIDGES WITH STRUCTURAL UNDER-TRUSSES ── */}
+      {/* ── 8. ELEVATED SKYBRIDGES WITH STRUCTURAL UNDER-TRUSSES ── */}
       {[
         { angle: Math.PI / 4, length: 22, height: 6 }, // AI District
         { angle: (3 * Math.PI) / 4, length: 22, height: 6 }, // Aerospace District
@@ -318,7 +371,7 @@ export function CityRoads() {
         );
       })}
 
-      {/* ── 7. INSTANCED MOVING TRANSIT PULSES ── */}
+      {/* ── 9. INSTANCED MOVING TRANSIT PULSES ── */}
       <instancedMesh
         ref={trafficMeshRef}
         args={[undefined, undefined, activeTrafficCount]}
@@ -329,3 +382,5 @@ export function CityRoads() {
     </group>
   );
 }
+
+export default CityRoads;

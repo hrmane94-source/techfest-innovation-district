@@ -6,6 +6,11 @@ import {
 } from '../architecture/DistrictBuildings';
 import { TowerGenerator } from '../architecture/TowerGenerator';
 import { UniversityLibrary } from '../architecture/UniversityLibrary';
+import { AcademicDistrict } from '../architecture/AcademicDistrict';
+import { StudentLifeDistrict } from '../architecture/StudentLifeDistrict';
+import { KnowledgeDistrict } from '../architecture/KnowledgeDistrict';
+import { RecreationDistrict } from '../architecture/RecreationDistrict';
+import { CentralInnovationPavilions } from '../architecture/CentralInnovationPavilions';
 import {
   darkTitaniumMaterial,
   titaniumStructuralMaterial,
@@ -491,6 +496,35 @@ export function InnovationDistrict() {
           Location centered around [-28, 0.9, 1] on West Concourse
       ────────────────────────────────────────────────────────────── */}
       <UniversityLibrary position={[-28, 0.9, 1]} rotation={0} />
+
+      {/* ─────────────────────────────────────────────────────────────
+          DISTRICT A CIVIC PAVILIONS: EXHIBITION & CONVENTION CENTRES
+      ────────────────────────────────────────────────────────────── */}
+      <CentralInnovationPavilions />
+
+      {/* ─────────────────────────────────────────────────────────────
+          DISTRICT B — ACADEMIC DISTRICT & GRAND AUDITORIUM (North-East)
+          Location centered around [28, 0, -55]
+      ────────────────────────────────────────────────────────────── */}
+      <AcademicDistrict position={[28, 0, -55]} />
+
+      {/* ─────────────────────────────────────────────────────────────
+          DISTRICT D — STUDENT LIFE & RESIDENTIAL DISTRICT (East)
+          Location centered around [55, 0, 20]
+      ────────────────────────────────────────────────────────────── */}
+      <StudentLifeDistrict position={[55, 0, 20]} />
+
+      {/* ─────────────────────────────────────────────────────────────
+          DISTRICT E — KNOWLEDGE & STARTUP INCUBATION DISTRICT (West)
+          Location centered around [-55, 0, 18]
+      ────────────────────────────────────────────────────────────── */}
+      <KnowledgeDistrict position={[-55, 0, 18]} />
+
+      {/* ─────────────────────────────────────────────────────────────
+          DISTRICT F — RECREATION & CAMPUS LAKE DISTRICT (South)
+          Location centered around [10, 0, 65]
+      ────────────────────────────────────────────────────────────── */}
+      <RecreationDistrict position={[10, 0, 65]} />
     </group>
   );
 }

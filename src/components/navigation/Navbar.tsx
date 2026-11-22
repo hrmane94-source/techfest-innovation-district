@@ -124,61 +124,89 @@ export function Navbar({ onExploreClick, isExploreMode = false }: NavbarProps) {
             </button>
 
             {districtsDropdownOpen && (
-              <div className="absolute top-full mt-2 left-0 w-64 rounded-xl border border-white/15 bg-[#081120]/95 backdrop-blur-2xl p-2 shadow-2xl z-50 animate-in fade-in slide-in-from-top-2 duration-200">
+              <div className="absolute top-full mt-2 left-0 w-72 rounded-xl border border-white/15 bg-[#081120]/95 backdrop-blur-2xl p-2 shadow-2xl z-50 animate-in fade-in slide-in-from-top-2 duration-200">
                 <button
                   type="button"
-                  onClick={() => handleDistrictSelect('ai')}
-                  className="w-full flex items-center justify-between p-2 rounded-lg text-left text-xs hover:bg-white/10 transition-colors group cursor-pointer"
-                >
-                  <div>
-                    <div className="font-semibold text-white group-hover:text-blue-400">
-                      SEC-01 // AI & Computation
-                    </div>
-                    <div className="text-[10px] text-[#94A3B8]">Computational Sciences Centre</div>
-                  </div>
-                  <span className="h-1.5 w-1.5 rounded-full bg-blue-500" />
-                </button>
-
-                <button
-                  type="button"
-                  onClick={() => handleDistrictSelect('robotics')}
-                  className="w-full flex items-center justify-between p-2 rounded-lg text-left text-xs hover:bg-white/10 transition-colors group cursor-pointer"
-                >
-                  <div>
-                    <div className="font-semibold text-white group-hover:text-amber-400">
-                      SEC-02 // Robotics & Automation
-                    </div>
-                    <div className="text-[10px] text-[#94A3B8]">Autonomous Systems & Mars Rover</div>
-                  </div>
-                  <span className="h-1.5 w-1.5 rounded-full bg-amber-500" />
-                </button>
-
-                <button
-                  type="button"
-                  onClick={() => handleDistrictSelect('aerospace')}
+                  onClick={() => handleDistrictSelect('core')}
                   className="w-full flex items-center justify-between p-2 rounded-lg text-left text-xs hover:bg-white/10 transition-colors group cursor-pointer"
                 >
                   <div>
                     <div className="font-semibold text-white group-hover:text-cyan-400">
-                      SEC-03 // Aerospace & Space
+                      DIST-A // Central Innovation
                     </div>
-                    <div className="text-[10px] text-[#94A3B8]">Space Research & JWST Pavilion</div>
+                    <div className="text-[10px] text-[#94A3B8]">Tower, Grand Plaza & Pavilions</div>
                   </div>
                   <span className="h-1.5 w-1.5 rounded-full bg-cyan-400" />
                 </button>
 
                 <button
                   type="button"
-                  onClick={() => handleDistrictSelect('cyber')}
+                  onClick={() => handleDistrictSelect('academic')}
                   className="w-full flex items-center justify-between p-2 rounded-lg text-left text-xs hover:bg-white/10 transition-colors group cursor-pointer"
                 >
                   <div>
-                    <div className="font-semibold text-white group-hover:text-blue-400">
-                      SEC-04 // Cybersecurity
+                    <div className="font-semibold text-white group-hover:text-sky-400">
+                      DIST-B // Academic District
                     </div>
-                    <div className="text-[10px] text-[#94A3B8]">Digital Infrastructure Centre</div>
+                    <div className="text-[10px] text-[#94A3B8]">Auditorium & Lecture Complexes</div>
                   </div>
-                  <span className="h-1.5 w-1.5 rounded-full bg-blue-400" />
+                  <span className="h-1.5 w-1.5 rounded-full bg-sky-400" />
+                </button>
+
+                <button
+                  type="button"
+                  onClick={() => handleDistrictSelect('research')}
+                  className="w-full flex items-center justify-between p-2 rounded-lg text-left text-xs hover:bg-white/10 transition-colors group cursor-pointer"
+                >
+                  <div>
+                    <div className="font-semibold text-white group-hover:text-cyan-400">
+                      DIST-C // Advanced Research
+                    </div>
+                    <div className="text-[10px] text-[#94A3B8]">AI, Robotics, Aerospace & Cyber</div>
+                  </div>
+                  <span className="h-1.5 w-1.5 rounded-full bg-cyan-400" />
+                </button>
+
+                <button
+                  type="button"
+                  onClick={() => handleDistrictSelect('student-life')}
+                  className="w-full flex items-center justify-between p-2 rounded-lg text-left text-xs hover:bg-white/10 transition-colors group cursor-pointer"
+                >
+                  <div>
+                    <div className="font-semibold text-white group-hover:text-amber-400">
+                      DIST-D // Student Life
+                    </div>
+                    <div className="text-[10px] text-[#94A3B8]">Living Residences & Dining Commons</div>
+                  </div>
+                  <span className="h-1.5 w-1.5 rounded-full bg-amber-400" />
+                </button>
+
+                <button
+                  type="button"
+                  onClick={() => handleDistrictSelect('knowledge')}
+                  className="w-full flex items-center justify-between p-2 rounded-lg text-left text-xs hover:bg-white/10 transition-colors group cursor-pointer"
+                >
+                  <div>
+                    <div className="font-semibold text-white group-hover:text-sky-400">
+                      DIST-E // Knowledge & Incubation
+                    </div>
+                    <div className="text-[10px] text-[#94A3B8]">Central Library & Startup Studio</div>
+                  </div>
+                  <span className="h-1.5 w-1.5 rounded-full bg-sky-400" />
+                </button>
+
+                <button
+                  type="button"
+                  onClick={() => handleDistrictSelect('recreation')}
+                  className="w-full flex items-center justify-between p-2 rounded-lg text-left text-xs hover:bg-white/10 transition-colors group cursor-pointer"
+                >
+                  <div>
+                    <div className="font-semibold text-white group-hover:text-emerald-400">
+                      DIST-F // Recreation & Green
+                    </div>
+                    <div className="text-[10px] text-[#94A3B8]">Campus Lake, Arena & Botanical Belt</div>
+                  </div>
+                  <span className="h-1.5 w-1.5 rounded-full bg-emerald-400" />
                 </button>
               </div>
             )}
@@ -274,40 +302,48 @@ export function Navbar({ onExploreClick, isExploreMode = false }: NavbarProps) {
               onClick={() => handleDistrictSelect('core')}
               className="p-2.5 rounded-lg border border-white/10 bg-[#091426] text-left hover:border-cyan-400 cursor-pointer"
             >
-              <div className="text-[10px] text-cyan-400">CORE</div>
-              <div className="font-bold text-white">Innovation Tower</div>
+              <div className="text-[10px] text-cyan-400">DIST-A</div>
+              <div className="font-bold text-white">Central Innovation</div>
             </button>
             <button
               type="button"
-              onClick={() => handleDistrictSelect('ai')}
-              className="p-2.5 rounded-lg border border-white/10 bg-[#091426] text-left hover:border-blue-400 cursor-pointer"
+              onClick={() => handleDistrictSelect('academic')}
+              className="p-2.5 rounded-lg border border-white/10 bg-[#091426] text-left hover:border-sky-400 cursor-pointer"
             >
-              <div className="text-[10px] text-blue-400">SEC-01</div>
-              <div className="font-bold text-white">AI Centre</div>
+              <div className="text-[10px] text-sky-400">DIST-B</div>
+              <div className="font-bold text-white">Academic District</div>
             </button>
             <button
               type="button"
-              onClick={() => handleDistrictSelect('robotics')}
-              className="p-2.5 rounded-lg border border-white/10 bg-[#091426] text-left hover:border-amber-400 cursor-pointer"
-            >
-              <div className="text-[10px] text-amber-400">SEC-02</div>
-              <div className="font-bold text-white">Robotics Lab</div>
-            </button>
-            <button
-              type="button"
-              onClick={() => handleDistrictSelect('aerospace')}
+              onClick={() => handleDistrictSelect('research')}
               className="p-2.5 rounded-lg border border-white/10 bg-[#091426] text-left hover:border-cyan-400 cursor-pointer"
             >
-              <div className="text-[10px] text-cyan-400">SEC-03</div>
-              <div className="font-bold text-white">Aerospace & JWST</div>
+              <div className="text-[10px] text-cyan-400">DIST-C</div>
+              <div className="font-bold text-white">Advanced Research</div>
             </button>
             <button
               type="button"
-              onClick={() => handleDistrictSelect('cyber')}
-              className="col-span-2 p-2.5 rounded-lg border border-white/10 bg-[#091426] text-left hover:border-blue-400 cursor-pointer"
+              onClick={() => handleDistrictSelect('student-life')}
+              className="p-2.5 rounded-lg border border-white/10 bg-[#091426] text-left hover:border-amber-400 cursor-pointer"
             >
-              <div className="text-[10px] text-blue-400">SEC-04</div>
-              <div className="font-bold text-white">Cybersecurity & Digital Infrastructure Centre</div>
+              <div className="text-[10px] text-amber-400">DIST-D</div>
+              <div className="font-bold text-white">Student Life</div>
+            </button>
+            <button
+              type="button"
+              onClick={() => handleDistrictSelect('knowledge')}
+              className="p-2.5 rounded-lg border border-white/10 bg-[#091426] text-left hover:border-sky-400 cursor-pointer"
+            >
+              <div className="text-[10px] text-sky-400">DIST-E</div>
+              <div className="font-bold text-white">Knowledge & Library</div>
+            </button>
+            <button
+              type="button"
+              onClick={() => handleDistrictSelect('recreation')}
+              className="p-2.5 rounded-lg border border-white/10 bg-[#091426] text-left hover:border-emerald-400 cursor-pointer"
+            >
+              <div className="text-[10px] text-emerald-400">DIST-F</div>
+              <div className="font-bold text-white">Recreation & Lake</div>
             </button>
           </div>
 

@@ -16,15 +16,16 @@ import {
   campusWoodBenchMaterial,
 } from '../materials';
 import { useDistrict, useGraphicsQuality } from '../../context';
+import type { DistrictId } from '../../types/district';
 
 /**
- * CityGround — Interconnected Futuristic University Campus Grounds
+ * CityGround — Interconnected Futuristic University Campus Grounds (Milestone 5: Living Innovation City)
  *
- * Authentic Campus Enhancements:
- * 1. Master campus foundation bed with subtle architectural grid
- * 2. Four interconnected Departmental Podiums with live active-state highlighting
- * 3. Continuous Paved Pedestrian Conourses linking all 4 departments to Central Plaza
- * 4. Landscaped Campus Green Belts, Manicured Lawn Strips & Courtyards
+ * Master-Planned Campus Expansion:
+ * 1. Expansive 280m x 280m Master Campus Foundation Bed with subtle architectural grid
+ * 2. Eight interconnected District & Departmental Podiums with live active-state highlighting
+ * 3. Continuous Paved Pedestrian Concourses linking all 6 districts to Central Plaza
+ * 4. Landscaped Campus Green Belts, Manicured Lawns, and Courtyards across the extended perimeter
  * 5. Tree-Lined Walkways with Shaded Campus Study Benches
  */
 export function CityGround() {
@@ -32,18 +33,31 @@ export function CityGround() {
   const { settings } = useGraphicsQuality();
   const shouldCastShadow = settings.shadowCasting === 'all';
 
-  // Departmental research platforms: [x, z, width, depth, height]
+  // Master campus district platforms: [x, z, width, depth, height, districtId, color]
   const districtPlatforms = useMemo(
     () => [
-      { id: 'ai-platform', districtId: 'ai', pos: [-24, 0.45, -20] as const, size: [36, 0.9, 32] as const, color: '#246BFD' },
-      { id: 'robotics-platform', districtId: 'robotics', pos: [24, 0.45, -20] as const, size: [34, 0.9, 34] as const, color: '#FF9B54' },
-      { id: 'aerospace-platform', districtId: 'aerospace', pos: [-24, 0.45, 22] as const, size: [36, 0.9, 34] as const, color: '#39DDF4' },
-      { id: 'cybersecurity-platform', districtId: 'cyber', pos: [24, 0.45, 22] as const, size: [34, 0.9, 32] as const, color: '#246BFD' },
+      // ── DISTRICT C (Advanced Research Institutes) ──
+      { id: 'ai-platform', districtId: 'ai' as DistrictId, pos: [-24, 0.45, -20] as const, size: [36, 0.9, 32] as const, color: '#246BFD' },
+      { id: 'robotics-platform', districtId: 'robotics' as DistrictId, pos: [24, 0.45, -20] as const, size: [34, 0.9, 34] as const, color: '#FF9B54' },
+      { id: 'aerospace-platform', districtId: 'aerospace' as DistrictId, pos: [-24, 0.45, 22] as const, size: [36, 0.9, 34] as const, color: '#39DDF4' },
+      { id: 'cybersecurity-platform', districtId: 'cyber' as DistrictId, pos: [24, 0.45, 22] as const, size: [34, 0.9, 32] as const, color: '#246BFD' },
+
+      // ── DISTRICT B (Academic District & Auditorium) ──
+      { id: 'academic-platform', districtId: 'academic' as DistrictId, pos: [28, 0.45, -55] as const, size: [52, 0.9, 44] as const, color: '#38BDF8' },
+
+      // ── DISTRICT D (Student Life & Residential District) ──
+      { id: 'student-life-platform', districtId: 'student-life' as DistrictId, pos: [55, 0.45, 20] as const, size: [48, 0.9, 46] as const, color: '#F59E0B' },
+
+      // ── DISTRICT E (Knowledge & Incubation District) ──
+      { id: 'knowledge-platform', districtId: 'knowledge' as DistrictId, pos: [-55, 0.45, 18] as const, size: [46, 0.9, 44] as const, color: '#38BDF8' },
+
+      // ── DISTRICT F (Recreation & Campus Lake District) ──
+      { id: 'recreation-platform', districtId: 'recreation' as DistrictId, pos: [10, 0.45, 65] as const, size: [72, 0.9, 44] as const, color: '#10B981' },
     ],
     []
   );
 
-  // Continuous Diagonal & Axial Pedestrian Concourse Spines connecting departments to Central Plaza
+  // Continuous Diagonal & Axial Pedestrian Concourse Spines connecting all districts to Central Plaza
   const campusConcourses = useMemo(
     () => [
       // Diagonal Concourse: AI Department to Central Plaza
@@ -60,6 +74,15 @@ export function CityGround() {
       { pos: [9.5, 0.45, -20] as const, size: [9.0, 0.88, 5.5] as const, rot: 0 },
       { pos: [-9.5, 0.45, 22] as const, size: [9.0, 0.88, 5.5] as const, rot: 0 },
       { pos: [9.5, 0.45, 22] as const, size: [9.0, 0.88, 5.5] as const, rot: 0 },
+
+      // Concourse: Central Core to District B (Academic)
+      { pos: [18, 0.46, -42] as const, size: [7.0, 0.9, 18] as const, rot: -0.4 },
+      // Concourse: Central Core to District D (Student Life)
+      { pos: [38, 0.46, 16] as const, size: [16, 0.9, 6.5] as const, rot: 0 },
+      // Concourse: Central Core to District E (Knowledge & Incubation)
+      { pos: [-38, 0.46, 16] as const, size: [16, 0.9, 6.5] as const, rot: 0 },
+      // Concourse: Central Core to District F (Recreation & Lake)
+      { pos: [8, 0.46, 42] as const, size: [6.5, 0.9, 16] as const, rot: 0 },
     ],
     []
   );
@@ -79,6 +102,13 @@ export function CityGround() {
       // Inter-Departmental Green Belts
       { pos: [-24, 0.48, 1] as const, size: [10, 0.12, 6] as const },
       { pos: [24, 0.48, 1] as const, size: [10, 0.12, 6] as const },
+
+      // Outer Campus Buffer Lawns
+      { pos: [36, 0.48, -32] as const, size: [16, 0.12, 8] as const },
+      { pos: [45, 0.48, -4] as const, size: [8, 0.12, 18] as const },
+      { pos: [-45, 0.48, -4] as const, size: [8, 0.12, 18] as const },
+      { pos: [-12, 0.48, 48] as const, size: [20, 0.12, 8] as const },
+      { pos: [30, 0.48, 48] as const, size: [20, 0.12, 8] as const },
     ],
     []
   );
@@ -105,24 +135,34 @@ export function CityGround() {
       [11, 0.9, -7.5] as const,
       [-11, 0.9, 7.5] as const,
       [11, 0.9, 7.5] as const,
+
+      // Expanded Campus Trees (Districts B, D, E, F perimeter)
+      [18, 0.55, -34] as const,
+      [38, 0.55, -34] as const,
+      [45, 0.55, -2] as const,
+      [45, 0.55, 12] as const,
+      [-45, 0.55, -2] as const,
+      [-45, 0.55, 12] as const,
+      [-8, 0.55, 48] as const,
+      [24, 0.55, 48] as const,
     ],
     []
   );
 
   return (
     <group name="city-ground">
-      {/* ── 1. MASTER CAMPUS FOUNDATION BED ── */}
-      <mesh position={[0, -0.5, 0]} material={groundBaseMaterial} receiveShadow>
-        <boxGeometry args={[190, 1.0, 190]} />
+      {/* ── 1. MASTER CAMPUS FOUNDATION BED (280m x 280m) ── */}
+      <mesh position={[0, -0.6, 0]} material={groundBaseMaterial} receiveShadow>
+        <boxGeometry args={[280, 1.2, 280]} />
       </mesh>
 
       {/* ── 2. ARCHITECTURAL CAMPUS SUB-FLOOR MATRIX ── */}
       <gridHelper
-        args={[190, 48, '#18355e', '#091527']}
+        args={[280, 56, '#18355e', '#091527']}
         position={[0, 0.02, 0]}
       />
 
-      {/* ── 3. FOUR DEPARTMENTAL RESEARCH PODIUMS ── */}
+      {/* ── 3. EIGHT DISTRICT & RESEARCH PODIUMS ── */}
       {districtPlatforms.map((plat) => {
         const isActive = selectedDistrict === plat.districtId;
         const isHovered = hoveredDistrict === plat.districtId;
@@ -246,3 +286,5 @@ export function CityGround() {
     </group>
   );
 }
+
+export default CityGround;

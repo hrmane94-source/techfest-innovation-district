@@ -454,6 +454,7 @@ export const pearlWhiteMaterial = new THREE.MeshStandardMaterial({
   roughness: 0.45,
   metalness: 0.12,
 });
+export const pearlWhiteConcreteMaterial = pearlWhiteMaterial;
 
 // Light Grey Precast Structural Concrete
 export const precastConcreteMaterial = new THREE.MeshStandardMaterial({

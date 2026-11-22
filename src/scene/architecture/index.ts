@@ -1,7 +1,12 @@
 export * from './CentralLandmark';
+export * from './CentralInnovationPavilions';
 export * from './DistrictBuildings';
 export * from './TowerGenerator';
 export * from './UniversityLibrary';
+export * from './AcademicDistrict';
+export * from './StudentLifeDistrict';
+export * from './KnowledgeDistrict';
+export * from './RecreationDistrict';
 
 import type { SceneArchitectureLayer } from '../../types/scene';
 

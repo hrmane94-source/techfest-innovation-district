@@ -5,6 +5,11 @@
 export type DistrictId =
   | 'overview'
   | 'core'
+  | 'academic'
+  | 'research'
+  | 'student-life'
+  | 'knowledge'
+  | 'recreation'
   | 'ai'
   | 'robotics'
   | 'aerospace'
