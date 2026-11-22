@@ -1,12 +1,13 @@
-import { useRef } from 'react';
+import { useRef, useEffect } from 'react';
 import * as THREE from 'three';
 import { useFrame } from '@react-three/fiber';
 import {
   darkTitaniumMaterial,
   titaniumStructuralMaterial,
-  blueSteelMaterial,
   metalExoskeletonMaterial,
   brushedAlloyMaterial,
+  pearlWhiteMaterial,
+  softSilverMaterial,
   reflectiveGlassMaterial,
   structuralGlassMaterial,
   windowGridMaterial,
@@ -17,7 +18,53 @@ import {
   warmGlowMaterial,
   redBeaconMaterial,
 } from '../materials';
-import { useDistrict } from '../../context';
+import { useDistrict, useGraphicsQuality } from '../../context';
+
+function ColonnadePillarsInstanced({ castShadow }: { castShadow: boolean }) {
+  const meshRef = useRef<THREE.InstancedMesh>(null);
+  const capRef = useRef<THREE.InstancedMesh>(null);
+
+  useEffect(() => {
+    if (!meshRef.current || !capRef.current) return;
+    const dummy = new THREE.Object3D();
+    const radius = 9.8;
+
+    for (let i = 0; i < 16; i++) {
+      const angle = (i * Math.PI * 2) / 16;
+      dummy.position.set(Math.cos(angle) * radius, 2.5, Math.sin(angle) * radius);
+      dummy.rotation.set(0, -angle, 0);
+      dummy.scale.set(1, 1, 1);
+      dummy.updateMatrix();
+      meshRef.current.setMatrixAt(i, dummy.matrix);
+
+      dummy.position.set(Math.cos(angle) * radius, 4.1, Math.sin(angle) * radius);
+      dummy.updateMatrix();
+      capRef.current.setMatrixAt(i, dummy.matrix);
+    }
+    meshRef.current.instanceMatrix.needsUpdate = true;
+    capRef.current.instanceMatrix.needsUpdate = true;
+  }, []);
+
+  return (
+    <group name="instanced-colonnade">
+      <instancedMesh
+        ref={meshRef}
+        args={[undefined, undefined, 16]}
+        material={softSilverMaterial}
+        castShadow={castShadow}
+      >
+        <boxGeometry args={[0.55, 3.4, 0.55]} />
+      </instancedMesh>
+      <instancedMesh
+        ref={capRef}
+        args={[undefined, undefined, 16]}
+        material={pearlWhiteMaterial}
+      >
+        <boxGeometry args={[0.75, 0.2, 0.75]} />
+      </instancedMesh>
+    </group>
+  );
+}
 
 /**
  * CentralLandmark — The Monumental Techfest Innovation Tower (Milestone 3.0 Interactive)
@@ -37,11 +84,13 @@ export function CentralLandmark() {
   const apexStrobeRef = useRef<THREE.Mesh>(null);
 
   const { selectedDistrict, hoveredDistrict, selectDistrict, setHoveredDistrict } = useDistrict();
+  const { settings } = useGraphicsQuality();
   const isSelected = selectedDistrict === 'core';
   const isHovered = hoveredDistrict === 'core';
 
   // Dynamic animations: Breathing crown core, counter-rotating halos, traveling elevators, apex strobe
   useFrame(({ clock }) => {
+    if (!settings.enableSecondaryAnimations) return;
     const t = clock.getElapsedTime();
 
     // Crown energy pulsation
@@ -108,43 +157,18 @@ export function CentralLandmark() {
       ────────────────────────────────────────────────────────────── */}
       <group name="podium-foundation">
         {/* Tiered Octagonal Base Slabs */}
-        <mesh position={[0, 1.8, 0]} material={darkTitaniumMaterial} receiveShadow castShadow>
+        <mesh position={[0, 1.8, 0]} material={softSilverMaterial} receiveShadow={settings.shadows} castShadow={settings.shadowCasting !== 'none'}>
           <cylinderGeometry args={[9.2, 11.2, 2.0, 8]} />
         </mesh>
-        <mesh position={[0, 3.8, 0]} material={titaniumStructuralMaterial} receiveShadow castShadow>
+        <mesh position={[0, 3.8, 0]} material={pearlWhiteMaterial} receiveShadow={settings.shadows} castShadow={settings.shadowCasting !== 'none'}>
           <cylinderGeometry args={[8.5, 9.2, 2.0, 8]} />
         </mesh>
         <mesh position={[0, 5.0, 0]} material={brushedAlloyMaterial}>
           <cylinderGeometry args={[8.6, 8.6, 0.4, 8]} />
         </mesh>
 
-        {/* 16 Monumental Perimeter Colonnade Pillars */}
-        {Array.from({ length: 16 }).map((_, idx) => {
-          const angle = (idx * Math.PI * 2) / 16;
-          const radius = 9.8;
-          return (
-            <group
-              key={`podium-col-${idx}`}
-              position={[Math.cos(angle) * radius, 2.5, Math.sin(angle) * radius]}
-              rotation={[0, -angle, 0]}
-            >
-              <mesh material={titaniumStructuralMaterial} castShadow>
-                <boxGeometry args={[0.55, 3.4, 0.55]} />
-              </mesh>
-              {/* Pillar Base & Capital Trim */}
-              <mesh position={[0, -1.6, 0]} material={darkTitaniumMaterial}>
-                <boxGeometry args={[0.75, 0.2, 0.75]} />
-              </mesh>
-              <mesh position={[0, 1.6, 0]} material={brushedAlloyMaterial}>
-                <boxGeometry args={[0.75, 0.2, 0.75]} />
-              </mesh>
-              {/* Recessed Cyan Uplight */}
-              <mesh position={[0, -1.45, 0.29]} material={cyanGlowMaterial}>
-                <boxGeometry args={[0.22, 0.1, 0.04]} />
-              </mesh>
-            </group>
-          );
-        })}
+        {/* 16 Monumental Perimeter Colonnade Pillars (Instanced) */}
+        <ColonnadePillarsInstanced castShadow={settings.shadowCasting === 'all'} />
 
         {/* Four Massive Angled Corner Buttress Pylons */}
         {[Math.PI / 4, (3 * Math.PI) / 4, (5 * Math.PI) / 4, (7 * Math.PI) / 4].map(
@@ -153,7 +177,7 @@ export function CentralLandmark() {
               <mesh
                 position={[8.8, 3.5, 0]}
                 rotation={[0, 0, -Math.PI / 8]}
-                material={blueSteelMaterial}
+                material={pearlWhiteMaterial}
                 castShadow
               >
                 <boxGeometry args={[1.8, 7.2, 2.2]} />
@@ -254,7 +278,7 @@ export function CentralLandmark() {
           [-3.8, -3.8],
         ].map(([cx, cz], idx) => (
           <group key={`tower-corner-pylon-${idx}`} position={[cx, 16.0, cz]}>
-            <mesh material={titaniumStructuralMaterial} castShadow>
+            <mesh material={pearlWhiteMaterial} castShadow>
               <boxGeometry args={[1.6, 19.4, 1.6]} />
             </mesh>
             {/* Corner Chamfer Lighting Slot */}
@@ -325,7 +349,7 @@ export function CentralLandmark() {
       ────────────────────────────────────────────────────────────── */}
       <group name="mid-tower-sky-deck" position={[0, 26.5, 0]}>
         {/* Cantilevered Octagonal Deck Body */}
-        <mesh material={darkTitaniumMaterial} castShadow>
+        <mesh material={softSilverMaterial} castShadow>
           <cylinderGeometry args={[6.4, 5.0, 2.2, 8]} />
         </mesh>
         {/* 360-Degree Panoramic Glass Observation Gallery */}
@@ -351,7 +375,7 @@ export function CentralLandmark() {
               key={`diagrid-strut-${idx}`}
               position={[Math.cos(angle) * 4.6, -1.6, Math.sin(angle) * 4.6]}
               rotation={[0, -angle, 0.45]}
-              material={metalExoskeletonMaterial}
+              material={softSilverMaterial}
             >
               <boxGeometry args={[0.7, 1.8, 0.7]} />
             </mesh>
@@ -371,7 +395,7 @@ export function CentralLandmark() {
           { x: -1.9, z: 1.9 },
         ].map((shaft, idx) => (
           <group key={`upper-quad-shaft-${idx}`} position={[shaft.x, 40.5, shaft.z]}>
-            <mesh material={titaniumStructuralMaterial} castShadow>
+            <mesh material={pearlWhiteMaterial} castShadow>
               <boxGeometry args={[2.4, 25.0, 2.4]} />
             </mesh>
             <mesh
@@ -397,7 +421,7 @@ export function CentralLandmark() {
         {/* Structural Cross-Bracing Sky-Rings binding the four shafts */}
         {[34, 41, 48].map((yPos, idx) => (
           <group key={`quad-sky-ring-${idx}`} position={[0, yPos, 0]}>
-            <mesh material={darkTitaniumMaterial}>
+            <mesh material={softSilverMaterial}>
               <cylinderGeometry args={[3.4, 3.4, 0.8, 8]} />
             </mesh>
             <mesh position={[0, 0, 0]} material={cyanGlowMaterial}>
@@ -412,7 +436,7 @@ export function CentralLandmark() {
       ────────────────────────────────────────────────────────────── */}
       <group name="monumental-crown" position={[0, 53.5, 0]}>
         {/* Crown Podium Platform with mechanical louvers */}
-        <mesh position={[0, 0.8, 0]} material={darkTitaniumMaterial}>
+        <mesh position={[0, 0.8, 0]} material={pearlWhiteMaterial}>
           <cylinderGeometry args={[3.0, 3.6, 1.6, 8]} />
         </mesh>
         <mesh position={[0, 0.8, 0]} material={brushedAlloyMaterial}>

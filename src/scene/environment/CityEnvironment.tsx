@@ -1,29 +1,28 @@
-import { useRef } from 'react';
+import { useMemo, useRef } from 'react';
 import * as THREE from 'three';
 import { useFrame } from '@react-three/fiber';
 import { CITY_COLORS } from '../materials';
+import { useGraphicsQuality } from '../../context';
 
 // Pre-generate deterministic particle data outside component render
-function createParticleData() {
-  const count = 250;
-  const pos = new Float32Array(count * 3);
-  const col = new Float32Array(count * 3);
+function createParticleData(maxCount = 250) {
+  const pos = new Float32Array(maxCount * 3);
+  const col = new Float32Array(maxCount * 3);
   const cyan = new THREE.Color(CITY_COLORS.electricCyan);
   const blue = new THREE.Color(CITY_COLORS.primaryBlue);
 
-  // Deterministic LCG pseudo-random generator
   let seed = 12345;
   const prng = () => {
     seed = (seed * 16807) % 2147483647;
     return (seed - 1) / 2147483646;
   };
 
-  for (let i = 0; i < count; i++) {
+  for (let i = 0; i < maxCount; i++) {
     pos[i * 3] = (prng() - 0.5) * 140;
     pos[i * 3 + 1] = 2 + prng() * 55;
     pos[i * 3 + 2] = (prng() - 0.5) * 140;
 
-    const chosenColor = prng() > 0.3 ? cyan : blue;
+    const chosenColor = prng() > 0.4 ? cyan : prng() > 0.2 ? blue : new THREE.Color('#FFFFFF');
     col[i * 3] = chosenColor.r;
     col[i * 3 + 1] = chosenColor.g;
     col[i * 3 + 2] = chosenColor.b;
@@ -32,56 +31,59 @@ function createParticleData() {
   return { positions: pos, colors: col };
 }
 
-const STATIC_PARTICLE_DATA = createParticleData();
+const STATIC_PARTICLE_DATA = createParticleData(250);
 
 /**
- * CityEnvironment — Atmospheric fog, background color, and subtle floating energy dust (Refined M1.2)
+ * CityEnvironment — Atmospheric fog, background color, and optimized floating energy dust
  */
 export function CityEnvironment() {
   const pointsRef = useRef<THREE.Points>(null);
+  const { settings } = useGraphicsQuality();
 
-  // Gentle particle drift
+  const particleData = useMemo(() => {
+    const count = Math.min(250, settings.particleCount);
+    if (count <= 0) return null;
+    return {
+      positions: STATIC_PARTICLE_DATA.positions.subarray(0, count * 3),
+      colors: STATIC_PARTICLE_DATA.colors.subarray(0, count * 3),
+    };
+  }, [settings.particleCount]);
+
+  // Zero-CPU-allocation particle motion (rotates object matrix, no GPU buffer re-upload)
   useFrame((_, delta) => {
-    if (!pointsRef.current) return;
-    const posAttr = pointsRef.current.geometry.attributes.position as THREE.BufferAttribute;
-    const array = posAttr.array as Float32Array;
-
-    for (let i = 0; i < array.length / 3; i++) {
-      array[i * 3 + 1] -= delta * 0.8;
-      if (array[i * 3 + 1] < 2) {
-        array[i * 3 + 1] = 55;
-      }
-    }
-    posAttr.needsUpdate = true;
+    if (!pointsRef.current || !settings.enableSecondaryAnimations) return;
+    pointsRef.current.rotation.y += delta * 0.015;
   });
 
   return (
     <>
       <color attach="background" args={[CITY_COLORS.bgPrimary]} />
-      {/* Calibrated fog range (65 to 280) preserves full city clarity while softly blending horizon */}
-      <fog attach="fog" args={[CITY_COLORS.bgPrimary, 65, 280]} />
+      {/* Broad calibrated fog range (110 to 420) ensures crystal-clear architecture while gently blending deep horizon */}
+      <fog attach="fog" args={[CITY_COLORS.bgPrimary, 110, 420]} />
 
-      <points ref={pointsRef}>
-        <bufferGeometry>
-          <bufferAttribute
-            attach="attributes-position"
-            args={[STATIC_PARTICLE_DATA.positions, 3]}
+      {particleData && (
+        <points ref={pointsRef}>
+          <bufferGeometry>
+            <bufferAttribute
+              attach="attributes-position"
+              args={[particleData.positions, 3]}
+            />
+            <bufferAttribute
+              attach="attributes-color"
+              args={[particleData.colors, 3]}
+            />
+          </bufferGeometry>
+          <pointsMaterial
+            size={0.55}
+            vertexColors
+            transparent
+            opacity={0.45}
+            sizeAttenuation
+            blending={THREE.AdditiveBlending}
+            depthWrite={false}
           />
-          <bufferAttribute
-            attach="attributes-color"
-            args={[STATIC_PARTICLE_DATA.colors, 3]}
-          />
-        </bufferGeometry>
-        <pointsMaterial
-          size={0.55}
-          vertexColors
-          transparent
-          opacity={0.45}
-          sizeAttenuation
-          blending={THREE.AdditiveBlending}
-          depthWrite={false}
-        />
-      </points>
+        </points>
+      )}
     </>
   );
 }

@@ -2,6 +2,7 @@ import { Suspense, useMemo, useEffect } from 'react';
 import * as THREE from 'three';
 import { useGLTF } from '@react-three/drei';
 import * as SkeletonUtils from 'three/examples/jsm/utils/SkeletonUtils.js';
+import { useGraphicsQuality } from '../../context';
 import { ModelErrorBoundary } from './ModelErrorBoundary';
 import type { ModelProps } from '../../types/models';
 
@@ -16,12 +17,16 @@ function ModelContent({
   visible = true,
   castShadow = false,
   receiveShadow = false,
-  clone = true,
+  clone = false, // Optimized: avoid wasteful deep cloning for single-instance models
   onLoad,
 }: ModelProps) {
   const gltf = useGLTF(url);
+  const { settings } = useGraphicsQuality();
 
-  // Deep clone scene hierarchy to allow independent instances without state corruption
+  const effectiveCastShadow = castShadow && settings.shadowCasting === 'all';
+  const effectiveReceiveShadow = receiveShadow && settings.shadows;
+
+  // Clone only when explicitly requested
   const sceneObject = useMemo(() => {
     if (!gltf.scene) return null;
     return clone ? (SkeletonUtils.clone(gltf.scene) as THREE.Object3D) : gltf.scene;
@@ -33,13 +38,13 @@ function ModelContent({
 
     sceneObject.traverse((node) => {
       if ((node as THREE.Mesh).isMesh) {
-        node.castShadow = castShadow;
-        node.receiveShadow = receiveShadow;
+        node.castShadow = effectiveCastShadow;
+        node.receiveShadow = effectiveReceiveShadow;
       }
     });
 
     onLoad?.(sceneObject);
-  }, [sceneObject, castShadow, receiveShadow, onLoad]);
+  }, [sceneObject, effectiveCastShadow, effectiveReceiveShadow, onLoad]);
 
   if (!sceneObject) return null;
 
@@ -56,12 +61,6 @@ function ModelContent({
 
 /**
  * ModelLoader — Reusable, high-performance GLTF/GLB 3D asset loader component.
- *
- * Features:
- * - Suspense integration with custom 3D fallback
- * - ModelErrorBoundary to isolate loading or fetch failures
- * - Automatic asset caching & optional deep cloning for multi-instance safety
- * - Shadow & transformation prop forwarding
  */
 export function ModelLoader({
   url,
@@ -71,7 +70,7 @@ export function ModelLoader({
   visible,
   castShadow,
   receiveShadow,
-  clone = true,
+  clone = false,
   fallback = null,
   onLoad,
   onError,

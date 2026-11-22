@@ -13,31 +13,32 @@ import * as THREE from 'three';
  */
 
 export const CITY_COLORS = {
-  bgPrimary: '#050A14',
-  bgSecondary: '#081120',
-  metalDark: '#1c2b42',         // Refined architectural titanium graphite
-  metalTitanium: '#283e5c',     // Sculpted titanium with crisp diffuse readability
-  metalSteelBlue: '#2e476b',    // Structural steel with subtle navy tint
-  metalAccent: '#3c5880',       // Mechanical brackets & secondary mullions
-  metalExoskeleton: '#3e5c85',  // Exposed diagrids & external trusses
-  metalBrushed: '#5a7fa8',      // Polished structural alloy
-  pearlWhite: '#F8FAFC',        // Pearl white architectural cladding
-  softSilver: '#E2E8F0',        // Metallic silver accents
-  glassFacade: '#102644',       // Tinted architectural curtain glazing
-  glassReflective: '#1a3d6b',   // High-reflectance sky-deck glass
-  glassClear: '#23508c',        // Clear observation glass
+  bgPrimary: '#070E1C',         // Luminous deep space navy
+  bgSecondary: '#0E1A2E',       // Raised podium fill
+  metalDark: '#334155',         // Sleek architectural slate titanium
+  metalTitanium: '#64748B',     // Sculpted titanium with crisp diffuse readability
+  metalSteelBlue: '#475569',    // Structural steel with subtle navy tint
+  metalAccent: '#94A3B8',       // Mechanical brackets & secondary mullions
+  metalExoskeleton: '#60A5FA',  // Exposed diagrids & external trusses
+  metalBrushed: '#CBD5E1',      // Polished structural alloy
+  pearlWhite: '#FFFFFF',        // Pearl white architectural cladding
+  softSilver: '#F1F5F9',        // Metallic silver accents
+  lightTitanium: '#CBD5E1',     // Light titanium alloy
+  glassFacade: '#1E3A5F',       // Tinted architectural curtain glazing
+  glassReflective: '#2563EB',   // High-reflectance sky-deck glass
+  glassClear: '#38BDF8',        // Clear observation glass
   primaryBlue: '#246BFD',       // Techfest signature electric blue
   electricCyan: '#00E5FF',      // Luminous cyan accent
   accentOrange: '#FF7A00',      // Industrial / telemetry amber
   accentWarm: '#FFB370',        // Warm architectural interior accent
   accentRed: '#FF4757',         // Aviation beacon / warning light
-  roadSurface: '#080e1a',       // Deep asphalt road
-  roadMarking: '#1e385c',       // Road lane divider
-  plazaPaving: '#0f1c30',       // Architectural granite paving
-  plazaAccent: '#162844',       // Raised terrace paving
-  vegetationDark: '#0a1e1c',    // Bio-pod soil & planters
-  vegetationNeon: '#125c56',    // Bioluminescent foliage
-  vegetationCyan: '#1ae5c7',    // Glowing flora tip
+  roadSurface: '#131E32',       // Refined asphalt road with diffuse readability
+  roadMarking: '#38BDF8',       // Road lane divider
+  plazaPaving: '#1E293B',       // Architectural granite paving
+  plazaAccent: '#334155',       // Raised terrace paving
+  vegetationDark: '#0D2622',    // Bio-pod soil & planters
+  vegetationNeon: '#147D75',    // Bioluminescent foliage
+  vegetationCyan: '#22F4D5',    // Glowing flora tip
 } as const;
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -51,7 +52,7 @@ function createProceduralWindowTextures() {
   const emissiveData = new Uint8Array(width * height * 4);
 
   // 8 distinct architectural floors (16 pixels per floor)
-  // Each floor: 4px dark horizontal spandrel beam, 12px glazed window zone
+  // Each floor: 4px horizontal spandrel beam, 12px glazed window zone
   // 4 bays per floor (32px per bay), separated by 3px vertical mullion columns
   const floorHeight = 16;
   const spandrelHeight = 4;
@@ -70,42 +71,72 @@ function createProceduralWindowTextures() {
       const pixelIndex = (y * width + x) * 4;
 
       if (isSpandrel || isMullion) {
-        // Dark metallic spandrel beam / vertical mullion column
-        diffuseData[pixelIndex] = 18;
-        diffuseData[pixelIndex + 1] = 27;
-        diffuseData[pixelIndex + 2] = 40;
+        // Bright architectural titanium spandrel beam & mullion column
+        diffuseData[pixelIndex] = 75;
+        diffuseData[pixelIndex + 1] = 95;
+        diffuseData[pixelIndex + 2] = 125;
         diffuseData[pixelIndex + 3] = 255;
 
-        emissiveData[pixelIndex] = 0;
-        emissiveData[pixelIndex + 1] = 0;
-        emissiveData[pixelIndex + 2] = 0;
+        emissiveData[pixelIndex] = 10;
+        emissiveData[pixelIndex + 1] = 15;
+        emissiveData[pixelIndex + 2] = 25;
         emissiveData[pixelIndex + 3] = 255;
       } else {
         // Window pane interior: State determined per floor and bay
         const floorHash = (floorIndex * 37 + bayIndex * 19 + 7) % 100;
         const normalizedYInPane = (yInFloor - spandrelHeight) / (floorHeight - spandrelHeight);
-        const verticalGlow = 0.85 + (1 - normalizedYInPane) * 0.3;
+        const verticalGlow = 0.9 + (1 - normalizedYInPane) * 0.35;
 
-        if (floorHash < 22) {
+        if (floorHash < 28) {
           // Electric Cyan illuminated laboratory / cleanroom floor
-          const r = Math.min(255, Math.floor(48 * verticalGlow));
-          const g = Math.min(255, Math.floor(205 * verticalGlow));
-          const b = Math.min(255, Math.floor(230 * verticalGlow));
+          const r = Math.min(255, Math.floor(55 * verticalGlow));
+          const g = Math.min(255, Math.floor(225 * verticalGlow));
+          const b = Math.min(255, Math.floor(255 * verticalGlow));
 
           diffuseData[pixelIndex] = r;
           diffuseData[pixelIndex + 1] = g;
           diffuseData[pixelIndex + 2] = b;
           diffuseData[pixelIndex + 3] = 255;
 
-          emissiveData[pixelIndex] = Math.floor(r * 0.85);
-          emissiveData[pixelIndex + 1] = Math.floor(g * 0.85);
-          emissiveData[pixelIndex + 2] = Math.floor(b * 0.85);
+          emissiveData[pixelIndex] = Math.floor(r * 0.95);
+          emissiveData[pixelIndex + 1] = Math.floor(g * 0.95);
+          emissiveData[pixelIndex + 2] = Math.floor(b * 0.95);
           emissiveData[pixelIndex + 3] = 255;
-        } else if (floorHash < 35) {
+        } else if (floorHash < 54) {
           // Primary Blue illuminated computational / data centre floor
-          const r = Math.min(255, Math.floor(32 * verticalGlow));
-          const g = Math.min(255, Math.floor(95 * verticalGlow));
-          const b = Math.min(255, Math.floor(225 * verticalGlow));
+          const r = Math.min(255, Math.floor(56 * verticalGlow));
+          const g = Math.min(255, Math.floor(140 * verticalGlow));
+          const b = Math.min(255, Math.floor(255 * verticalGlow));
+
+          diffuseData[pixelIndex] = r;
+          diffuseData[pixelIndex + 1] = g;
+          diffuseData[pixelIndex + 2] = b;
+          diffuseData[pixelIndex + 3] = 255;
+
+          emissiveData[pixelIndex] = Math.floor(r * 0.9);
+          emissiveData[pixelIndex + 1] = Math.floor(g * 0.9);
+          emissiveData[pixelIndex + 2] = Math.floor(b * 0.9);
+          emissiveData[pixelIndex + 3] = 255;
+        } else if (floorHash < 70) {
+          // Warm amber executive suite / collaboration zone
+          const r = Math.min(255, Math.floor(255 * verticalGlow));
+          const g = Math.min(255, Math.floor(185 * verticalGlow));
+          const b = Math.min(255, Math.floor(110 * verticalGlow));
+
+          diffuseData[pixelIndex] = r;
+          diffuseData[pixelIndex + 1] = g;
+          diffuseData[pixelIndex + 2] = b;
+          diffuseData[pixelIndex + 3] = 255;
+
+          emissiveData[pixelIndex] = Math.floor(r * 0.88);
+          emissiveData[pixelIndex + 1] = Math.floor(g * 0.88);
+          emissiveData[pixelIndex + 2] = Math.floor(b * 0.88);
+          emissiveData[pixelIndex + 3] = 255;
+        } else if (floorHash < 86) {
+          // Luminous pearl-white collaborative studio floor
+          const r = Math.min(255, Math.floor(240 * verticalGlow));
+          const g = Math.min(255, Math.floor(245 * verticalGlow));
+          const b = Math.min(255, Math.floor(255 * verticalGlow));
 
           diffuseData[pixelIndex] = r;
           diffuseData[pixelIndex + 1] = g;
@@ -115,32 +146,17 @@ function createProceduralWindowTextures() {
           emissiveData[pixelIndex] = Math.floor(r * 0.85);
           emissiveData[pixelIndex + 1] = Math.floor(g * 0.85);
           emissiveData[pixelIndex + 2] = Math.floor(b * 0.85);
-          emissiveData[pixelIndex + 3] = 255;
-        } else if (floorHash < 42) {
-          // Warm amber executive suite / collaboration zone
-          const r = Math.min(255, Math.floor(240 * verticalGlow));
-          const g = Math.min(255, Math.floor(155 * verticalGlow));
-          const b = Math.min(255, Math.floor(85 * verticalGlow));
-
-          diffuseData[pixelIndex] = r;
-          diffuseData[pixelIndex + 1] = g;
-          diffuseData[pixelIndex + 2] = b;
-          diffuseData[pixelIndex + 3] = 255;
-
-          emissiveData[pixelIndex] = Math.floor(r * 0.8);
-          emissiveData[pixelIndex + 1] = Math.floor(g * 0.8);
-          emissiveData[pixelIndex + 2] = Math.floor(b * 0.8);
           emissiveData[pixelIndex + 3] = 255;
         } else {
-          // Dark reflective unlit architectural glazing
-          diffuseData[pixelIndex] = 14;
-          diffuseData[pixelIndex + 1] = 24;
-          diffuseData[pixelIndex + 2] = 40;
+          // Softly reflective sky-blue architectural curtain glazing
+          diffuseData[pixelIndex] = 60;
+          diffuseData[pixelIndex + 1] = 90;
+          diffuseData[pixelIndex + 2] = 135;
           diffuseData[pixelIndex + 3] = 255;
 
-          emissiveData[pixelIndex] = 0;
-          emissiveData[pixelIndex + 1] = 0;
-          emissiveData[pixelIndex + 2] = 0;
+          emissiveData[pixelIndex] = 15;
+          emissiveData[pixelIndex + 1] = 25;
+          emissiveData[pixelIndex + 2] = 45;
           emissiveData[pixelIndex + 3] = 255;
         }
       }
@@ -247,65 +263,71 @@ export const solarPanelTexture = createSolarPanelTexture();
 // REFINED ARCHITECTURAL MATERIAL INSTANCES
 // ─────────────────────────────────────────────────────────────────────────────
 
-// High-Tech Window Facade Material
+// High-Tech Window Facade Material (Bright Futurism Luminous Elevation)
 export const windowGridMaterial = new THREE.MeshStandardMaterial({
   map: windowDiffuseTexture,
   emissiveMap: windowEmissiveTexture,
   emissive: new THREE.Color(0xffffff),
-  emissiveIntensity: 0.68,
-  roughness: 0.18,
-  metalness: 0.72,
+  emissiveIntensity: 0.95,
+  roughness: 0.16,
+  metalness: 0.52,
 });
 
-// Pearl White & Soft Silver Cladding
+// Pearl White, Soft Silver & Light Titanium Cladding
 export const pearlWhiteMaterial = new THREE.MeshStandardMaterial({
   color: new THREE.Color(CITY_COLORS.pearlWhite),
-  roughness: 0.22,
-  metalness: 0.55,
+  roughness: 0.15,
+  metalness: 0.35,
 });
 
 export const softSilverMaterial = new THREE.MeshStandardMaterial({
   color: new THREE.Color(CITY_COLORS.softSilver),
-  roughness: 0.25,
-  metalness: 0.72,
+  roughness: 0.18,
+  metalness: 0.58,
+});
+
+export const lightTitaniumMaterial = new THREE.MeshStandardMaterial({
+  color: new THREE.Color(CITY_COLORS.lightTitanium),
+  roughness: 0.24,
+  metalness: 0.52,
 });
 
 // Foundation and Ground Materials
 export const groundBaseMaterial = new THREE.MeshStandardMaterial({
   color: new THREE.Color(CITY_COLORS.bgPrimary),
-  roughness: 0.9,
-  metalness: 0.15,
+  roughness: 0.75,
+  metalness: 0.28,
 });
 
 export const districtPlatformMaterial = new THREE.MeshStandardMaterial({
   color: new THREE.Color(CITY_COLORS.bgSecondary),
-  roughness: 0.55,
-  metalness: 0.48,
+  roughness: 0.42,
+  metalness: 0.55,
 });
 
 export const platformBorderMaterial = new THREE.MeshStandardMaterial({
   color: new THREE.Color(CITY_COLORS.metalTitanium),
-  roughness: 0.32,
+  roughness: 0.25,
   metalness: 0.78,
 });
 
 // Architectural Metallic Structures
 export const darkTitaniumMaterial = new THREE.MeshStandardMaterial({
   color: new THREE.Color(CITY_COLORS.metalDark),
-  roughness: 0.4,
-  metalness: 0.6,
+  roughness: 0.32,
+  metalness: 0.65,
 });
 
 export const titaniumStructuralMaterial = new THREE.MeshStandardMaterial({
   color: new THREE.Color(CITY_COLORS.metalTitanium),
-  roughness: 0.35,
-  metalness: 0.65,
+  roughness: 0.28,
+  metalness: 0.70,
 });
 
 export const blueSteelMaterial = new THREE.MeshStandardMaterial({
   color: new THREE.Color(CITY_COLORS.metalSteelBlue),
-  roughness: 0.38,
-  metalness: 0.62,
+  roughness: 0.30,
+  metalness: 0.68,
 });
 
 export const metalExoskeletonMaterial = new THREE.MeshStandardMaterial({
@@ -429,7 +451,19 @@ export const solarPanelMaterial = new THREE.MeshStandardMaterial({
   metalness: 0.88,
 });
 
-// Minimal Futuristic Vegetation
+// Minimal Futuristic Vegetation & Campus Landscape
+export const campusLawnMaterial = new THREE.MeshStandardMaterial({
+  color: new THREE.Color('#163c2c'),
+  roughness: 0.85,
+  metalness: 0.1,
+});
+
+export const campusWoodBenchMaterial = new THREE.MeshStandardMaterial({
+  color: new THREE.Color('#8b5a2b'),
+  roughness: 0.7,
+  metalness: 0.15,
+});
+
 export const futuristicPlanterMaterial = new THREE.MeshStandardMaterial({
   color: new THREE.Color(CITY_COLORS.vegetationDark),
   roughness: 0.65,

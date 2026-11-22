@@ -8,7 +8,10 @@ export type DistrictId =
   | 'ai'
   | 'robotics'
   | 'aerospace'
-  | 'cyber';
+  | 'cyber'
+  | 'nasa-rover'
+  | 'nasa-dish'
+  | 'nasa-jwst';
 
 export type DistrictSectionId = 
   | 'arrival'

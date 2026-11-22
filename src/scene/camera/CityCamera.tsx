@@ -4,7 +4,7 @@ import { useFrame, useThree } from '@react-three/fiber';
 import { OrbitControls } from '@react-three/drei';
 import type { OrbitControls as OrbitControlsImpl } from 'three-stdlib';
 import gsap from 'gsap';
-import { useDistrict } from '../../context';
+import { useDistrict, useGraphicsQuality } from '../../context';
 
 export interface CityCameraProps {
   initialTarget?: [number, number, number];
@@ -12,13 +12,7 @@ export interface CityCameraProps {
 }
 
 /**
- * CityCamera — Cinematic camera transitions with smooth OrbitControls (Milestone 3.0)
- *
- * Capabilities:
- * - Listens to selectedDistrict from DistrictContext
- * - Animates camera position and OrbitControls target via GSAP with ease 'power2.inOut'
- * - Seamlessly returns authority to OrbitControls for full manual drag-to-orbit interaction
- * - Applies subtle cursor parallax when idle for architectural depth
+ * CityCamera — Cinematic camera transitions with smooth OrbitControls and adaptive parallax
  */
 export function CityCamera({
   initialTarget,
@@ -28,6 +22,7 @@ export function CityCamera({
   const controlsRef = useRef<OrbitControlsImpl>(null);
   const { camera } = useThree();
   const { selectedDetails, isTransitioning, setTransitioning } = useDistrict();
+  const { settings } = useGraphicsQuality();
   const baseTarget = useRef(new THREE.Vector3(...effectiveTarget));
   const isAnimatingRef = useRef(false);
 
@@ -87,26 +82,30 @@ export function CityCamera({
     };
   }, [selectedDetails, camera, setTransitioning]);
 
-  // Subtle mouse parallax effect during idle state
+  // Subtle mouse parallax effect during idle state (skipped if disabled or settled)
   useFrame(({ pointer }) => {
-    if (!controlsRef.current || isAnimatingRef.current || isTransitioning) return;
+    if (
+      !controlsRef.current ||
+      isAnimatingRef.current ||
+      isTransitioning ||
+      !settings.enableSecondaryAnimations
+    ) {
+      return;
+    }
 
     // Gentle target offset based on cursor position (-1 to 1)
-    const targetX = baseTarget.current.x + pointer.x * 1.8;
-    const targetY = baseTarget.current.y + pointer.y * 1.0;
+    const targetX = baseTarget.current.x + pointer.x * 1.5;
+    const targetY = baseTarget.current.y + pointer.y * 0.8;
 
-    controlsRef.current.target.x = THREE.MathUtils.lerp(
-      controlsRef.current.target.x,
-      targetX,
-      0.025
-    );
-    controlsRef.current.target.y = THREE.MathUtils.lerp(
-      controlsRef.current.target.y,
-      targetY,
-      0.025
-    );
+    const diffX = targetX - controlsRef.current.target.x;
+    const diffY = targetY - controlsRef.current.target.y;
 
-    controlsRef.current.update();
+    // Only update if not settled
+    if (Math.abs(diffX) > 0.01 || Math.abs(diffY) > 0.01) {
+      controlsRef.current.target.x += diffX * 0.025;
+      controlsRef.current.target.y += diffY * 0.025;
+      controlsRef.current.update();
+    }
   });
 
   return (
@@ -123,6 +122,14 @@ export function CityCamera({
       enablePan={false}
       rotateSpeed={0.65}
       zoomSpeed={0.8}
+      onStart={() => {
+        gsap.killTweensOf(camera.position);
+        if (controlsRef.current) {
+          gsap.killTweensOf(controlsRef.current.target);
+        }
+        isAnimatingRef.current = false;
+        setTransitioning(false);
+      }}
     />
   );
 }

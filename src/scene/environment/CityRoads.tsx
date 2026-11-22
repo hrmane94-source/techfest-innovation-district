@@ -1,6 +1,7 @@
-import { useMemo, useRef } from 'react';
+import { useMemo, useRef, useEffect } from 'react';
 import * as THREE from 'three';
 import { useFrame } from '@react-three/fiber';
+import { useGraphicsQuality } from '../../context';
 import {
   roadMaterial,
   titaniumStructuralMaterial,
@@ -62,17 +63,75 @@ function createStreetlightPositions() {
 const STREETLIGHT_POSITIONS = createStreetlightPositions();
 
 /**
- * CityRoads — Primary arterial roads, transit rings, elevated skybridges, streetlights, and moving transit lights (Milestone 2.3)
+ * High-performance batched streetlights using InstancedMesh (2 draw calls instead of 160)
+ */
+function StreetlightsInstanced({ castShadow }: { castShadow: boolean }) {
+  const mastRef = useRef<THREE.InstancedMesh>(null);
+  const headRef = useRef<THREE.InstancedMesh>(null);
+
+  useEffect(() => {
+    if (!mastRef.current || !headRef.current) return;
+    const dummy = new THREE.Object3D();
+
+    STREETLIGHT_POSITIONS.forEach((light, i) => {
+      // Mast
+      dummy.position.set(light.pos[0], light.pos[1] + 1.8, light.pos[2]);
+      dummy.rotation.set(0, light.rotY, 0);
+      dummy.scale.set(1, 1, 1);
+      dummy.updateMatrix();
+      mastRef.current!.setMatrixAt(i, dummy.matrix);
+
+      // Glowing Head
+      const armOffset = 0.55;
+      const headX = light.pos[0] + Math.sin(light.rotY) * armOffset;
+      const headZ = light.pos[2] + Math.cos(light.rotY) * armOffset;
+      dummy.position.set(headX, light.pos[1] + 3.65, headZ);
+      dummy.rotation.set(0, light.rotY, 0);
+      dummy.scale.set(1, 1, 1);
+      dummy.updateMatrix();
+      headRef.current!.setMatrixAt(i, dummy.matrix);
+    });
+
+    mastRef.current.instanceMatrix.needsUpdate = true;
+    headRef.current.instanceMatrix.needsUpdate = true;
+  }, []);
+
+  return (
+    <group name="instanced-streetlights-network">
+      <instancedMesh
+        ref={mastRef}
+        args={[undefined, undefined, STREETLIGHT_POSITIONS.length]}
+        material={brushedAlloyMaterial}
+        castShadow={castShadow}
+      >
+        <cylinderGeometry args={[0.06, 0.1, 3.6, 6]} />
+      </instancedMesh>
+      <instancedMesh
+        ref={headRef}
+        args={[undefined, undefined, STREETLIGHT_POSITIONS.length]}
+        material={whiteGlowMaterial}
+      >
+        <boxGeometry args={[0.35, 0.08, 0.16]} />
+      </instancedMesh>
+    </group>
+  );
+}
+
+/**
+ * CityRoads — Primary arterial roads, transit rings, elevated skybridges, batched streetlights, and moving transit lights
  */
 export function CityRoads() {
+  const { settings } = useGraphicsQuality();
   const trafficMeshRef = useRef<THREE.InstancedMesh>(null);
   const dummy = useMemo(() => new THREE.Object3D(), []);
+  const activeTrafficCount = Math.min(settings.trafficCount, STATIC_TRAFFIC_PULSES.length);
 
   // Update moving transit pulses along roads & skyways
   useFrame((_, delta) => {
-    if (!trafficMeshRef.current) return;
+    if (!trafficMeshRef.current || !settings.enableSecondaryAnimations) return;
 
-    STATIC_TRAFFIC_PULSES.forEach((pulse) => {
+    for (let i = 0; i < activeTrafficCount; i++) {
+      const pulse = STATIC_TRAFFIC_PULSES[i];
       pulse.progress = (pulse.progress + delta * (pulse.speed / 100)) % 1;
 
       let x: number;
@@ -119,15 +178,17 @@ export function CityRoads() {
       dummy.updateMatrix();
 
       trafficMeshRef.current!.setMatrixAt(pulse.index, dummy.matrix);
-    });
+    }
 
     trafficMeshRef.current.instanceMatrix.needsUpdate = true;
   });
 
+  const shouldCastShadow = settings.shadowCasting === 'all';
+
   return (
     <group name="city-roads-infrastructure">
       {/* ── 1. MAIN NORTH-SOUTH ARTERIAL ROAD ── */}
-      <mesh position={[0, 0.04, 0]} material={roadMaterial} receiveShadow>
+      <mesh position={[0, 0.04, 0]} material={roadMaterial} receiveShadow={settings.shadows}>
         <boxGeometry args={[6.6, 0.04, 150]} />
       </mesh>
       {/* N-S Center Illuminated Marking Ribbon */}
@@ -143,7 +204,7 @@ export function CityRoads() {
       </mesh>
 
       {/* ── 2. MAIN EAST-WEST ARTERIAL ROAD ── */}
-      <mesh position={[0, 0.04, 0]} material={roadMaterial} receiveShadow>
+      <mesh position={[0, 0.04, 0]} material={roadMaterial} receiveShadow={settings.shadows}>
         <boxGeometry args={[150, 0.04, 6.6]} />
       </mesh>
       {/* E-W Center Illuminated Marking Ribbon */}
@@ -158,32 +219,16 @@ export function CityRoads() {
         <boxGeometry args={[146, 0.02, 0.08]} />
       </mesh>
 
-      {/* ── 3. CIRCULAR RING ROAD AROUND CENTRAL PLAZA ── */}
-      <mesh
-        position={[0, 0.06, 0]}
-        rotation={[-Math.PI / 2, 0, 0]}
-        material={roadMaterial}
-        receiveShadow
-      >
+      {/* ── 3. CIRCULAR TRANSIT RING ROAD AROUND CENTRAL PLAZA ── */}
+      <mesh position={[0, 0.05, 0]} rotation={[-Math.PI / 2, 0, 0]} material={roadMaterial} receiveShadow={settings.shadows}>
         <ringGeometry args={[23.5, 27.5, 48]} />
       </mesh>
-      {/* Inner & Outer Ring Light Ribbons */}
-      <mesh
-        position={[0, 0.09, 0]}
-        rotation={[-Math.PI / 2, 0, 0]}
-        material={blueGlowMaterial}
-      >
-        <ringGeometry args={[23.55, 23.85, 48]} />
-      </mesh>
-      <mesh
-        position={[0, 0.09, 0]}
-        rotation={[-Math.PI / 2, 0, 0]}
-        material={cyanGlowMaterial}
-      >
-        <ringGeometry args={[27.15, 27.45, 48]} />
+      {/* Concentric Illuminated Lane Divider */}
+      <mesh position={[0, 0.07, 0]} rotation={[-Math.PI / 2, 0, 0]} material={cyanGlowMaterial}>
+        <ringGeometry args={[25.4, 25.6, 48]} />
       </mesh>
 
-      {/* ── 4. DISTRICT ENTRY MONUMENT GATEWAYS ── */}
+      {/* ── 4. FOUR CEREMONIAL DISTRICT PORTAL GATEWAYS ── */}
       {[
         { pos: [-16, 0, -16] as const, rot: Math.PI / 4, color: cyanGlowMaterial },
         { pos: [16, 0, -16] as const, rot: -Math.PI / 4, color: orangeGlowMaterial },
@@ -192,14 +237,14 @@ export function CityRoads() {
       ].map((gateway, idx) => (
         <group key={`district-gateway-${idx}`} position={[gateway.pos[0], 0, gateway.pos[1]]} rotation={[0, gateway.rot, 0]}>
           {/* Twin Architectural Portal Pylons */}
-          <mesh position={[-2.8, 2.5, 0]} material={titaniumStructuralMaterial} castShadow>
+          <mesh position={[-2.8, 2.5, 0]} material={titaniumStructuralMaterial} castShadow={shouldCastShadow}>
             <boxGeometry args={[0.5, 5.0, 0.5]} />
           </mesh>
-          <mesh position={[2.8, 2.5, 0]} material={titaniumStructuralMaterial} castShadow>
+          <mesh position={[2.8, 2.5, 0]} material={titaniumStructuralMaterial} castShadow={shouldCastShadow}>
             <boxGeometry args={[0.5, 5.0, 0.5]} />
           </mesh>
           {/* Overhead Horizontal Beam */}
-          <mesh position={[0, 4.8, 0]} material={brushedAlloyMaterial} castShadow>
+          <mesh position={[0, 4.8, 0]} material={brushedAlloyMaterial} castShadow={shouldCastShadow}>
             <boxGeometry args={[6.1, 0.4, 0.6]} />
           </mesh>
           {/* Inset Glowing Gateway Signage Line */}
@@ -209,25 +254,8 @@ export function CityRoads() {
         </group>
       ))}
 
-      {/* ── 5. FUTURISTIC STREETLIGHT PYLONS ── */}
-      <group name="streetlights-network">
-        {STREETLIGHT_POSITIONS.map((light, idx) => (
-          <group key={`streetlight-${idx}`} position={light.pos} rotation={[0, light.rotY, 0]}>
-            {/* Vertical Tapered Mast */}
-            <mesh position={[0, 1.8, 0]} material={brushedAlloyMaterial} castShadow>
-              <cylinderGeometry args={[0.06, 0.1, 3.6, 6]} />
-            </mesh>
-            {/* Angled Cantilever Luminaire Arm */}
-            <mesh position={[0.45, 3.5, 0]} rotation={[0, 0, -0.45]} material={brushedAlloyMaterial}>
-              <boxGeometry args={[1.1, 0.06, 0.12]} />
-            </mesh>
-            {/* Luminaire Glowing Head */}
-            <mesh position={[0.85, 3.65, 0]} material={whiteGlowMaterial}>
-              <boxGeometry args={[0.35, 0.05, 0.14]} />
-            </mesh>
-          </group>
-        ))}
-      </group>
+      {/* ── 5. BATCHED INSTANCED STREETLIGHTS (2 draw calls total) ── */}
+      <StreetlightsInstanced castShadow={shouldCastShadow} />
 
       {/* ── 6. ELEVATED SKYBRIDGES WITH STRUCTURAL UNDER-TRUSSES ── */}
       {[
@@ -247,11 +275,11 @@ export function CityRoads() {
             rotation={[0, -skybridge.angle + Math.PI / 2, 0]}
           >
             {/* Skybridge Floor Deck */}
-            <mesh material={titaniumStructuralMaterial} castShadow receiveShadow>
+            <mesh material={titaniumStructuralMaterial} castShadow={shouldCastShadow} receiveShadow={settings.shadows}>
               <boxGeometry args={[3.4, 0.65, skybridge.length]} />
             </mesh>
             {/* Under-Deck Longitudinal Truss Spine */}
-            <mesh position={[0, -0.6, 0]} material={metalExoskeletonMaterial} castShadow>
+            <mesh position={[0, -0.6, 0]} material={metalExoskeletonMaterial} castShadow={shouldCastShadow}>
               <boxGeometry args={[1.4, 0.6, skybridge.length]} />
             </mesh>
 
@@ -277,7 +305,7 @@ export function CityRoads() {
             {/* Heavy Structural Support Pylons with Foundation Collars */}
             {[-skybridge.length / 3, skybridge.length / 3].map((zPos, pIdx) => (
               <group key={`pylon-${pIdx}`} position={[0, -skybridge.height / 2, zPos]}>
-                <mesh material={titaniumStructuralMaterial} castShadow>
+                <mesh material={titaniumStructuralMaterial} castShadow={shouldCastShadow}>
                   <cylinderGeometry args={[0.55, 0.75, skybridge.height, 8]} />
                 </mesh>
                 {/* Pylon Illuminated Collar */}
@@ -293,7 +321,7 @@ export function CityRoads() {
       {/* ── 7. INSTANCED MOVING TRANSIT PULSES ── */}
       <instancedMesh
         ref={trafficMeshRef}
-        args={[undefined, undefined, 48]}
+        args={[undefined, undefined, activeTrafficCount]}
         material={cyanGlowMaterial}
       >
         <boxGeometry args={[1, 1, 1]} />

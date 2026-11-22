@@ -30,19 +30,19 @@ export function HeroOverlay({
             <span className="relative inline-flex rounded-full h-2 w-2 bg-cyan-400" />
           </span>
           <span className="font-mono text-[10px] sm:text-xs font-semibold tracking-wider text-cyan-300 uppercase">
-            TECHFEST 2026 • IIT BOMBAY • ASIA&apos;S LARGEST TECH FESTIVAL
+            TECHFEST 2026 • IIT BOMBAY • CAMPUS VISION
           </span>
         </div>
 
         {/* Monumental Headline */}
-        <h1 className="font-display font-extrabold text-4xl sm:text-6xl lg:text-7xl tracking-tight leading-[1.08] text-gradient-pearl drop-shadow-2xl">
-          WHERE THE FUTURE <br />
-          <span className="text-gradient-cyan">TAKES SHAPE.</span>
+        <h1 className="font-display font-extrabold text-3xl sm:text-5xl lg:text-6xl tracking-tight leading-[1.08] text-gradient-pearl drop-shadow-2xl">
+          WELCOME TO THE <br />
+          <span className="text-gradient-cyan">UNIVERSITY OF TOMORROW.</span>
         </h1>
 
         {/* Supporting Copy */}
         <p className="text-sm sm:text-base lg:text-lg text-[#CBD5E1] font-normal leading-relaxed max-w-xl drop-shadow-md">
-          Step into India&apos;s premier innovation ecosystem. An autonomous 3D architectural city where quantum artificial intelligence, deep-space telemetry, and advanced planetary robotics converge.
+          Explore a futuristic campus where artificial intelligence, robotics, aerospace and cybersecurity come together through research, engineering, learning and innovation. A conceptual academic vision inspired by Techfest IIT Bombay.
         </p>
 
         {/* CTA Button Row */}
@@ -53,7 +53,7 @@ export function HeroOverlay({
             className="group relative overflow-hidden px-6 sm:px-8 py-3.5 rounded-xl bg-gradient-to-r from-blue-600 via-cyan-500 to-blue-500 font-display font-bold text-xs sm:text-sm text-white tracking-widest uppercase shadow-[0_0_32px_rgba(0,229,255,0.4)] hover:shadow-[0_0_48px_rgba(0,229,255,0.7)] transition-all duration-300 hover:scale-[1.02] cursor-pointer"
           >
             <span className="relative z-10 flex items-center gap-2.5">
-              <span>EXPLORE THE INNOVATION DISTRICT</span>
+              <span>EXPLORE THE CAMPUS</span>
               <svg
                 className="h-4 w-4 transition-transform group-hover:translate-x-1"
                 fill="none"
@@ -78,13 +78,13 @@ export function HeroOverlay({
             className="px-5 sm:px-6 py-3.5 rounded-xl border border-white/20 bg-white/5 backdrop-blur-md font-mono text-xs font-semibold text-[#F8FAFC] hover:border-cyan-400/60 hover:text-white hover:bg-white/10 transition-all duration-300 cursor-pointer flex items-center gap-2 shadow-lg"
           >
             <span className="h-1.5 w-1.5 rounded-full bg-cyan-400" />
-            <span>DISCOVER TECHFEST</span>
+            <span>CAMPUS GUIDED TOUR</span>
           </button>
         </div>
 
-        {/* Quick Sector Tags */}
+        {/* Quick Academic Department Tags */}
         <div className="pt-2 flex flex-wrap items-center gap-2 font-mono text-[10px] text-[#94A3B8]">
-          <span className="uppercase text-slate-400">Featured Sectors:</span>
+          <span className="uppercase text-slate-400">Research Centres:</span>
           <button
             type="button"
             onClick={() => {
@@ -93,7 +93,7 @@ export function HeroOverlay({
             }}
             className="px-2 py-0.5 rounded bg-blue-500/10 border border-blue-500/30 text-blue-300 hover:text-white hover:bg-blue-500/20 cursor-pointer"
           >
-            Quantum AI
+            AI & Computation
           </button>
           <button
             type="button"
@@ -103,7 +103,7 @@ export function HeroOverlay({
             }}
             className="px-2 py-0.5 rounded bg-amber-500/10 border border-amber-500/30 text-amber-300 hover:text-white hover:bg-amber-500/20 cursor-pointer"
           >
-            NASA Rover Testbed
+            Robotics Lab
           </button>
           <button
             type="button"
@@ -113,7 +113,17 @@ export function HeroOverlay({
             }}
             className="px-2 py-0.5 rounded bg-cyan-500/10 border border-cyan-500/30 text-cyan-300 hover:text-white hover:bg-cyan-500/20 cursor-pointer"
           >
-            NASA 70m Dish & JWST
+            Aerospace & Space
+          </button>
+          <button
+            type="button"
+            onClick={() => {
+              selectDistrict('cyber');
+              onExploreClick();
+            }}
+            className="px-2 py-0.5 rounded bg-blue-500/10 border border-blue-500/30 text-blue-300 hover:text-white hover:bg-blue-500/20 cursor-pointer"
+          >
+            Cybersecurity
           </button>
         </div>
       </div>
@@ -124,30 +134,30 @@ export function HeroOverlay({
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-6 w-full md:w-auto font-mono">
           <div className="border-l-2 border-cyan-400 pl-3">
             <div className="font-display font-bold text-lg sm:text-xl text-white">68M</div>
-            <div className="text-[10px] uppercase tracking-wider text-[#94A3B8]">Structural Apex</div>
+            <div className="text-[10px] uppercase tracking-wider text-[#94A3B8]">Central Landmark</div>
           </div>
           <div className="border-l-2 border-blue-500 pl-3">
             <div className="font-display font-bold text-lg sm:text-xl text-white">04</div>
-            <div className="text-[10px] uppercase tracking-wider text-[#94A3B8]">Research Sectors</div>
+            <div className="text-[10px] uppercase tracking-wider text-[#94A3B8]">Academic Centres</div>
           </div>
           <div className="border-l-2 border-cyan-400 pl-3">
             <div className="font-display font-bold text-lg sm:text-xl text-white">03</div>
-            <div className="text-[10px] uppercase tracking-wider text-[#94A3B8]">NASA Mission Assets</div>
+            <div className="text-[10px] uppercase tracking-wider text-[#94A3B8]">NASA Research Exhibits</div>
           </div>
           <div className="border-l-2 border-amber-400 pl-3">
-            <div className="font-display font-bold text-lg sm:text-xl text-white">36.1K</div>
-            <div className="text-[10px] uppercase tracking-wider text-[#94A3B8]">Ecosystem m²</div>
+            <div className="font-display font-bold text-lg sm:text-xl text-white">100%</div>
+            <div className="text-[10px] uppercase tracking-wider text-[#94A3B8]">Pedestrian Campus</div>
           </div>
         </div>
 
-        {/* 3D Interaction Hint */}
-        <div className="hidden lg:flex items-center gap-3 text-right font-mono text-[10px] text-[#94A3B8]">
-          <div className="flex flex-col items-end">
-            <span className="text-white font-medium">3D INTERACTIVE ENGINE</span>
-            <span>DRAG TO ORBIT • CLICK ARCHITECTURE</span>
+        {/* Scroll Indicator Prompt */}
+        <div className="hidden md:flex items-center gap-3 text-right font-mono text-xs text-[#94A3B8]">
+          <div>
+            <span className="block font-semibold text-white">SCROLL TO TOUR CAMPUS</span>
+            <span className="text-[10px] text-cyan-400">EXPLORE DEPARTMENTS & FACILITIES</span>
           </div>
-          <div className="h-8 w-5 rounded-full border border-white/20 flex items-start justify-center p-1">
-            <span className="h-1.5 w-1 rounded-full bg-cyan-400 animate-bounce" />
+          <div className="flex h-10 w-6 items-start justify-center rounded-full border border-white/20 p-1.5">
+            <span className="h-2 w-1 rounded-full bg-cyan-400 animate-bounce" />
           </div>
         </div>
       </div>

@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useDistrict } from '../../context';
 import type { DistrictId } from '../../types/district';
+import { GraphicsQualityPill } from '../interface';
 
 export interface NavbarProps {
   onExploreClick?: () => void;
@@ -111,7 +112,7 @@ export function Navbar({ onExploreClick, isExploreMode = false }: NavbarProps) {
                   : 'text-[#94A3B8] hover:text-white'
               }`}
             >
-              <span>Districts</span>
+              <span>Departments</span>
               <svg
                 className={`h-3 w-3 transition-transform ${districtsDropdownOpen ? 'rotate-180' : ''}`}
                 fill="none"
@@ -131,9 +132,9 @@ export function Navbar({ onExploreClick, isExploreMode = false }: NavbarProps) {
                 >
                   <div>
                     <div className="font-semibold text-white group-hover:text-blue-400">
-                      SEC-01 // Artificial Intelligence
+                      SEC-01 // AI & Computation
                     </div>
-                    <div className="text-[10px] text-[#94A3B8]">Quantum & Neural Computing</div>
+                    <div className="text-[10px] text-[#94A3B8]">Computational Sciences Centre</div>
                   </div>
                   <span className="h-1.5 w-1.5 rounded-full bg-blue-500" />
                 </button>
@@ -147,7 +148,7 @@ export function Navbar({ onExploreClick, isExploreMode = false }: NavbarProps) {
                     <div className="font-semibold text-white group-hover:text-amber-400">
                       SEC-02 // Robotics & Automation
                     </div>
-                    <div className="text-[10px] text-[#94A3B8]">NASA Perseverance Rover Pad</div>
+                    <div className="text-[10px] text-[#94A3B8]">Autonomous Systems & Mars Rover</div>
                   </div>
                   <span className="h-1.5 w-1.5 rounded-full bg-amber-500" />
                 </button>
@@ -159,9 +160,9 @@ export function Navbar({ onExploreClick, isExploreMode = false }: NavbarProps) {
                 >
                   <div>
                     <div className="font-semibold text-white group-hover:text-cyan-400">
-                      SEC-03 // Aerospace & Deep Space
+                      SEC-03 // Aerospace & Space
                     </div>
-                    <div className="text-[10px] text-[#94A3B8]">NASA 70m Dish & JWST Pavilion</div>
+                    <div className="text-[10px] text-[#94A3B8]">Space Research & JWST Pavilion</div>
                   </div>
                   <span className="h-1.5 w-1.5 rounded-full bg-cyan-400" />
                 </button>
@@ -175,7 +176,7 @@ export function Navbar({ onExploreClick, isExploreMode = false }: NavbarProps) {
                     <div className="font-semibold text-white group-hover:text-blue-400">
                       SEC-04 // Cybersecurity
                     </div>
-                    <div className="text-[10px] text-[#94A3B8]">Fortified Data Matrix</div>
+                    <div className="text-[10px] text-[#94A3B8]">Digital Infrastructure Centre</div>
                   </div>
                   <span className="h-1.5 w-1.5 rounded-full bg-blue-400" />
                 </button>
@@ -198,6 +199,8 @@ export function Navbar({ onExploreClick, isExploreMode = false }: NavbarProps) {
 
         {/* ── 3. PRIMARY CTA ACTION BUTTONS ── */}
         <div className="hidden sm:flex items-center gap-3">
+          <GraphicsQualityPill />
+
           <button
             type="button"
             onClick={() => toggleTour()}
@@ -253,13 +256,16 @@ export function Navbar({ onExploreClick, isExploreMode = false }: NavbarProps) {
         <div className="lg:hidden mt-3 mx-4 p-4 rounded-2xl border border-white/15 bg-[#050A14]/95 backdrop-blur-2xl shadow-2xl space-y-3 animate-in fade-in slide-in-from-top-4 duration-300">
           <div className="flex items-center justify-between pb-2 border-b border-white/10">
             <span className="font-mono text-xs font-bold text-cyan-400">NAVIGATION</span>
-            <button
-              type="button"
-              onClick={resetToOverview}
-              className="text-xs text-white hover:text-cyan-400 cursor-pointer"
-            >
-              Reset Overview
-            </button>
+            <div className="flex items-center gap-2">
+              <GraphicsQualityPill />
+              <button
+                type="button"
+                onClick={resetToOverview}
+                className="text-xs text-white hover:text-cyan-400 cursor-pointer"
+              >
+                Reset
+              </button>
+            </div>
           </div>
 
           <div className="grid grid-cols-2 gap-2 font-mono text-xs">
@@ -277,7 +283,7 @@ export function Navbar({ onExploreClick, isExploreMode = false }: NavbarProps) {
               className="p-2.5 rounded-lg border border-white/10 bg-[#091426] text-left hover:border-blue-400 cursor-pointer"
             >
               <div className="text-[10px] text-blue-400">SEC-01</div>
-              <div className="font-bold text-white">AI Labs</div>
+              <div className="font-bold text-white">AI Centre</div>
             </button>
             <button
               type="button"
@@ -285,7 +291,7 @@ export function Navbar({ onExploreClick, isExploreMode = false }: NavbarProps) {
               className="p-2.5 rounded-lg border border-white/10 bg-[#091426] text-left hover:border-amber-400 cursor-pointer"
             >
               <div className="text-[10px] text-amber-400">SEC-02</div>
-              <div className="font-bold text-white">Robotics Pad</div>
+              <div className="font-bold text-white">Robotics Lab</div>
             </button>
             <button
               type="button"
@@ -294,6 +300,14 @@ export function Navbar({ onExploreClick, isExploreMode = false }: NavbarProps) {
             >
               <div className="text-[10px] text-cyan-400">SEC-03</div>
               <div className="font-bold text-white">Aerospace & JWST</div>
+            </button>
+            <button
+              type="button"
+              onClick={() => handleDistrictSelect('cyber')}
+              className="col-span-2 p-2.5 rounded-lg border border-white/10 bg-[#091426] text-left hover:border-blue-400 cursor-pointer"
+            >
+              <div className="text-[10px] text-blue-400">SEC-04</div>
+              <div className="font-bold text-white">Cybersecurity & Digital Infrastructure Centre</div>
             </button>
           </div>
 

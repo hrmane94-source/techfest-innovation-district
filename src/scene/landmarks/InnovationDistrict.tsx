@@ -18,7 +18,7 @@ import {
   CITY_COLORS,
 } from '../materials';
 import { ModelLoader } from '../models';
-import { useDistrict } from '../../context';
+import { useDistrict, useGraphicsQuality } from '../../context';
 
 /**
  * InnovationDistrict — Complete 4-Quadrant Innovation Ecosystem (Milestone 3.0 Interactive)
@@ -30,6 +30,8 @@ import { useDistrict } from '../../context';
  */
 export function InnovationDistrict() {
   const { selectedDistrict, hoveredDistrict, selectDistrict, setHoveredDistrict } = useDistrict();
+  const { settings } = useGraphicsQuality();
+  const shouldCastShadow = settings.shadowCasting === 'all';
 
   return (
     <group name="innovation-districts-ecosystem">
@@ -75,32 +77,32 @@ export function InnovationDistrict() {
           </group>
         )}
 
-        {/* Primary Stepped AI Research Tower */}
+        {/* Primary Stepped AI Research Centre (4-Story Academic Wing) */}
         <SteppedTower
           position={[-26, 0.9, -22]}
           baseSize={[8.8, 8.8]}
-          height={46}
+          height={20}
           rotation={0.1}
         />
 
-        {/* Neural Computation Center */}
+        {/* Neural Computation Center (3-Story Lab Pavilion) */}
         <SteppedTower
           position={[-18, 0.9, -15]}
           baseSize={[7.2, 7.2]}
-          height={36}
+          height={15}
           rotation={-0.15}
         />
 
-        {/* Algorithmic Ingest & Lab Tower */}
+        {/* Algorithmic Ingest & Student Data Lab */}
         <SteppedTower
           position={[-32, 0.9, -14]}
           baseSize={[6.6, 6.6]}
-          height={28}
+          height={12}
           rotation={0.2}
         />
 
-        {/* High-level Enclosed Glass Skybridge connecting AI Tower 1 & 2 */}
-        <group position={[-22, 23, -18.5]} rotation={[0, 0.6, 0]}>
+        {/* Academic Shaded Skybridge connecting AI Wings */}
+        <group position={[-22, 11, -18.5]} rotation={[0, 0.6, 0]}>
           <mesh material={titaniumStructuralMaterial} castShadow>
             <boxGeometry args={[1.8, 1.6, 11]} />
           </mesh>
@@ -115,12 +117,12 @@ export function InnovationDistrict() {
           </mesh>
         </group>
 
-        {/* Secondary AI Data Ingestion Tower */}
+        {/* Computational Seminar & Lecture Wing */}
         <TowerGenerator
           position={[-16, 0.9, -27]}
           width={5.6}
           depth={5.6}
-          height={26}
+          height={13}
           accentColor="cyan"
         />
       </group>
@@ -171,12 +173,26 @@ export function InnovationDistrict() {
         <IndustrialComplex position={[24, 0.9, -20]} rotation={-0.2} />
 
         {/* ── PLANETARY EXPLORATION & ROBOTICS TESTING BED (NASA Mars 2020 Rover) ── */}
-        <group position={[24, 0.9, -9.5]} rotation={[0, -0.4, 0]}>
+        <group
+          position={[24, 0.9, -9.5]}
+          rotation={[0, -0.4, 0]}
+          onPointerOver={(e) => {
+            e.stopPropagation();
+            document.body.style.cursor = 'pointer';
+          }}
+          onPointerOut={() => {
+            document.body.style.cursor = 'auto';
+          }}
+          onClick={(e) => {
+            e.stopPropagation();
+            selectDistrict('nasa-rover');
+          }}
+        >
           {/* Multi-tiered Basalt / Martian Analog Simulation Plinth */}
-          <mesh position={[0, 0.25, 0]} material={darkTitaniumMaterial} receiveShadow castShadow>
+          <mesh position={[0, 0.25, 0]} material={darkTitaniumMaterial} receiveShadow={settings.shadows} castShadow={shouldCastShadow}>
             <boxGeometry args={[8.8, 0.5, 8.8]} />
           </mesh>
-          <mesh position={[0, 0.55, 0]} material={titaniumStructuralMaterial} receiveShadow>
+          <mesh position={[0, 0.55, 0]} material={titaniumStructuralMaterial} receiveShadow={settings.shadows}>
             <boxGeometry args={[8.0, 0.15, 8.0]} />
           </mesh>
 
@@ -212,7 +228,7 @@ export function InnovationDistrict() {
           ))}
 
           {/* Sample Return Depot & Target Calibration Stanchions */}
-          <mesh position={[2.6, 0.8, 2.4]} material={metalExoskeletonMaterial} castShadow>
+          <mesh position={[2.6, 0.8, 2.4]} material={metalExoskeletonMaterial} castShadow={shouldCastShadow}>
             <cylinderGeometry args={[0.35, 0.45, 0.5, 8]} />
           </mesh>
           <mesh position={[2.6, 1.1, 2.4]} material={orangeGlowMaterial}>
@@ -239,28 +255,28 @@ export function InnovationDistrict() {
           />
         </group>
 
-        {/* Automated Prototyping Tower */}
+        {/* Autonomous Prototyping & Student Engineering Lab */}
         <TowerGenerator
           position={[32, 0.9, -14]}
           width={7.2}
           depth={7.2}
-          height={32}
+          height={15}
           rotation={0.3}
           accentColor="orange"
         />
 
-        {/* Heavy Robotic Actuation Facility */}
+        {/* Heavy Mechatronics Workshop */}
         <TowerGenerator
           position={[16, 0.9, -26]}
           width={6.2}
           depth={6.2}
-          height={24}
+          height={12}
           rotation={-0.1}
           accentColor="orange"
         />
 
-        {/* Mechanical Skyway connecting Prototyping Tower to Complex */}
-        <group position={[28, 14.5, -17]} rotation={[0, -0.4, 0]}>
+        {/* Shaded Engineering Skyway */}
+        <group position={[28, 9.5, -17]} rotation={[0, -0.4, 0]}>
           <mesh material={titaniumStructuralMaterial} castShadow>
             <boxGeometry args={[1.9, 1.3, 9]} />
           </mesh>
@@ -316,7 +332,20 @@ export function InnovationDistrict() {
         <AerospaceComplex position={[-24, 0.9, 22]} rotation={0.25} />
 
         {/* ── SCIENTIFIC EXHIBITION & QUANTUM CRADLE (NASA James Webb Space Telescope) ── */}
-        <group position={[-21, 1.2, 13]}>
+        <group
+          position={[-21, 1.2, 13]}
+          onPointerOver={(e) => {
+            e.stopPropagation();
+            document.body.style.cursor = 'pointer';
+          }}
+          onPointerOut={() => {
+            document.body.style.cursor = 'auto';
+          }}
+          onClick={(e) => {
+            e.stopPropagation();
+            selectDistrict('nasa-jwst');
+          }}
+        >
           <mesh position={[0, 0.4, 0]} material={darkTitaniumMaterial} receiveShadow castShadow>
             <cylinderGeometry args={[5.2, 6.0, 0.8, 8]} />
           </mesh>
@@ -369,22 +398,22 @@ export function InnovationDistrict() {
           </group>
         </group>
 
-        {/* Propulsion Dynamics & Testing Facility */}
+        {/* Propulsion Dynamics Academic Lab */}
         <TowerGenerator
           position={[-33, 0.9, 16]}
           width={6.6}
           depth={8.6}
-          height={26}
+          height={14}
           rotation={-0.3}
           accentColor="blue"
         />
 
-        {/* Orbital Guidance Pylon */}
+        {/* Satellite Communications & Flight Systems Wing */}
         <TowerGenerator
           position={[-16, 0.9, 28]}
           width={5.2}
           depth={5.2}
-          height={34}
+          height={16}
           rotation={0.15}
           accentColor="cyan"
         />
@@ -435,22 +464,22 @@ export function InnovationDistrict() {
         {/* Fortified Central Matrix Core, Cryptography Spire & Perimeter Node */}
         <CybersecurityComplex position={[24, 0.9, 22]} rotation={-0.3} />
 
-        {/* Perimeter Sentry Bastion & Optical Firewall Node */}
+        {/* Network Systems & Defense Lab Wing */}
         <TowerGenerator
           position={[33, 0.9, 18]}
           width={6.2}
           depth={6.2}
-          height={24}
+          height={13}
           rotation={0.4}
           accentColor="cyan"
         />
 
-        {/* Encrypted Data Vault Spire */}
+        {/* Encrypted Data Science & Computing Archive */}
         <TowerGenerator
           position={[17, 0.9, 29]}
           width={6.6}
           depth={6.6}
-          height={30}
+          height={15}
           rotation={-0.2}
           accentColor="blue"
         />

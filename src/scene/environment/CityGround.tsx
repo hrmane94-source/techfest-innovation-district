@@ -6,27 +6,33 @@ import {
   platformBorderMaterial,
   metalExoskeletonMaterial,
   brushedAlloyMaterial,
+  softSilverMaterial,
   cyanGlowMaterial,
   futuristicPlanterMaterial,
   bioluminescentFloraMaterial,
   warmGlowMaterial,
   structuralGlassMaterial,
+  campusLawnMaterial,
+  campusWoodBenchMaterial,
 } from '../materials';
-import { useDistrict } from '../../context';
+import { useDistrict, useGraphicsQuality } from '../../context';
 
 /**
- * CityGround — Multi-tiered architectural city foundation & civic courtyards (Milestone 3.0 Interactive)
+ * CityGround — Interconnected Futuristic University Campus Grounds
  *
- * Enhancements:
- * - Master foundation slab with subtle architectural expansion joints
- * - Raised district podium slabs with dynamic selection highlight responses
- * - Pedestrian connecting walkways bridging platforms to arterial avenues
- * - Stylized futuristic bio-canopies (solar trees) with integrated civic seating benches
+ * Authentic Campus Enhancements:
+ * 1. Master campus foundation bed with subtle architectural grid
+ * 2. Four interconnected Departmental Podiums with live active-state highlighting
+ * 3. Continuous Paved Pedestrian Conourses linking all 4 departments to Central Plaza
+ * 4. Landscaped Campus Green Belts, Manicured Lawn Strips & Courtyards
+ * 5. Tree-Lined Walkways with Shaded Campus Study Benches
  */
 export function CityGround() {
   const { selectedDistrict, hoveredDistrict } = useDistrict();
+  const { settings } = useGraphicsQuality();
+  const shouldCastShadow = settings.shadowCasting === 'all';
 
-  // District platform layouts: [x, z, width, depth, height]
+  // Departmental research platforms: [x, z, width, depth, height]
   const districtPlatforms = useMemo(
     () => [
       { id: 'ai-platform', districtId: 'ai', pos: [-24, 0.45, -20] as const, size: [36, 0.9, 32] as const, color: '#246BFD' },
@@ -37,54 +43,86 @@ export function CityGround() {
     []
   );
 
-  // Civic courtyard planter locations with bio-canopy trees
-  const planterPositions = useMemo(
+  // Continuous Diagonal & Axial Pedestrian Concourse Spines connecting departments to Central Plaza
+  const campusConcourses = useMemo(
     () => [
-      [-11, 0.9, -8],
-      [11, 0.9, -8],
-      [-11, 0.9, 8],
-      [11, 0.9, 8],
-      [-36, 0.9, 0],
-      [36, 0.9, 0],
-      [0, 0.9, -36],
-      [0, 0.9, 36],
-      [-24, 0.9, -38],
-      [24, 0.9, -38],
-      [-24, 0.9, 40],
-      [24, 0.9, 40],
-    ] as const,
+      // Diagonal Concourse: AI Department to Central Plaza
+      { pos: [-14.5, 0.46, -12.5] as const, size: [7.5, 0.9, 9] as const, rot: 0.65 },
+      // Diagonal Concourse: Robotics Department to Central Plaza
+      { pos: [14.5, 0.46, -12.5] as const, size: [7.5, 0.9, 9] as const, rot: -0.65 },
+      // Diagonal Concourse: Aerospace Department to Central Plaza
+      { pos: [-14.5, 0.46, 13.5] as const, size: [7.5, 0.9, 9] as const, rot: -0.65 },
+      // Diagonal Concourse: Cybersecurity Department to Central Plaza
+      { pos: [14.5, 0.46, 13.5] as const, size: [7.5, 0.9, 9] as const, rot: 0.65 },
+
+      // Axial Connectors to Grand Plaza Steps
+      { pos: [-9.5, 0.45, -20] as const, size: [9.0, 0.88, 5.5] as const, rot: 0 },
+      { pos: [9.5, 0.45, -20] as const, size: [9.0, 0.88, 5.5] as const, rot: 0 },
+      { pos: [-9.5, 0.45, 22] as const, size: [9.0, 0.88, 5.5] as const, rot: 0 },
+      { pos: [9.5, 0.45, 22] as const, size: [9.0, 0.88, 5.5] as const, rot: 0 },
+    ],
     []
   );
 
-  // Pedestrian walkways connecting platforms to arterial roads
-  const pedestrianWalkways = useMemo(
+  // Campus Landscaped Green Lawns & Courtyard Pads
+  const campusGreenLawns = useMemo(
     () => [
-      // AI to Central Avenue
-      { pos: [-10, 0.45, -20] as const, size: [8, 0.88, 5] as const },
-      // Robotics to Central Avenue
-      { pos: [10, 0.45, -20] as const, size: [8, 0.88, 5] as const },
-      // Aerospace to Central Avenue
-      { pos: [-10, 0.45, 22] as const, size: [8, 0.88, 5] as const },
-      // Cybersecurity to Central Avenue
-      { pos: [10, 0.45, 22] as const, size: [8, 0.88, 5] as const },
+      // Central West Lawn
+      { pos: [-17, 0.48, 1] as const, size: [8, 0.12, 16] as const },
+      // Central East Lawn
+      { pos: [17, 0.48, 1] as const, size: [8, 0.12, 16] as const },
+      // North Campus Green Spine
+      { pos: [0, 0.48, -24] as const, size: [14, 0.12, 7] as const },
+      // South Campus Green Spine
+      { pos: [0, 0.48, 26] as const, size: [14, 0.12, 7] as const },
+
+      // Inter-Departmental Green Belts
+      { pos: [-24, 0.48, 1] as const, size: [10, 0.12, 6] as const },
+      { pos: [24, 0.48, 1] as const, size: [10, 0.12, 6] as const },
+    ],
+    []
+  );
+
+  // Campus Tree-Lined Locations with Benches
+  const campusTreesWithBenches = useMemo(
+    () => [
+      // West Lawn Trees
+      [-17, 0.55, -4] as const,
+      [-17, 0.55, 6] as const,
+      // East Lawn Trees
+      [17, 0.55, -4] as const,
+      [17, 0.55, 6] as const,
+      // North Lawn Trees
+      [-4.5, 0.55, -24] as const,
+      [4.5, 0.55, -24] as const,
+      // South Lawn Trees
+      [-4.5, 0.55, 26] as const,
+      [4.5, 0.55, 26] as const,
+      // Departmental Courtyards
+      [-36, 0.9, -1] as const,
+      [36, 0.9, -1] as const,
+      [-11, 0.9, -7.5] as const,
+      [11, 0.9, -7.5] as const,
+      [-11, 0.9, 7.5] as const,
+      [11, 0.9, 7.5] as const,
     ],
     []
   );
 
   return (
     <group name="city-ground">
-      {/* 1. Master City Bedrock Foundation Slab */}
+      {/* ── 1. MASTER CAMPUS FOUNDATION BED ── */}
       <mesh position={[0, -0.5, 0]} material={groundBaseMaterial} receiveShadow>
         <boxGeometry args={[190, 1.0, 190]} />
       </mesh>
 
-      {/* 2. Architectural Sub-Floor Grid Matrix */}
+      {/* ── 2. ARCHITECTURAL CAMPUS SUB-FLOOR MATRIX ── */}
       <gridHelper
         args={[190, 48, '#18355e', '#091527']}
         position={[0, 0.02, 0]}
       />
 
-      {/* 3. Raised District Platform Podiums */}
+      {/* ── 3. FOUR DEPARTMENTAL RESEARCH PODIUMS ── */}
       {districtPlatforms.map((plat) => {
         const isActive = selectedDistrict === plat.districtId;
         const isHovered = hoveredDistrict === plat.districtId;
@@ -125,55 +163,82 @@ export function CityGround() {
         );
       })}
 
-      {/* 4. Pedestrian Access Ramps / Walkways */}
-      {pedestrianWalkways.map((walkway, idx) => (
-        <group key={`walkway-${idx}`} position={[walkway.pos[0], walkway.pos[1], walkway.pos[2]]}>
+      {/* ── 4. CONTINUOUS CAMPUS PEDESTRIAN CONCOURSES ── */}
+      {campusConcourses.map((concourse, idx) => (
+        <group
+          key={`campus-concourse-${idx}`}
+          position={[concourse.pos[0], concourse.pos[1], concourse.pos[2]]}
+          rotation={[0, concourse.rot, 0]}
+        >
           <mesh material={districtPlatformMaterial} receiveShadow>
-            <boxGeometry args={[walkway.size[0], walkway.size[1], walkway.size[2]]} />
+            <boxGeometry args={[concourse.size[0], concourse.size[1], concourse.size[2]]} />
           </mesh>
-          {/* Cyan Inset Guide Ribbon */}
-          <mesh position={[0, walkway.size[1] / 2 + 0.02, 0]} material={cyanGlowMaterial}>
-            <boxGeometry args={[walkway.size[0] - 0.5, 0.02, 0.12]} />
+          {/* Cyan Inset Pedestrian Navigation Ribbon */}
+          <mesh position={[0, concourse.size[1] / 2 + 0.02, 0]} material={cyanGlowMaterial}>
+            <boxGeometry args={[concourse.size[0] - 0.6, 0.02, 0.14]} />
+          </mesh>
+          {/* Subtle Outer Curb */}
+          <mesh position={[0, concourse.size[1] / 2 + 0.03, 0]} material={softSilverMaterial}>
+            <boxGeometry args={[concourse.size[0] + 0.1, 0.02, concourse.size[2] + 0.1]} />
           </mesh>
         </group>
       ))}
 
-      {/* 5. Minimalist Futuristic Landscaped Bio-Canopies (Solar Trees) */}
-      <group name="landscaped-green-spaces">
-        {planterPositions.map((pos, idx) => (
-          <group key={`landscaped-planter-${idx}`} position={[pos[0], pos[1], pos[2]]}>
-            {/* Hexagonal geometric planter base */}
-            <mesh material={futuristicPlanterMaterial} position={[0, 0.35, 0]} receiveShadow castShadow>
-              <cylinderGeometry args={[2.2, 2.6, 0.7, 6]} />
+      {/* ── 5. CAMPUS GREEN LAWNS & COURTYARDS ── */}
+      <group name="campus-green-lawns">
+        {campusGreenLawns.map((lawn, idx) => (
+          <group key={`campus-lawn-${idx}`} position={[lawn.pos[0], lawn.pos[1], lawn.pos[2]]}>
+            <mesh material={campusLawnMaterial} receiveShadow={settings.shadows}>
+              <boxGeometry args={[lawn.size[0], lawn.size[1], lawn.size[2]]} />
             </mesh>
-            {/* Planter cyan rim ring */}
+            {/* Lawn Low Concrete / Alloy Border Curb */}
+            <mesh position={[0, 0.07, 0]} material={softSilverMaterial}>
+              <boxGeometry args={[lawn.size[0] + 0.3, 0.06, lawn.size[2] + 0.3]} />
+            </mesh>
+            {/* Soft Green Turf Boundary Accent */}
+            <mesh position={[0, 0.08, 0]} material={cyanGlowMaterial}>
+              <boxGeometry args={[lawn.size[0] + 0.32, 0.01, 0.06]} />
+            </mesh>
+          </group>
+        ))}
+      </group>
+
+      {/* ── 6. CAMPUS TREES, PLANTERS & STUDENT STUDY BENCHES ── */}
+      <group name="campus-trees-and-commons">
+        {campusTreesWithBenches.map((pos, idx) => (
+          <group key={`campus-tree-node-${idx}`} position={[pos[0], pos[1], pos[2]]}>
+            {/* Geometric Planter Base */}
+            <mesh material={futuristicPlanterMaterial} position={[0, 0.35, 0]} receiveShadow castShadow={shouldCastShadow}>
+              <cylinderGeometry args={[1.8, 2.2, 0.7, 6]} />
+            </mesh>
             <mesh material={cyanGlowMaterial} position={[0, 0.71, 0]}>
-              <ringGeometry args={[1.9, 2.15, 6]} />
-            </mesh>
-            {/* Civic Seating Bench surrounding the planter */}
-            <mesh material={brushedAlloyMaterial} position={[0, 0.3, 0]}>
-              <ringGeometry args={[2.7, 3.2, 6]} />
+              <ringGeometry args={[1.6, 1.8, 6]} />
             </mesh>
 
-            {/* Futuristic Bio-Tree Trunk & Canopy */}
-            <mesh position={[0, 1.2, 0]} material={brushedAlloyMaterial} castShadow>
-              <cylinderGeometry args={[0.2, 0.35, 1.8, 6]} />
+            {/* Campus Wood Study Bench encircling the planter */}
+            <mesh material={campusWoodBenchMaterial} position={[0, 0.3, 0]} castShadow={shouldCastShadow}>
+              <ringGeometry args={[2.3, 2.9, 6]} />
             </mesh>
-            {/* Stylized Geometric Translucent Foliage Canopy */}
-            <mesh material={bioluminescentFloraMaterial} position={[0, 2.4, 0]} castShadow>
-              <dodecahedronGeometry args={[1.35, 0]} />
+
+            {/* Futuristic Bio-Tree Trunk */}
+            <mesh position={[0, 1.3, 0]} material={brushedAlloyMaterial} castShadow={shouldCastShadow}>
+              <cylinderGeometry args={[0.18, 0.32, 2.0, 6]} />
             </mesh>
-            <mesh material={structuralGlassMaterial} position={[0, 2.4, 0]}>
-              <dodecahedronGeometry args={[1.42, 0]} />
+            {/* Geometric Foliage Canopy */}
+            <mesh material={bioluminescentFloraMaterial} position={[0, 2.6, 0]} castShadow={shouldCastShadow}>
+              <dodecahedronGeometry args={[1.4, 0]} />
+            </mesh>
+            <mesh material={structuralGlassMaterial} position={[0, 2.6, 0]}>
+              <dodecahedronGeometry args={[1.46, 0]} />
             </mesh>
 
             {/* Glowing Flora Core Node */}
-            <mesh material={cyanGlowMaterial} position={[0, 2.4, 0]}>
-              <octahedronGeometry args={[0.4, 0]} />
+            <mesh material={cyanGlowMaterial} position={[0, 2.6, 0]}>
+              <octahedronGeometry args={[0.38, 0]} />
             </mesh>
             {/* Warm Seating Accent Downlight */}
             <mesh material={warmGlowMaterial} position={[0, 0.72, 0]}>
-              <ringGeometry args={[2.2, 2.25, 6]} />
+              <ringGeometry args={[1.85, 1.9, 6]} />
             </mesh>
           </group>
         ))}
