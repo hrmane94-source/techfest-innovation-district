@@ -20,7 +20,6 @@ import {
   hazardStripeMaterial,
   cyanGlowMaterial,
   orangeGlowMaterial,
-  whiteGlowMaterial,
   CITY_COLORS,
 } from '../materials';
 import { ModelLoader } from '../models';
@@ -233,6 +232,37 @@ export function InnovationDistrict() {
             </group>
           ))}
 
+          {/* Low Stanchion Boundary Guardrails (Perimeter safety barrier) */}
+          {[-2.0, 0, 2.0].map((rx) => (
+            <group key={`rover-rail-s-${rx}`} position={[rx, 0.65, 3.85]}>
+              <mesh position={[0, 0.25, 0]} material={brushedAlloyMaterial}>
+                <cylinderGeometry args={[0.03, 0.04, 0.5, 6]} />
+              </mesh>
+            </group>
+          ))}
+          <mesh position={[0, 1.1, 3.85]} material={brushedAlloyMaterial}>
+            <boxGeometry args={[7.2, 0.03, 0.03]} />
+          </mesh>
+          <mesh position={[0, 1.1, -3.85]} material={brushedAlloyMaterial}>
+            <boxGeometry args={[7.2, 0.03, 0.03]} />
+          </mesh>
+
+          {/* Educational Interpretive Plaque & Stainless Pedestal (NASA MARS 2020 • PERSEVERANCE ROVER) */}
+          <group position={[0, 0.65, 4.35]}>
+            <mesh position={[0, 0.35, 0]} material={brushedAlloyMaterial}>
+              <cylinderGeometry args={[0.06, 0.08, 0.7, 8]} />
+            </mesh>
+            <mesh position={[0, 0.72, 0]} rotation={[-0.42, 0, 0]} material={darkTitaniumMaterial}>
+              <boxGeometry args={[1.3, 0.04, 0.65]} />
+            </mesh>
+            <mesh position={[0, 0.73, 0]} rotation={[-0.42, 0, 0]} material={orangeGlowMaterial}>
+              <boxGeometry args={[1.15, 0.015, 0.16]} />
+            </mesh>
+            <mesh position={[0, 0.74, 0]} rotation={[-0.42, 0, 0]} material={reflectiveGlassMaterial}>
+              <boxGeometry args={[1.28, 0.015, 0.62]} />
+            </mesh>
+          </group>
+
           {/* Sample Return Depot & Target Calibration Stanchions */}
           <mesh position={[2.6, 0.8, 2.4]} material={metalExoskeletonMaterial} castShadow={shouldCastShadow}>
             <cylinderGeometry args={[0.35, 0.45, 0.5, 8]} />
@@ -374,13 +404,21 @@ export function InnovationDistrict() {
             </group>
           ))}
 
-          {/* Informational Telemetry Pedestal */}
-          <mesh position={[0, 1.2, 4.4]} material={titaniumStructuralMaterial}>
-            <boxGeometry args={[1.2, 0.7, 0.4]} />
-          </mesh>
-          <mesh position={[0, 1.58, 4.4]} material={whiteGlowMaterial}>
-            <boxGeometry args={[1.0, 0.05, 0.3]} />
-          </mesh>
+          {/* Educational Scientific Lectern (NASA / ESA / CSA • JAMES WEBB SPACE TELESCOPE) */}
+          <group position={[0, 0.9, 4.8]}>
+            <mesh position={[0, 0.45, 0]} material={brushedAlloyMaterial}>
+              <cylinderGeometry args={[0.07, 0.09, 0.9, 8]} />
+            </mesh>
+            <mesh position={[0, 0.92, 0]} rotation={[-0.42, 0, 0]} material={darkTitaniumMaterial}>
+              <boxGeometry args={[1.4, 0.04, 0.7]} />
+            </mesh>
+            <mesh position={[0, 0.93, 0]} rotation={[-0.42, 0, 0]} material={cyanGlowMaterial}>
+              <boxGeometry args={[1.25, 0.015, 0.18]} />
+            </mesh>
+            <mesh position={[0, 0.94, 0]} rotation={[-0.42, 0, 0]} material={reflectiveGlassMaterial}>
+              <boxGeometry args={[1.38, 0.015, 0.68]} />
+            </mesh>
+          </group>
 
           {/* Dedicated Exhibition Spot Lighting */}
           <pointLight

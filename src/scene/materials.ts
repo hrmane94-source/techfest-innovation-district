@@ -415,6 +415,209 @@ export const hazardStripeTexture = createHazardStripeTexture();
 export const solarPanelTexture = createSolarPanelTexture();
 
 // ─────────────────────────────────────────────────────────────────────────────
+// 6. PROCEDURAL PRECAST CONCRETE PANEL TEXTURES (Architectural Facades & Reveals)
+// ─────────────────────────────────────────────────────────────────────────────
+
+function createConcretePanelTextures() {
+  const size = 128;
+  const bumpData = new Uint8Array(size * size * 4);
+  const roughData = new Uint8Array(size * size * 4);
+
+  // 64x32 pixel precast panels with 2px reveal joints
+  for (let y = 0; y < size; y++) {
+    const isYJoint = y % 32 < 2;
+    const row = Math.floor(y / 32);
+    for (let x = 0; x < size; x++) {
+      const isXJoint = (x + (row % 2) * 32) % 64 < 2;
+      const idx = (y * size + x) * 4;
+      const noise = ((x * 17 + y * 31) % 19) / 19;
+
+      if (isYJoint || isXJoint) {
+        bumpData[idx] = 40;
+        bumpData[idx + 1] = 40;
+        bumpData[idx + 2] = 40;
+        bumpData[idx + 3] = 255;
+
+        roughData[idx] = 240;
+        roughData[idx + 1] = 240;
+        roughData[idx + 2] = 240;
+        roughData[idx + 3] = 255;
+      } else {
+        const val = Math.floor(180 + noise * 40);
+        bumpData[idx] = val;
+        bumpData[idx + 1] = val;
+        bumpData[idx + 2] = val;
+        bumpData[idx + 3] = 255;
+
+        roughData[idx] = Math.floor(190 + noise * 30);
+        roughData[idx + 1] = Math.floor(190 + noise * 30);
+        roughData[idx + 2] = Math.floor(190 + noise * 30);
+        roughData[idx + 3] = 255;
+      }
+    }
+  }
+
+  const bumpTex = new THREE.DataTexture(bumpData, size, size, THREE.RGBAFormat);
+  bumpTex.wrapS = THREE.RepeatWrapping;
+  bumpTex.wrapT = THREE.RepeatWrapping;
+  bumpTex.repeat.set(2, 2);
+  bumpTex.needsUpdate = true;
+
+  const roughTex = new THREE.DataTexture(roughData, size, size, THREE.RGBAFormat);
+  roughTex.wrapS = THREE.RepeatWrapping;
+  roughTex.wrapT = THREE.RepeatWrapping;
+  roughTex.repeat.set(2, 2);
+  roughTex.needsUpdate = true;
+
+  return { bumpTex, roughTex };
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// 7. PROCEDURAL STONE PAVER TEXTURES (Plaza & Pedestrian Concourses)
+// ─────────────────────────────────────────────────────────────────────────────
+
+function createStonePaverTextures() {
+  const size = 128;
+  const diffuseData = new Uint8Array(size * size * 4);
+  const bumpData = new Uint8Array(size * size * 4);
+
+  // 16x32 running bond pavers with 2px mortar joint
+  for (let y = 0; y < size; y++) {
+    const isYJoint = y % 16 < 2;
+    const row = Math.floor(y / 16);
+    for (let x = 0; x < size; x++) {
+      const isXJoint = (x + (row % 2) * 16) % 32 < 2;
+      const idx = (y * size + x) * 4;
+      const paverId = (Math.floor((x + (row % 2) * 16) / 32) * 13 + row * 29) % 23;
+      const tone = (paverId / 23) * 16 - 8;
+
+      if (isYJoint || isXJoint) {
+        diffuseData[idx] = 175;
+        diffuseData[idx + 1] = 170;
+        diffuseData[idx + 2] = 160;
+        diffuseData[idx + 3] = 255;
+
+        bumpData[idx] = 50;
+        bumpData[idx + 1] = 50;
+        bumpData[idx + 2] = 50;
+        bumpData[idx + 3] = 255;
+      } else {
+        const base = Math.floor(224 + tone);
+        diffuseData[idx] = Math.min(255, base);
+        diffuseData[idx + 1] = Math.min(255, base - 6);
+        diffuseData[idx + 2] = Math.min(255, base - 16);
+        diffuseData[idx + 3] = 255;
+
+        bumpData[idx] = 200;
+        bumpData[idx + 1] = 200;
+        bumpData[idx + 2] = 200;
+        bumpData[idx + 3] = 255;
+      }
+    }
+  }
+
+  const diffuseTex = new THREE.DataTexture(diffuseData, size, size, THREE.RGBAFormat);
+  diffuseTex.wrapS = THREE.RepeatWrapping;
+  diffuseTex.wrapT = THREE.RepeatWrapping;
+  diffuseTex.repeat.set(4, 4);
+  diffuseTex.needsUpdate = true;
+
+  const bumpTex = new THREE.DataTexture(bumpData, size, size, THREE.RGBAFormat);
+  bumpTex.wrapS = THREE.RepeatWrapping;
+  bumpTex.wrapT = THREE.RepeatWrapping;
+  bumpTex.repeat.set(4, 4);
+  bumpTex.needsUpdate = true;
+
+  return { diffuseTex, bumpTex };
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// 8. PROCEDURAL NATURAL TIMBER GRAIN TEXTURES (Boardwalks & Pergolas)
+// ─────────────────────────────────────────────────────────────────────────────
+
+function createNaturalWoodTextures() {
+  const size = 64;
+  const diffuseData = new Uint8Array(size * size * 4);
+  const bumpData = new Uint8Array(size * size * 4);
+
+  // 8px wide timber planks running along Y
+  for (let y = 0; y < size; y++) {
+    for (let x = 0; x < size; x++) {
+      const isSeam = x % 8 === 0;
+      const idx = (y * size + x) * 4;
+      const grain = Math.sin(y * 0.4 + (x % 8) * 1.5) * 8;
+
+      if (isSeam) {
+        diffuseData[idx] = 75;
+        diffuseData[idx + 1] = 45;
+        diffuseData[idx + 2] = 25;
+        diffuseData[idx + 3] = 255;
+
+        bumpData[idx] = 40;
+        bumpData[idx + 1] = 40;
+        bumpData[idx + 2] = 40;
+        bumpData[idx + 3] = 255;
+      } else {
+        diffuseData[idx] = Math.min(255, Math.floor(155 + grain));
+        diffuseData[idx + 1] = Math.min(255, Math.floor(105 + grain * 0.7));
+        diffuseData[idx + 2] = Math.min(255, Math.floor(65 + grain * 0.4));
+        diffuseData[idx + 3] = 255;
+
+        bumpData[idx] = Math.min(255, Math.floor(190 + grain * 2));
+        bumpData[idx + 1] = bumpData[idx];
+        bumpData[idx + 2] = bumpData[idx];
+        bumpData[idx + 3] = 255;
+      }
+    }
+  }
+
+  const diffuseTex = new THREE.DataTexture(diffuseData, size, size, THREE.RGBAFormat);
+  diffuseTex.wrapS = THREE.RepeatWrapping;
+  diffuseTex.wrapT = THREE.RepeatWrapping;
+  diffuseTex.repeat.set(2, 4);
+  diffuseTex.needsUpdate = true;
+
+  const bumpTex = new THREE.DataTexture(bumpData, size, size, THREE.RGBAFormat);
+  bumpTex.wrapS = THREE.RepeatWrapping;
+  bumpTex.wrapT = THREE.RepeatWrapping;
+  bumpTex.repeat.set(2, 4);
+  bumpTex.needsUpdate = true;
+
+  return { diffuseTex, bumpTex };
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// 9. PROCEDURAL FINE-GRAIN ASPHALT BUMP (Campus Avenues & Streets)
+// ─────────────────────────────────────────────────────────────────────────────
+
+function createAsphaltBumpTexture() {
+  const size = 64;
+  const bumpData = new Uint8Array(size * size * 4);
+  for (let i = 0; i < size * size; i++) {
+    const val = 120 + ((i * 37) % 50);
+    const idx = i * 4;
+    bumpData[idx] = val;
+    bumpData[idx + 1] = val;
+    bumpData[idx + 2] = val;
+    bumpData[idx + 3] = 255;
+  }
+  const bumpTex = new THREE.DataTexture(bumpData, size, size, THREE.RGBAFormat);
+  bumpTex.wrapS = THREE.RepeatWrapping;
+  bumpTex.wrapT = THREE.RepeatWrapping;
+  bumpTex.repeat.set(8, 8);
+  bumpTex.needsUpdate = true;
+  return bumpTex;
+}
+
+export const { bumpTex: concreteBumpTexture, roughTex: concreteRoughnessTexture } =
+  createConcretePanelTextures();
+export const { diffuseTex: paverDiffuseTexture, bumpTex: paverBumpTexture } =
+  createStonePaverTextures();
+export const { diffuseTex: woodDiffuseTexture, bumpTex: woodBumpTexture } =
+  createNaturalWoodTextures();
+export const asphaltBumpTexture = createAsphaltBumpTexture();
+
+// ─────────────────────────────────────────────────────────────────────────────
 // REFINED ARCHITECTURAL MATERIAL INSTANCES (Physically Based Rendering — PBR)
 // ─────────────────────────────────────────────────────────────────────────────
 
@@ -451,16 +654,21 @@ export const industrialWindowMaterial = new THREE.MeshStandardMaterial({
 // Architectural Cladding: Matte Pearl-White Precast Limestone Concrete (Non-reflective, soft bounce)
 export const pearlWhiteMaterial = new THREE.MeshStandardMaterial({
   color: new THREE.Color(CITY_COLORS.pearlWhite),
-  roughness: 0.82,
+  roughness: 0.80,
   metalness: 0.02,
+  bumpMap: concreteBumpTexture,
+  bumpScale: 0.03,
+  roughnessMap: concreteRoughnessTexture,
 });
 export const pearlWhiteConcreteMaterial = pearlWhiteMaterial;
 
 // Light Grey Precast Structural Concrete
 export const precastConcreteMaterial = new THREE.MeshStandardMaterial({
   color: new THREE.Color('#B0BAC7'),
-  roughness: 0.85,
+  roughness: 0.84,
   metalness: 0.02,
+  bumpMap: concreteBumpTexture,
+  bumpScale: 0.04,
 });
 
 // Satin Architectural Aluminium Cladding
@@ -642,6 +850,8 @@ export const roadMaterial = new THREE.MeshStandardMaterial({
   color: new THREE.Color(CITY_COLORS.roadSurface),
   roughness: 0.88,
   metalness: 0.02,
+  bumpMap: asphaltBumpTexture,
+  bumpScale: 0.04,
 });
 
 export const roadMarkingWhiteMaterial = new THREE.MeshStandardMaterial({
@@ -664,14 +874,18 @@ export const crosswalkMarkingMaterial = new THREE.MeshStandardMaterial({
 
 export const plazaMaterial = new THREE.MeshStandardMaterial({
   color: new THREE.Color(CITY_COLORS.plazaPaving),
-  roughness: 0.75,
+  roughness: 0.72,
   metalness: 0.04,
+  bumpMap: paverBumpTexture,
+  bumpScale: 0.04,
 });
 
 export const plazaAccentMaterial = new THREE.MeshStandardMaterial({
   color: new THREE.Color(CITY_COLORS.plazaAccent),
   roughness: 0.68,
   metalness: 0.04,
+  bumpMap: paverBumpTexture,
+  bumpScale: 0.03,
 });
 
 export const hazardStripeMaterial = new THREE.MeshStandardMaterial({
@@ -759,38 +973,46 @@ export const cobaltGlassMaterial = new THREE.MeshStandardMaterial({
 // 2. Academic District (Warm ivory, Sandstone, Muted terracotta, Natural concrete)
 export const warmIvoryMaterial = new THREE.MeshStandardMaterial({
   color: new THREE.Color('#F7F4EC'),
-  roughness: 0.82,
+  roughness: 0.80,
   metalness: 0.02,
+  bumpMap: concreteBumpTexture,
+  bumpScale: 0.03,
 });
 
 export const sandstoneMaterial = new THREE.MeshStandardMaterial({
   color: new THREE.Color('#D8C3A5'),
-  roughness: 0.86,
+  roughness: 0.84,
   metalness: 0.02,
+  bumpMap: paverBumpTexture,
+  bumpScale: 0.04,
 });
 
 export const terracottaMaterial = new THREE.MeshStandardMaterial({
   color: new THREE.Color('#C8644A'),
-  roughness: 0.80,
+  roughness: 0.78,
   metalness: 0.02,
+  bumpMap: concreteBumpTexture,
+  bumpScale: 0.03,
 });
 
 export const terracottaAccentMaterial = new THREE.MeshStandardMaterial({
   color: new THREE.Color('#DC7356'),
-  roughness: 0.78,
+  roughness: 0.76,
   metalness: 0.02,
 });
 
 // 3. Advanced Research District (Cool white, Deep blue glass, Titanium, Controlled cyan)
 export const coolWhiteMaterial = new THREE.MeshStandardMaterial({
   color: new THREE.Color('#F1F5F9'),
-  roughness: 0.80,
+  roughness: 0.78,
   metalness: 0.02,
+  bumpMap: concreteBumpTexture,
+  bumpScale: 0.03,
 });
 
 export const deepBlueGlassMaterial = new THREE.MeshStandardMaterial({
   color: new THREE.Color('#0F2A48'),
-  roughness: 0.08,
+  roughness: 0.06,
   metalness: 0.10,
   transparent: true,
   opacity: 0.85,
@@ -805,14 +1027,19 @@ export const architecturalCyanMaterial = new THREE.MeshStandardMaterial({
 // 4. Student Life District (Warm beige, Natural timber, Sage green, Warm glazing)
 export const warmBeigeMaterial = new THREE.MeshStandardMaterial({
   color: new THREE.Color('#EFE6D8'),
-  roughness: 0.82,
+  roughness: 0.80,
   metalness: 0.02,
+  bumpMap: concreteBumpTexture,
+  bumpScale: 0.03,
 });
 
 export const naturalTimberMaterial = new THREE.MeshStandardMaterial({
   color: new THREE.Color('#8A5A36'),
-  roughness: 0.74,
+  roughness: 0.72,
   metalness: 0.03,
+  map: woodDiffuseTexture,
+  bumpMap: woodBumpTexture,
+  bumpScale: 0.05,
 });
 
 export const sageGreenMaterial = new THREE.MeshStandardMaterial({
@@ -832,8 +1059,10 @@ export const warmGlazingMaterial = new THREE.MeshStandardMaterial({
 // 5. Knowledge & Incubation District (Cream stone, Teal accents, Blonde wood)
 export const creamStoneMaterial = new THREE.MeshStandardMaterial({
   color: new THREE.Color('#FAF3E0'),
-  roughness: 0.84,
+  roughness: 0.82,
   metalness: 0.02,
+  bumpMap: concreteBumpTexture,
+  bumpScale: 0.03,
 });
 
 export const tealAccentMaterial = new THREE.MeshStandardMaterial({
@@ -844,14 +1073,17 @@ export const tealAccentMaterial = new THREE.MeshStandardMaterial({
 
 export const blondeWoodMaterial = new THREE.MeshStandardMaterial({
   color: new THREE.Color('#C89D6C'),
-  roughness: 0.74,
+  roughness: 0.72,
   metalness: 0.03,
+  map: woodDiffuseTexture,
+  bumpMap: woodBumpTexture,
+  bumpScale: 0.04,
 });
 
 // 6. Recreation & Lake District (Natural stone, Botanical green, Warm stone, Azure water, Timber)
 export const azureWaterMaterial = new THREE.MeshStandardMaterial({
   color: new THREE.Color('#0284C7'),
-  roughness: 0.06,
+  roughness: 0.05,
   metalness: 0.04,
   transparent: true,
   opacity: 0.88,
@@ -859,14 +1091,19 @@ export const azureWaterMaterial = new THREE.MeshStandardMaterial({
 
 export const warmStoneMaterial = new THREE.MeshStandardMaterial({
   color: new THREE.Color('#D3C8B8'),
-  roughness: 0.82,
+  roughness: 0.80,
   metalness: 0.03,
+  bumpMap: paverBumpTexture,
+  bumpScale: 0.04,
 });
 
 export const teakTimberMaterial = new THREE.MeshStandardMaterial({
   color: new THREE.Color('#784622'),
-  roughness: 0.74,
+  roughness: 0.70,
   metalness: 0.03,
+  map: woodDiffuseTexture,
+  bumpMap: woodBumpTexture,
+  bumpScale: 0.06,
 });
 
 // 7. Campus Landscape & Botanical Flowering Materials
@@ -878,8 +1115,10 @@ export const campusTurfMaterial = new THREE.MeshStandardMaterial({
 
 export const warmPlazaPavingMaterial = new THREE.MeshStandardMaterial({
   color: new THREE.Color('#E8E1D5'),
-  roughness: 0.78,
+  roughness: 0.76,
   metalness: 0.03,
+  bumpMap: paverBumpTexture,
+  bumpScale: 0.05,
 });
 
 export const floweringLavenderMaterial = new THREE.MeshStandardMaterial({

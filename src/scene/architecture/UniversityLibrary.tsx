@@ -45,14 +45,35 @@ export function UniversityLibrary({
     <group name="university-central-library" position={position} rotation={[0, rotation, 0]}>
       {/* ── 1. GROUND FLOOR: TRANSPARENT READING ATRIUM & STUDY COMMONS ── */}
       <group name="library-ground-atrium">
-        {/* Continuous Double-Height Glass Curtain Wall */}
+        {/* Continuous Double-Height Glass Curtain Wall with Vertical Mullions */}
         <mesh position={[0, 2.0, 0]} material={clearLobbyGlassMaterial}>
           <boxGeometry args={[width - 0.8, 4.0, depth - 0.8]} />
         </mesh>
+        {/* Atrium Vertical Facade Mullions */}
+        {[-4.5, -1.5, 1.5, 4.5].map((mx, mIdx) => (
+          <mesh key={`lib-mullion-${mIdx}`} position={[mx, 2.0, depth / 2 - 0.35]} material={tealAccentMaterial}>
+            <boxGeometry args={[0.1, 4.0, 0.15]} />
+          </mesh>
+        ))}
 
-        {/* Interior Warm Study Light Core & Visual Bookstack Representation */}
+        {/* Visible Interior Library Bookstack Ranges through glass */}
+        {[-3.2, 3.2].map((bx, bIdx) => (
+          <group key={`bookstack-range-${bIdx}`} position={[bx, 1.5, 0]}>
+            <mesh material={blondeWoodMaterial} castShadow={shouldCastShadow}>
+              <boxGeometry args={[1.2, 2.6, 4.5]} />
+            </mesh>
+            {/* Horizontal Book Shelf Bands */}
+            {[-0.8, -0.2, 0.4, 1.0].map((sy, sIdx) => (
+              <mesh key={`shelf-band-${sIdx}`} position={[0, sy, 0]} material={darkTitaniumMaterial}>
+                <boxGeometry args={[1.25, 0.06, 4.55]} />
+              </mesh>
+            ))}
+          </group>
+        ))}
+
+        {/* Interior Warm Study Light Core */}
         <mesh position={[0, 1.8, 0]} material={warmGlowMaterial}>
-          <boxGeometry args={[width * 0.65, 3.2, depth * 0.55]} />
+          <boxGeometry args={[width * 0.45, 2.8, depth * 0.45]} />
         </mesh>
 
         {/* Interior Structural Columns */}

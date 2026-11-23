@@ -196,7 +196,7 @@ export function CentralLandmark() {
           )
         )}
 
-        {/* Four Grand Axial Entrance Portals & Canopies */}
+        {/* Four Grand Axial Entrance Portals & Canopies with Architectural Detail */}
         {[0, Math.PI / 2, Math.PI, (3 * Math.PI) / 2].map((angle, idx) => (
           <group key={`entrance-portal-${idx}`} rotation={[0, angle, 0]}>
             {/* Double-Height Glazed Entrance Lobby */}
@@ -207,10 +207,28 @@ export function CentralLandmark() {
             <mesh position={[0, 3.0, 8.2]} material={warmGlowMaterial}>
               <boxGeometry args={[3.6, 3.2, 0.1]} />
             </mesh>
+            {/* Entrance Revolving Door Cylindrical Portal */}
+            <mesh position={[0, 2.0, 8.65]} material={champagneSilverMaterial}>
+              <cylinderGeometry args={[0.9, 0.9, 2.2, 12, 1, true]} />
+            </mesh>
+            <mesh position={[0, 2.0, 8.65]} material={cobaltGlassMaterial}>
+              <cylinderGeometry args={[0.88, 0.88, 2.1, 12]} />
+            </mesh>
             {/* Projecting High-Tech Cantilever Canopy */}
             <mesh position={[0, 5.2, 9.7]} material={titaniumStructuralMaterial} castShadow>
               <boxGeometry args={[5.0, 0.35, 2.4]} />
             </mesh>
+            {/* Canopy Structural Stainless Steel Tie-Rods (Anchoring back to tower facade) */}
+            {[-1.8, 1.8].map((rx, rIdx) => (
+              <mesh
+                key={`canopy-rod-${rIdx}`}
+                position={[rx, 6.2, 9.2]}
+                rotation={[0.65, 0, 0]}
+                material={champagneSilverMaterial}
+              >
+                <cylinderGeometry args={[0.03, 0.03, 2.4, 6]} />
+              </mesh>
+            ))}
             {/* Canopy Glowing Cyan Soffit Trim */}
             <mesh position={[0, 5.0, 9.7]} material={cyanGlowMaterial}>
               <boxGeometry args={[4.8, 0.05, 2.2]} />
@@ -370,6 +388,18 @@ export function CentralLandmark() {
         <mesh position={[0, 0.2, 0]} material={cobaltGlassMaterial}>
           <cylinderGeometry args={[6.45, 5.8, 1.2, 8]} />
         </mesh>
+        {/* Interior Observation Lounge Perimeter Columns visible through glass */}
+        {[0, Math.PI / 4, Math.PI / 2, (3 * Math.PI) / 4, Math.PI, (5 * Math.PI) / 4, (3 * Math.PI) / 2, (7 * Math.PI) / 4].map(
+          (ang, cIdx) => (
+            <mesh
+              key={`skydeck-col-${cIdx}`}
+              position={[Math.cos(ang) * 5.4, 0.2, Math.sin(ang) * 5.4]}
+              material={champagneSilverMaterial}
+            >
+              <cylinderGeometry args={[0.08, 0.1, 1.15, 6]} />
+            </mesh>
+          )
+        )}
         {/* Interior Observation Deck Warm Ambient Core */}
         <mesh position={[0, 0.2, 0]} material={warmGlowMaterial}>
           <cylinderGeometry args={[5.2, 5.2, 0.8, 8]} />
@@ -389,7 +419,7 @@ export function CentralLandmark() {
               key={`diagrid-strut-${idx}`}
               position={[Math.cos(angle) * 4.6, -1.6, Math.sin(angle) * 4.6]}
               rotation={[0, -angle, 0.45]}
-              material={softSilverMaterial}
+              material={champagneSilverMaterial}
             >
               <boxGeometry args={[0.7, 1.8, 0.7]} />
             </mesh>
@@ -418,6 +448,12 @@ export function CentralLandmark() {
             >
               <boxGeometry args={[0.9, 24.5, 0.9]} />
             </mesh>
+            {/* Expressed Floor Slab Division Rings every 4.5m along the shaft */}
+            {[-9, -4.5, 0, 4.5, 9].map((fY, fIdx) => (
+              <mesh key={`shaft-slab-${fIdx}`} position={[0, fY, 0]} material={champagneSilverMaterial}>
+                <boxGeometry args={[2.55, 0.18, 2.55]} />
+              </mesh>
+            ))}
             <mesh
               position={[shaft.x > 0 ? 1.25 : -1.25, 0, shaft.z > 0 ? 1.25 : -1.25]}
               material={cyanGlowMaterial}

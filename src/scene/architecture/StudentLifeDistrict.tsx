@@ -108,10 +108,51 @@ export function StudentLifeDistrict({
           <boxGeometry args={[14, 0.7, 16]} />
         </mesh>
 
-        {/* Main Residential Massing */}
+        {/* Main Residential Massing with Modular Floor Slab Reveals */}
         <mesh position={[0, 11, 0]} material={warmBeigeMaterial} receiveShadow castShadow>
           <boxGeometry args={[12.5, 20.5, 14.5]} />
         </mesh>
+        {/* Expressed Horizontal Floor Slab Shadow Bands on Tower A */}
+        {balconyFloors.map((bY, fIdx) => (
+          <mesh key={`res-a-slab-${fIdx}`} position={[0, bY - 0.2, 0]} material={warmBeigeMaterial}>
+            <boxGeometry args={[12.8, 0.18, 14.8]} />
+          </mesh>
+        ))}
+
+        {/* East Facade Student Bedroom Windows (Modular Fenestration with Sage Green Sills) */}
+        {balconyFloors.map((bY, wIdx) => (
+          <group key={`east-window-row-${wIdx}`} position={[6.3, bY, 0]}>
+            {[-4, -1.3, 1.3, 4].map((wz, zIdx) => (
+              <group key={`win-pane-${zIdx}`} position={[0, 0, wz]}>
+                <mesh material={warmGlazingMaterial}>
+                  <boxGeometry args={[0.08, 1.3, 1.8]} />
+                </mesh>
+                <mesh position={[-0.04, -0.72, 0]} material={sageGreenMaterial}>
+                  <boxGeometry args={[0.12, 0.14, 2.0]} />
+                </mesh>
+              </group>
+            ))}
+          </group>
+        ))}
+
+        {/* Ground Floor Student Reception & Vestibule Canopy */}
+        <group position={[0, 1.8, 7.6]}>
+          <mesh position={[0, 1.8, 0]} material={naturalTimberMaterial} castShadow={shouldCastShadow}>
+            <boxGeometry args={[6.5, 0.25, 2.2]} />
+          </mesh>
+          {[-2.8, 2.8].map((cx, idx) => (
+            <mesh key={`dorm-col-${idx}`} position={[cx, 0.9, 0.9]} material={naturalTimberMaterial}>
+              <cylinderGeometry args={[0.1, 0.12, 1.8, 8]} />
+            </mesh>
+          ))}
+          {/* Glass Draught-Lobby Doors */}
+          <mesh position={[0, 0.9, -0.2]} material={clearGlassMaterial}>
+            <boxGeometry args={[4.2, 1.8, 0.1]} />
+          </mesh>
+          <mesh position={[0, 0.9, -0.4]} material={warmGlowMaterial}>
+            <boxGeometry args={[3.2, 1.5, 0.05]} />
+          </mesh>
+        </group>
 
         {/* Modular Recessed Balconies (West Facade) */}
         {balconyFloors.map((bY, idx) => (
@@ -216,6 +257,17 @@ export function StudentLifeDistrict({
           <boxGeometry args={[16.5, 8.2, 14.5]} />
         </mesh>
 
+        {/* Visible Interior Mezzanine Floor Slab & Dining Seating Through Glass */}
+        <mesh position={[0, 4.5, 0]} material={warmBeigeMaterial}>
+          <boxGeometry args={[14.5, 0.22, 12.5]} />
+        </mesh>
+        {/* Vertical Timber Curtain Wall Glulam Mullions */}
+        {[-6, -2, 2, 6].map((mx, mIdx) => (
+          <mesh key={`dining-mullion-${mIdx}`} position={[mx, 4.8, 7.3]} material={naturalTimberMaterial}>
+            <boxGeometry args={[0.15, 8.2, 0.25]} />
+          </mesh>
+        ))}
+
         {/* Warm Luminous Dining Core */}
         <mesh position={[0, 4.2, 0]} material={warmGlowMaterial}>
           <boxGeometry args={[12, 6.5, 10]} />
@@ -234,6 +286,10 @@ export function StudentLifeDistrict({
           {/* Natural Timber Deck Platform */}
           <mesh material={naturalTimberMaterial} receiveShadow>
             <boxGeometry args={[7, 0.2, 13]} />
+          </mesh>
+          {/* Terrace Botanical Planter Edge with Shrubs */}
+          <mesh position={[3.6, 0.25, 0]} material={sageGreenMaterial}>
+            <boxGeometry args={[0.3, 0.4, 13]} />
           </mesh>
 
           {/* Timber Pergola Roof */}

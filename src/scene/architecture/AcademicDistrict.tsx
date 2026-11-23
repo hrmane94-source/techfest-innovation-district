@@ -102,7 +102,7 @@ export function AcademicDistrict({
           Identity: Sandstone shell, terracotta acoustic baffles, warm ivory colonnade
       ══════════════════════════════════════════════════════════════ */}
       <group position={[6, 0.9, -7]}>
-        {/* Foundation Plinth (Honed Sandstone) */}
+        {/* Foundation Plinth (Honed Sandstone with Expressed Reveal) */}
         <mesh position={[0, 0.35, 0]} material={sandstoneMaterial} receiveShadow castShadow>
           <boxGeometry args={[22, 0.7, 26]} />
         </mesh>
@@ -110,10 +110,25 @@ export function AcademicDistrict({
           <boxGeometry args={[22.3, 0.1, 26.3]} />
         </mesh>
 
-        {/* Sculptural Main Auditorium Body (Warm Sandstone Acoustic Envelope) */}
+        {/* Sculptural Main Auditorium Body (Warm Sandstone Acoustic Envelope with Shadow Reveals) */}
         <mesh position={[0, 7.5, -2]} material={sandstoneMaterial} receiveShadow castShadow>
           <boxGeometry args={[18, 13.5, 18]} />
         </mesh>
+        {/* Horizontal Shadow Reveal Band dividing auditorium levels */}
+        <mesh position={[0, 7.0, -2]} material={terracottaAccentMaterial}>
+          <boxGeometry args={[18.25, 0.15, 18.25]} />
+        </mesh>
+
+        {/* Lateral Structural Acoustic Buttress Pylons (East & West Flanks) */}
+        {[-9.2, 9.2].map((bx, bIdx) => (
+          <group key={`aud-buttress-flank-${bIdx}`} position={[bx, 7.5, -2]}>
+            {[-6, -2, 2, 6].map((bz, zIdx) => (
+              <mesh key={`buttress-pylon-${zIdx}`} position={[0, 0, bz]} material={sandstoneMaterial} castShadow={shouldCastShadow}>
+                <boxGeometry args={[0.7, 13.0, 1.2]} />
+              </mesh>
+            ))}
+          </group>
+        ))}
 
         {/* Sloped Roof Envelope with Muted Terracotta Acoustic Baffles */}
         <mesh position={[0, 14.8, -2]} rotation={[-0.08, 0, 0]} material={terracottaMaterial} castShadow>
@@ -130,12 +145,30 @@ export function AcademicDistrict({
         <mesh position={[0, 18.3, -9.5]} material={warmIvoryMaterial}>
           <boxGeometry args={[12.3, 0.3, 6.8]} />
         </mesh>
+        {/* Flytower Rooftop HVAC & Acoustic Louver Screening */}
+        <mesh position={[0, 19.2, -9.5]} material={terracottaAccentMaterial} castShadow={shouldCastShadow}>
+          <boxGeometry args={[8.5, 1.5, 4.5]} />
+        </mesh>
 
         {/* Grand Glazed Entrance Portico & Foyer (Front facing south) */}
         <mesh position={[0, 4.5, 8]} material={clearLobbyGlassMaterial}>
           <boxGeometry args={[16, 7.6, 3.8]} />
         </mesh>
+        {/* Foyer Vertical Mullion Frames */}
+        {[-6, -3, 0, 3, 6].map((mx, mIdx) => (
+          <mesh key={`foyer-mullion-${mIdx}`} position={[mx, 4.5, 9.92]} material={warmIvoryMaterial}>
+            <boxGeometry args={[0.12, 7.5, 0.1]} />
+          </mesh>
+        ))}
 
+        {/* Interior Tiered Amphitheater Seating Profile (Visible through glazed foyer) */}
+        <group position={[0, 3.2, 6.5]}>
+          {[0, 1, 2, 3].map((tier) => (
+            <mesh key={`interior-tier-${tier}`} position={[0, tier * 0.45, -tier * 0.9]} material={terracottaMaterial}>
+              <boxGeometry args={[11, 0.35, 1.2]} />
+            </mesh>
+          ))}
+        </group>
         {/* Interior Warm Foyer Lighting Core */}
         <mesh position={[0, 4.0, 7.8]} material={warmGlowMaterial}>
           <boxGeometry args={[12, 5.0, 0.1]} />
@@ -169,6 +202,16 @@ export function AcademicDistrict({
           <boxGeometry args={[18, 0.25, 1.8]} />
         </mesh>
 
+        {/* Accessible Pedestrian Entrance Ramp with Sandstone Balustrade */}
+        <group position={[-9.8, 0, 13.2]}>
+          <mesh position={[0, 0.25, 0]} rotation={[0.08, 0, 0]} material={warmPlazaPavingMaterial} receiveShadow>
+            <boxGeometry args={[2.0, 0.25, 5.2]} />
+          </mesh>
+          <mesh position={[-1.05, 0.65, 0]} rotation={[0.08, 0, 0]} material={sandstoneMaterial}>
+            <boxGeometry args={[0.15, 0.65, 5.2]} />
+          </mesh>
+        </group>
+
         {/* Auditorium Signage Banner (Terracotta & Ivory) */}
         <mesh position={[0, 8.9, 12.4]} material={terracottaMaterial}>
           <boxGeometry args={[9.5, 0.8, 0.2]} />
@@ -194,6 +237,13 @@ export function AcademicDistrict({
           <boxGeometry args={[14.5, 11.5, 16.5]} />
         </mesh>
 
+        {/* Expressed Horizontal Floor Slabs with Shadow Reveals on all 3 levels */}
+        {[4.3, 7.6, 11.0].map((sY, sIdx) => (
+          <mesh key={`slab-reveal-${sIdx}`} position={[0, sY, 0]} material={terracottaMaterial} castShadow={shouldCastShadow}>
+            <boxGeometry args={[14.9, 0.22, 16.9]} />
+          </mesh>
+        ))}
+
         {/* Tiered Glazed Ribbon Windows with Terracotta Louver Sunshades */}
         {[3.5, 6.8, 10.2].map((yLvl, idx) => (
           <group key={`lecture-ribbon-${idx}`} position={[0, yLvl, 0]}>
@@ -218,6 +268,29 @@ export function AcademicDistrict({
           </group>
         ))}
 
+        {/* Ground Floor Entrance Colonnade & Vestibule */}
+        <group position={[0, 1.8, 8.6]}>
+          <mesh position={[0, 1.8, 0]} material={terracottaMaterial} castShadow={shouldCastShadow}>
+            <boxGeometry args={[6.5, 0.25, 1.8]} />
+          </mesh>
+          {[-2.8, 2.8].map((cx, idx) => (
+            <mesh key={`lecture-col-${idx}`} position={[cx, 0.9, 0.6]} material={warmIvoryMaterial}>
+              <cylinderGeometry args={[0.14, 0.16, 1.8, 8]} />
+            </mesh>
+          ))}
+          {/* Bicycle Shelter Parking Rack */}
+          <group position={[-5.5, -1.2, 0]}>
+            <mesh position={[0, 1.2, 0]} material={sandstoneMaterial}>
+              <boxGeometry args={[3.2, 0.1, 1.4]} />
+            </mesh>
+            {[-1.2, -0.4, 0.4, 1.2].map((rx, rIdx) => (
+              <mesh key={`bike-rack-${rIdx}`} position={[rx, 0.35, 0]} material={terracottaAccentMaterial}>
+                <cylinderGeometry args={[0.03, 0.03, 0.7, 6]} />
+              </mesh>
+            ))}
+          </group>
+        </group>
+
         {/* Central Skylight Atrium Spire */}
         <mesh position={[0, 12.6, 0]} material={clearGlassMaterial}>
           <boxGeometry args={[6.5, 1.2, 14.5]} />
@@ -230,6 +303,10 @@ export function AcademicDistrict({
         <mesh position={[4.2, 12.8, 4]} rotation={[-0.1, 0, 0]} material={solarPanelMaterial}>
           <boxGeometry args={[4.2, 0.1, 6]} />
         </mesh>
+        {/* Rooftop Mechanical Penthouse Screen */}
+        <mesh position={[-4.2, 13.0, -3]} material={sandstoneMaterial} castShadow={shouldCastShadow}>
+          <boxGeometry args={[4.5, 1.4, 5.5]} />
+        </mesh>
       </group>
 
       {/* ══════════════════════════════════════════════════════════════
@@ -238,27 +315,45 @@ export function AcademicDistrict({
           Identity: Warm Ivory facades, Terracotta framing, connecting Skybridge
       ══════════════════════════════════════════════════════════════ */}
       <group position={[18, 0.9, 12]}>
-        {/* Department Block A (East Wing - Warm Ivory with Terracotta cornice) */}
-        <mesh position={[6, 8.5, 0]} material={warmIvoryMaterial} receiveShadow castShadow>
-          <boxGeometry args={[8.5, 16, 12]} />
-        </mesh>
-        <mesh position={[6, 8.5, 6.05]} material={glassCurtainMaterial}>
-          <boxGeometry args={[7.2, 14, 0.15]} />
-        </mesh>
-        <mesh position={[6, 16.7, 0]} material={terracottaMaterial}>
-          <boxGeometry args={[8.8, 0.4, 12.4]} />
-        </mesh>
+        {/* Department Block A (East Wing - Warm Ivory with Terracotta cornice & pilasters) */}
+        <group position={[6, 8.5, 0]}>
+          <mesh material={warmIvoryMaterial} receiveShadow castShadow>
+            <boxGeometry args={[8.5, 16, 12]} />
+          </mesh>
+          <mesh position={[0, 0, 6.05]} material={glassCurtainMaterial}>
+            <boxGeometry args={[7.2, 14, 0.15]} />
+          </mesh>
+          {/* Vertical Architectural Corner Pilasters */}
+          {[-4.1, 4.1].map((px, pIdx) => (
+            <mesh key={`pilaster-a-${pIdx}`} position={[px, 0, 6.08]} material={sandstoneMaterial} castShadow={shouldCastShadow}>
+              <boxGeometry args={[0.4, 16, 0.25]} />
+            </mesh>
+          ))}
+          {/* Horizontal Terracotta Cornice & Parapet Upstand */}
+          <mesh position={[0, 8.2, 0]} material={terracottaMaterial}>
+            <boxGeometry args={[8.8, 0.4, 12.4]} />
+          </mesh>
+        </group>
 
-        {/* Department Block B (West Wing - Warm Ivory with Terracotta cornice) */}
-        <mesh position={[-6, 8.5, 0]} material={warmIvoryMaterial} receiveShadow castShadow>
-          <boxGeometry args={[8.5, 16, 12]} />
-        </mesh>
-        <mesh position={[-6, 8.5, 6.05]} material={glassCurtainMaterial}>
-          <boxGeometry args={[7.2, 14, 0.15]} />
-        </mesh>
-        <mesh position={[-6, 16.7, 0]} material={terracottaMaterial}>
-          <boxGeometry args={[8.8, 0.4, 12.4]} />
-        </mesh>
+        {/* Department Block B (West Wing - Warm Ivory with Terracotta cornice & pilasters) */}
+        <group position={[-6, 8.5, 0]}>
+          <mesh material={warmIvoryMaterial} receiveShadow castShadow>
+            <boxGeometry args={[8.5, 16, 12]} />
+          </mesh>
+          <mesh position={[0, 0, 6.05]} material={glassCurtainMaterial}>
+            <boxGeometry args={[7.2, 14, 0.15]} />
+          </mesh>
+          {/* Vertical Architectural Corner Pilasters */}
+          {[-4.1, 4.1].map((px, pIdx) => (
+            <mesh key={`pilaster-b-${pIdx}`} position={[px, 0, 6.08]} material={sandstoneMaterial} castShadow={shouldCastShadow}>
+              <boxGeometry args={[0.4, 16, 0.25]} />
+            </mesh>
+          ))}
+          {/* Horizontal Terracotta Cornice & Parapet Upstand */}
+          <mesh position={[0, 8.2, 0]} material={terracottaMaterial}>
+            <boxGeometry args={[8.8, 0.4, 12.4]} />
+          </mesh>
+        </group>
 
         {/* High-Level Glazed Academic Skybridge (Terracotta Structural Truss) */}
         <group position={[0, 11.5, 0]}>
@@ -270,6 +365,13 @@ export function AcademicDistrict({
           </mesh>
           <mesh position={[0, 0, -1.62]} material={clearGlassMaterial}>
             <boxGeometry args={[4.8, 2.4, 0.1]} />
+          </mesh>
+          {/* Structural Diagonal Truss Cross-Braces */}
+          <mesh rotation={[0, 0, 0.6]} material={terracottaAccentMaterial}>
+            <boxGeometry args={[0.15, 3.8, 3.3]} />
+          </mesh>
+          <mesh rotation={[0, 0, -0.6]} material={terracottaAccentMaterial}>
+            <boxGeometry args={[0.15, 3.8, 3.3]} />
           </mesh>
         </group>
 

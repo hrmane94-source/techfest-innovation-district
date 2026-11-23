@@ -462,6 +462,32 @@ export function AerospaceComplex({ position, rotation = 0 }: AerospaceComplexPro
           selectDistrict('nasa-dish');
         }}
       >
+        {/* Concrete Public Observation Terrace */}
+        <mesh position={[0, 0.15, 0]} material={precastConcreteMaterial} castShadow receiveShadow>
+          <cylinderGeometry args={[4.4, 4.6, 0.3, 20]} />
+        </mesh>
+        {/* Terrace Perimeter Safety Railing */}
+        <mesh position={[0, 0.5, 0]} rotation={[-Math.PI / 2, 0, 0]} material={metalExoskeletonMaterial}>
+          <ringGeometry args={[4.2, 4.35, 20]} />
+        </mesh>
+
+        {/* Educational Interpretive Stanchion & Telemetry Lectern */}
+        <group position={[0, 0.3, 3.6]}>
+          <mesh position={[0, 0.4, 0]} material={brushedAlloyMaterial}>
+            <cylinderGeometry args={[0.06, 0.08, 0.8, 8]} />
+          </mesh>
+          {/* Angled Interpretive Plaque (NASA DEEP SPACE NETWORK • 70-METER TELEMETRY DISH) */}
+          <mesh position={[0, 0.82, 0]} rotation={[-0.42, 0, 0]} material={darkTitaniumMaterial}>
+            <boxGeometry args={[1.2, 0.04, 0.6]} />
+          </mesh>
+          <mesh position={[0, 0.83, 0]} rotation={[-0.42, 0, 0]} material={cyanGlowMaterial}>
+            <boxGeometry args={[1.05, 0.02, 0.15]} />
+          </mesh>
+          <mesh position={[0, 0.84, 0]} rotation={[-0.42, 0, 0]} material={clearLobbyGlassMaterial}>
+            <boxGeometry args={[1.18, 0.02, 0.58]} />
+          </mesh>
+        </group>
+
         {/* Heavy Reinforced Architectural Pedestal Base */}
         <mesh position={[0, 2.0, 0]} material={precastConcreteMaterial} castShadow receiveShadow>
           <cylinderGeometry args={[2.4, 3.0, 4.0, 12]} />

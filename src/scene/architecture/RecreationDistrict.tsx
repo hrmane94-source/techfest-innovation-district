@@ -141,6 +141,27 @@ export function RecreationDistrict({
         <group ref={fountainsRef} position={[0, 0.05, 0]}>
           {fountainPositions.map(([fx, , fz], fIdx) => (
             <group key={`fountain-jet-${fIdx}`} position={[fx, 0, fz]}>
+              {/* Fountain Water Aeration Ripple Rings */}
+              <mesh position={[0, 0.01, 0]} rotation={[-Math.PI / 2, 0, 0]}>
+                <ringGeometry args={[0.6, 1.4, 24]} />
+                <meshStandardMaterial
+                  color="#dbeafe"
+                  roughness={0.15}
+                  metalness={0.1}
+                  transparent
+                  opacity={0.65}
+                />
+              </mesh>
+              <mesh position={[0, 0.015, 0]} rotation={[-Math.PI / 2, 0, 0]}>
+                <ringGeometry args={[1.6, 2.2, 24]} />
+                <meshStandardMaterial
+                  color="#eff6ff"
+                  roughness={0.2}
+                  metalness={0.05}
+                  transparent
+                  opacity={0.35}
+                />
+              </mesh>
               {/* Fountain Nozzle Base */}
               <mesh position={[0, 0.15, 0]} material={darkTitaniumMaterial}>
                 <cylinderGeometry args={[0.5, 0.6, 0.3, 8]} />
@@ -176,6 +197,14 @@ export function RecreationDistrict({
           <mesh material={teakTimberMaterial} receiveShadow>
             <boxGeometry args={[4.5, 0.2, 8.5]} />
           </mesh>
+          {/* Submerged Teak Timber Structural Pilings */}
+          {[-1.8, 1.8].map((px, pIdx) =>
+            [-3.5, 0, 3.5].map((pz, zIdx) => (
+              <mesh key={`pier-pile-${pIdx}-${zIdx}`} position={[px, -0.4, pz]} material={teakTimberMaterial}>
+                <cylinderGeometry args={[0.1, 0.12, 0.9, 6]} />
+              </mesh>
+            ))
+          )}
           {/* Glass Safety Railings on Boardwalk */}
           <mesh position={[-2.2, 0.45, 0]} material={clearGlassMaterial}>
             <boxGeometry args={[0.06, 0.7, 8.4]} />
@@ -232,6 +261,18 @@ export function RecreationDistrict({
         >
           <cylinderGeometry args={[8.5, 8.5, 21, 24, 1, false, 0, Math.PI]} />
         </mesh>
+        {/* External Structural Titanium Arch Ribs (Expressed architectural skeleton casting shadows) */}
+        {[-8.5, -4.25, 0, 4.25, 8.5].map((xOffset) => (
+          <mesh
+            key={`arena-arch-rib-${xOffset}`}
+            position={[xOffset, 12.8, 0]}
+            rotation={[0, 0, Math.PI / 2]}
+            material={darkTitaniumMaterial}
+            castShadow
+          >
+            <cylinderGeometry args={[8.72, 8.72, 0.45, 24, 1, false, 0, Math.PI]} />
+          </mesh>
+        ))}
         <mesh position={[0, 13.8, 0]} material={cyanGlowMaterial}>
           <boxGeometry args={[20.8, 0.1, 0.2]} />
         </mesh>
@@ -251,6 +292,17 @@ export function RecreationDistrict({
         <mesh position={[-11.2, 7.2, 0]} material={teakTimberMaterial} castShadow>
           <boxGeometry args={[2.5, 0.5, 10]} />
         </mesh>
+        {/* Entrance Portico Structural Support Columns */}
+        {[-4.2, 4.2].map((zCol) => (
+          <mesh
+            key={`portico-col-${zCol}`}
+            position={[-12.2, 3.6, zCol]}
+            material={darkTitaniumMaterial}
+            castShadow
+          >
+            <cylinderGeometry args={[0.16, 0.16, 7.2, 8]} />
+          </mesh>
+        ))}
         <mesh position={[-11.2, 7.5, 0]} material={whiteGlowMaterial}>
           <boxGeometry args={[0.2, 0.6, 7.5]} />
         </mesh>

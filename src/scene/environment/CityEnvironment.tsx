@@ -58,8 +58,8 @@ export function CityEnvironment() {
   return (
     <>
       <color attach="background" args={[CITY_COLORS.bgPrimary]} />
-      {/* Broad calibrated fog range (150 to 580) ensures crystal-clear architecture across 280m while gently blending deep horizon */}
-      <fog attach="fog" args={[CITY_COLORS.bgPrimary, 150, 580]} />
+      {/* Calibrated architectural fog range (220m to 680m): keeps all 6 districts crystal-clear while smoothly blending the vast 680m landscape apron into the sunny daylight sky */}
+      <fog attach="fog" args={[CITY_COLORS.bgPrimary, 220, 680]} />
 
       {particleData && (
         <points ref={pointsRef}>

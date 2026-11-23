@@ -66,6 +66,41 @@ export function CityGround() {
     []
   );
 
+  // Natural Sculpted Earth Berms (Rolling Topography framing the campus and eliminating the floating platform effect)
+  const campusEarthBerms = useMemo(
+    () => [
+      { pos: [75, 0.4, -75] as const, scale: [32, 2.6, 24] as const, rot: 0.3 },
+      { pos: [-75, 0.4, -75] as const, scale: [30, 2.4, 24] as const, rot: -0.4 },
+      { pos: [98, 0.35, 0] as const, scale: [26, 2.2, 38] as const, rot: 0.1 },
+      { pos: [-98, 0.35, 0] as const, scale: [26, 2.2, 38] as const, rot: -0.1 },
+      { pos: [85, 0.4, 75] as const, scale: [34, 2.8, 28] as const, rot: 0.5 },
+      { pos: [-85, 0.4, 75] as const, scale: [34, 2.8, 28] as const, rot: -0.5 },
+      { pos: [10, 0.35, 96] as const, scale: [52, 2.2, 22] as const, rot: 0 },
+      { pos: [28, 0.35, -92] as const, scale: [46, 2.2, 20] as const, rot: 0 },
+      // Interior courtyard mounds
+      { pos: [0, 0.42, -36] as const, scale: [16, 1.4, 10] as const, rot: 0 },
+      { pos: [0, 0.42, 38] as const, scale: [16, 1.4, 10] as const, rot: 0 },
+      { pos: [-36, 0.42, -36] as const, scale: [18, 1.5, 14] as const, rot: 0.4 },
+      { pos: [40, 0.42, -18] as const, scale: [18, 1.5, 14] as const, rot: -0.4 },
+    ],
+    []
+  );
+
+  // Curved Secondary Garden Pathways (Travertine and sandstone ribbons connecting quads)
+  const secondaryGardenPaths = useMemo(
+    () => [
+      { pos: [-28, 0.47, -2] as const, size: [2.2, 0.04, 18] as const, rot: 0.2 },
+      { pos: [28, 0.47, -2] as const, size: [2.2, 0.04, 18] as const, rot: -0.2 },
+      { pos: [0, 0.47, -14] as const, size: [2.4, 0.04, 16] as const, rot: 0 },
+      { pos: [0, 0.47, 14] as const, size: [2.4, 0.04, 16] as const, rot: 0 },
+      { pos: [44, 0.47, -38] as const, size: [2.0, 0.04, 22] as const, rot: 0.6 },
+      { pos: [-44, 0.47, 34] as const, size: [2.0, 0.04, 22] as const, rot: -0.5 },
+      { pos: [-4, 0.47, 52] as const, size: [2.4, 0.04, 24] as const, rot: 0.3 },
+      { pos: [22, 0.47, 52] as const, size: [2.4, 0.04, 24] as const, rot: -0.3 },
+    ],
+    []
+  );
+
   // Continuous Diagonal & Axial Pedestrian Concourse Spines connecting all districts to Central Plaza
   const campusConcourses = useMemo(
     () => [
@@ -183,6 +218,32 @@ export function CityGround() {
     []
   );
 
+  // Perimeter Woodland Belt & Tall Sentinel Trees (Varied species, varied heights, breaking the horizon)
+  const perimeterWoodlandTrees = useMemo(
+    () => [
+      // Outer north boundary (Academic quad background)
+      [0, 0.45, -85] as const,
+      [18, 0.45, -88] as const,
+      [36, 0.45, -86] as const,
+      [-18, 0.45, -88] as const,
+      [-36, 0.45, -84] as const,
+      // Outer south boundary (Lakeside park buffer)
+      [-12, 0.45, 92] as const,
+      [8, 0.45, 94] as const,
+      [28, 0.45, 90] as const,
+      [-32, 0.45, 88] as const,
+      // East perimeter (Student Life buffer)
+      [88, 0.45, -12] as const,
+      [92, 0.45, 14] as const,
+      [86, 0.45, 38] as const,
+      // West perimeter (Knowledge district buffer)
+      [-88, 0.45, -12] as const,
+      [-92, 0.45, 14] as const,
+      [-86, 0.45, 38] as const,
+    ],
+    []
+  );
+
   // Colorful Botanical Flower Beds (Lavender ribbons, golden marigolds, magenta azaleas)
   const campusFlowerBeds = useMemo(
     () => [
@@ -209,10 +270,52 @@ export function CityGround() {
 
   return (
     <group name="city-ground">
-      {/* ── 1. MASTER CAMPUS FOUNDATION BED (280m x 280m Natural Green Park Terrain) ── */}
+      {/* ── 1. MASTER CAMPUS FOUNDATION BED & CONTINUOUS HORIZON LANDSCAPE APRON (REMOVES FLOATING PLATFORM) ── */}
+      {/* Central 280m x 280m Campus Park Terrain Bed */}
       <mesh position={[0, -0.6, 0]} material={groundBaseMaterial} receiveShadow>
         <boxGeometry args={[280, 1.2, 280]} />
       </mesh>
+
+      {/* Sloping Peripheral Earth Skirt (Gently tapers the campus perimeter into the surrounding landscape) */}
+      <mesh position={[0, -1.05, 0]} material={groundBaseMaterial} receiveShadow>
+        <cylinderGeometry args={[144, 210, 1.3, 32]} />
+      </mesh>
+
+      {/* Vast Panoramic Outer Landscape Apron (Spans to 680m diameter, seamlessly blending into horizon fog) */}
+      <mesh position={[0, -1.65, 0]} material={campusLawnMaterial} receiveShadow>
+        <cylinderGeometry args={[210, 340, 1.5, 48]} />
+      </mesh>
+
+      {/* ── 1B. NATURAL SCULPTED EARTH BERMS & ROLLING TOPOGRAPHY ── */}
+      <group name="campus-earth-berms">
+        {campusEarthBerms.map((berm, bIdx) => (
+          <mesh
+            key={`earth-berm-${bIdx}`}
+            position={[berm.pos[0], berm.pos[1], berm.pos[2]]}
+            scale={[berm.scale[0], berm.scale[1], berm.scale[2]]}
+            rotation={[0, berm.rot, 0]}
+            material={campusLawnMaterial}
+            receiveShadow
+          >
+            <sphereGeometry args={[1, 16, 12, 0, Math.PI * 2, 0, Math.PI / 2]} />
+          </mesh>
+        ))}
+      </group>
+
+      {/* ── 1C. SECONDARY CURVED GARDEN PATHWAYS ── */}
+      <group name="secondary-garden-paths">
+        {secondaryGardenPaths.map((path, pIdx) => (
+          <mesh
+            key={`garden-path-${pIdx}`}
+            position={[path.pos[0], path.pos[1], path.pos[2]]}
+            rotation={[0, path.rot, 0]}
+            material={warmPlazaPavingMaterial}
+            receiveShadow
+          >
+            <boxGeometry args={[path.size[0], path.size[1], path.size[2]]} />
+          </mesh>
+        ))}
+      </group>
 
       {/* ── 2. EIGHT DISTRICT & RESEARCH PODIUMS WITH DISTRICT MATERIALS ── */}
       {districtPlatforms.map((plat) => {
@@ -402,6 +505,49 @@ export function CityGround() {
                   <sphereGeometry args={[0.85, 6, 6]} />
                 </mesh>
               </group>
+            </group>
+          );
+        })}
+      </group>
+
+      {/* ── 8. PERIMETER WOODLAND BELT & TALL SENTINEL TREES (BREAKS HORIZON) ── */}
+      <group name="perimeter-woodland-trees">
+        {perimeterWoodlandTrees.map((pos, idx) => {
+          const wScale = 1.25 + ((idx * 5) % 4) * 0.18;
+          const isColumnar = idx % 2 === 0;
+
+          return (
+            <group key={`woodland-tree-${idx}`} position={[pos[0], pos[1], pos[2]]} scale={[wScale, wScale, wScale]}>
+              {/* Root Mound in Turf */}
+              <mesh position={[0, 0.12, 0]} material={soilBedMaterial}>
+                <cylinderGeometry args={[1.0, 1.6, 0.25, 8]} />
+              </mesh>
+              {/* Sturdy Trunk */}
+              <mesh position={[0, 2.2, 0]} material={treeBarkMaterial} castShadow={shouldCastShadow}>
+                <cylinderGeometry args={[0.18, 0.36, 4.2, 8]} />
+              </mesh>
+              {/* Distinctive Botanical Silhouette */}
+              {isColumnar ? (
+                // Tall Columnar Cypress / Poplar Silhouette
+                <group position={[0, 5.0, 0]}>
+                  <mesh material={naturalFoliagePrimaryMaterial} castShadow={shouldCastShadow}>
+                    <coneGeometry args={[1.2, 5.5, 8]} />
+                  </mesh>
+                  <mesh position={[0, -0.8, 0]} material={naturalFoliageSecondaryMaterial} castShadow={shouldCastShadow}>
+                    <coneGeometry args={[1.4, 4.5, 8]} />
+                  </mesh>
+                </group>
+              ) : (
+                // Broadleaf Forest Canopy with Tiered Foliage
+                <group position={[0, 4.6, 0]}>
+                  <mesh material={naturalFoliageSecondaryMaterial} castShadow={shouldCastShadow}>
+                    <dodecahedronGeometry args={[2.0, 0]} />
+                  </mesh>
+                  <mesh position={[0.6, 0.8, 0.4]} material={naturalFoliageAccentMaterial} castShadow={shouldCastShadow}>
+                    <dodecahedronGeometry args={[1.4, 0]} />
+                  </mesh>
+                </group>
+              )}
             </group>
           );
         })}
