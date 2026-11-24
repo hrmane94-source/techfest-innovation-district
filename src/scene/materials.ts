@@ -41,22 +41,45 @@ export const CITY_COLORS = {
 } as const;
 
 // ─────────────────────────────────────────────────────────────────────────────
+// STANDARDIZED ULTRA-SHARP PROCEDURAL TEXTURE CONFIGURATOR (Milestone 7.3)
+// Generates hardware mipmaps, enables tri-linear filtering & 8x anisotropic filtering
+// ─────────────────────────────────────────────────────────────────────────────
+
+function configureDataTexture(
+  tex: THREE.DataTexture,
+  repeatX: number,
+  repeatY: number,
+  anisotropy = 8
+): THREE.DataTexture {
+  tex.wrapS = THREE.RepeatWrapping;
+  tex.wrapT = THREE.RepeatWrapping;
+  tex.repeat.set(repeatX, repeatY);
+  tex.generateMipmaps = true;
+  tex.minFilter = THREE.LinearMipmapLinearFilter;
+  tex.magFilter = THREE.LinearFilter;
+  tex.anisotropy = anisotropy;
+  tex.needsUpdate = true;
+  return tex;
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
 // 1. PROCEDURAL ARCHITECTURAL CURTAIN WALL (Offices, Atriums, Towers)
+// High-resolution 256x256 buffer with 8 distinct architectural floors & sub-pixel reveals
 // ─────────────────────────────────────────────────────────────────────────────
 
 function createProceduralWindowTextures() {
-  const width = 128;
-  const height = 128;
+  const width = 256;
+  const height = 256;
   const diffuseData = new Uint8Array(width * height * 4);
   const emissiveData = new Uint8Array(width * height * 4);
 
-  // 8 distinct architectural floors (16 pixels per floor)
-  // Each floor: 3px horizontal spandrel beam, 13px glazed window zone
-  // 4 bays per floor (32px per bay), separated by 2px vertical mullion columns
-  const floorHeight = 16;
-  const spandrelHeight = 3;
-  const bayWidth = 32;
-  const mullionWidth = 2;
+  // 8 distinct architectural floors (32 pixels per floor)
+  // Each floor: 6px horizontal spandrel beam, 26px glazed window zone
+  // 4 bays per floor (64px per bay), separated by 4px vertical mullion columns
+  const floorHeight = 32;
+  const spandrelHeight = 6;
+  const bayWidth = 64;
+  const mullionWidth = 4;
 
   for (let y = 0; y < height; y++) {
     const floorIndex = Math.floor(y / floorHeight);
@@ -147,38 +170,40 @@ function createProceduralWindowTextures() {
     }
   }
 
-  const diffuseTex = new THREE.DataTexture(diffuseData, width, height, THREE.RGBAFormat);
-  diffuseTex.wrapS = THREE.RepeatWrapping;
-  diffuseTex.wrapT = THREE.RepeatWrapping;
-  diffuseTex.repeat.set(1.5, 3.2);
-  diffuseTex.needsUpdate = true;
-
-  const emissiveTex = new THREE.DataTexture(emissiveData, width, height, THREE.RGBAFormat);
-  emissiveTex.wrapS = THREE.RepeatWrapping;
-  emissiveTex.wrapT = THREE.RepeatWrapping;
-  emissiveTex.repeat.set(1.5, 3.2);
-  emissiveTex.needsUpdate = true;
+  const diffuseTex = configureDataTexture(
+    new THREE.DataTexture(diffuseData, width, height, THREE.RGBAFormat),
+    1.5,
+    3.2,
+    8
+  );
+  const emissiveTex = configureDataTexture(
+    new THREE.DataTexture(emissiveData, width, height, THREE.RGBAFormat),
+    1.5,
+    3.2,
+    8
+  );
 
   return { diffuseTex, emissiveTex };
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
 // 2. PROCEDURAL ACADEMIC RIBBON WINDOW TEXTURE (AI, Cyber, Library Wings)
+// High-resolution 256x256 buffer with precast concrete spandrel joints & aluminium mullions
 // ─────────────────────────────────────────────────────────────────────────────
 
 function createRibbonWindowTextures() {
-  const width = 128;
-  const height = 128;
+  const width = 256;
+  const height = 256;
   const diffuseData = new Uint8Array(width * height * 4);
   const emissiveData = new Uint8Array(width * height * 4);
 
-  // 4 floors (32 pixels per floor)
-  // Each floor: 14px precast concrete spandrel band, 18px horizontal ribbon glass
-  // Vertical mullion dividing panes every 24 pixels
-  const floorHeight = 32;
-  const spandrelHeight = 14;
-  const paneWidth = 24;
-  const mullionWidth = 2;
+  // 4 floors (64 pixels per floor)
+  // Each floor: 28px precast concrete spandrel band, 36px horizontal ribbon glass
+  // Vertical mullion dividing panes every 48 pixels
+  const floorHeight = 64;
+  const spandrelHeight = 28;
+  const paneWidth = 48;
+  const mullionWidth = 4;
 
   for (let y = 0; y < height; y++) {
     const floorIndex = Math.floor(y / floorHeight);
@@ -255,17 +280,18 @@ function createRibbonWindowTextures() {
     }
   }
 
-  const diffuseTex = new THREE.DataTexture(diffuseData, width, height, THREE.RGBAFormat);
-  diffuseTex.wrapS = THREE.RepeatWrapping;
-  diffuseTex.wrapT = THREE.RepeatWrapping;
-  diffuseTex.repeat.set(1.0, 1.0);
-  diffuseTex.needsUpdate = true;
-
-  const emissiveTex = new THREE.DataTexture(emissiveData, width, height, THREE.RGBAFormat);
-  emissiveTex.wrapS = THREE.RepeatWrapping;
-  emissiveTex.wrapT = THREE.RepeatWrapping;
-  emissiveTex.repeat.set(1.0, 1.0);
-  emissiveTex.needsUpdate = true;
+  const diffuseTex = configureDataTexture(
+    new THREE.DataTexture(diffuseData, width, height, THREE.RGBAFormat),
+    1.0,
+    1.0,
+    8
+  );
+  const emissiveTex = configureDataTexture(
+    new THREE.DataTexture(emissiveData, width, height, THREE.RGBAFormat),
+    1.0,
+    1.0,
+    8
+  );
 
   return { diffuseTex, emissiveTex };
 }
@@ -275,14 +301,14 @@ function createRibbonWindowTextures() {
 // ─────────────────────────────────────────────────────────────────────────────
 
 function createIndustrialClerestoryTextures() {
-  const width = 64;
-  const height = 64;
+  const width = 128;
+  const height = 128;
   const diffuseData = new Uint8Array(width * height * 4);
   const emissiveData = new Uint8Array(width * height * 4);
 
-  // Multi-pane industrial steel grid (8x8 pixel panes with 1px steel muntins)
-  const paneSize = 16;
-  const muntinWidth = 2;
+  // Multi-pane industrial steel grid (32x32 pixel panes with 3px steel muntins)
+  const paneSize = 32;
+  const muntinWidth = 3;
 
   for (let y = 0; y < height; y++) {
     const isHorizontalMuntin = y % paneSize < muntinWidth;
@@ -316,17 +342,18 @@ function createIndustrialClerestoryTextures() {
     }
   }
 
-  const diffuseTex = new THREE.DataTexture(diffuseData, width, height, THREE.RGBAFormat);
-  diffuseTex.wrapS = THREE.RepeatWrapping;
-  diffuseTex.wrapT = THREE.RepeatWrapping;
-  diffuseTex.repeat.set(2.0, 1.0);
-  diffuseTex.needsUpdate = true;
-
-  const emissiveTex = new THREE.DataTexture(emissiveData, width, height, THREE.RGBAFormat);
-  emissiveTex.wrapS = THREE.RepeatWrapping;
-  emissiveTex.wrapT = THREE.RepeatWrapping;
-  emissiveTex.repeat.set(2.0, 1.0);
-  emissiveTex.needsUpdate = true;
+  const diffuseTex = configureDataTexture(
+    new THREE.DataTexture(diffuseData, width, height, THREE.RGBAFormat),
+    2.0,
+    1.0,
+    8
+  );
+  const emissiveTex = configureDataTexture(
+    new THREE.DataTexture(emissiveData, width, height, THREE.RGBAFormat),
+    2.0,
+    1.0,
+    8
+  );
 
   return { diffuseTex, emissiveTex };
 }
@@ -336,9 +363,9 @@ function createIndustrialClerestoryTextures() {
 // ─────────────────────────────────────────────────────────────────────────────
 
 function createHazardStripeTexture() {
-  const size = 64;
+  const size = 128;
   const data = new Uint8Array(size * size * 4);
-  const stripeWidth = 8;
+  const stripeWidth = 16;
 
   for (let y = 0; y < size; y++) {
     for (let x = 0; x < size; x++) {
@@ -359,12 +386,12 @@ function createHazardStripeTexture() {
     }
   }
 
-  const tex = new THREE.DataTexture(data, size, size, THREE.RGBAFormat);
-  tex.wrapS = THREE.RepeatWrapping;
-  tex.wrapT = THREE.RepeatWrapping;
-  tex.repeat.set(4, 1);
-  tex.needsUpdate = true;
-  return tex;
+  return configureDataTexture(
+    new THREE.DataTexture(data, size, size, THREE.RGBAFormat),
+    4,
+    1,
+    8
+  );
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -372,13 +399,13 @@ function createHazardStripeTexture() {
 // ─────────────────────────────────────────────────────────────────────────────
 
 function createSolarPanelTexture() {
-  const size = 64;
+  const size = 128;
   const data = new Uint8Array(size * size * 4);
 
   for (let y = 0; y < size; y++) {
     for (let x = 0; x < size; x++) {
       const idx = (y * size + x) * 4;
-      const isBusbar = x % 16 === 0 || y % 16 === 0;
+      const isBusbar = x % 32 === 0 || y % 32 === 0;
 
       if (isBusbar) {
         data[idx] = 60;
@@ -394,12 +421,12 @@ function createSolarPanelTexture() {
     }
   }
 
-  const tex = new THREE.DataTexture(data, size, size, THREE.RGBAFormat);
-  tex.wrapS = THREE.RepeatWrapping;
-  tex.wrapT = THREE.RepeatWrapping;
-  tex.repeat.set(4, 4);
-  tex.needsUpdate = true;
-  return tex;
+  return configureDataTexture(
+    new THREE.DataTexture(data, size, size, THREE.RGBAFormat),
+    4,
+    4,
+    8
+  );
 }
 
 export const { diffuseTex: windowDiffuseTexture, emissiveTex: windowEmissiveTexture } =
@@ -416,10 +443,11 @@ export const solarPanelTexture = createSolarPanelTexture();
 
 // ─────────────────────────────────────────────────────────────────────────────
 // 6. PROCEDURAL PRECAST CONCRETE PANEL TEXTURES (Architectural Facades & Reveals)
+// High-resolution 256x256 buffer with 2px reveal joints and micro-stipple grain
 // ─────────────────────────────────────────────────────────────────────────────
 
 function createConcretePanelTextures() {
-  const size = 128;
+  const size = 256;
   const bumpData = new Uint8Array(size * size * 4);
   const roughData = new Uint8Array(size * size * 4);
 
@@ -457,27 +485,29 @@ function createConcretePanelTextures() {
     }
   }
 
-  const bumpTex = new THREE.DataTexture(bumpData, size, size, THREE.RGBAFormat);
-  bumpTex.wrapS = THREE.RepeatWrapping;
-  bumpTex.wrapT = THREE.RepeatWrapping;
-  bumpTex.repeat.set(2, 2);
-  bumpTex.needsUpdate = true;
-
-  const roughTex = new THREE.DataTexture(roughData, size, size, THREE.RGBAFormat);
-  roughTex.wrapS = THREE.RepeatWrapping;
-  roughTex.wrapT = THREE.RepeatWrapping;
-  roughTex.repeat.set(2, 2);
-  roughTex.needsUpdate = true;
+  const bumpTex = configureDataTexture(
+    new THREE.DataTexture(bumpData, size, size, THREE.RGBAFormat),
+    2,
+    2,
+    8
+  );
+  const roughTex = configureDataTexture(
+    new THREE.DataTexture(roughData, size, size, THREE.RGBAFormat),
+    2,
+    2,
+    8
+  );
 
   return { bumpTex, roughTex };
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
 // 7. PROCEDURAL STONE PAVER TEXTURES (Plaza & Pedestrian Concourses)
+// High-resolution 256x256 running bond pavers with recessed mortar joints
 // ─────────────────────────────────────────────────────────────────────────────
 
 function createStonePaverTextures() {
-  const size = 128;
+  const size = 256;
   const diffuseData = new Uint8Array(size * size * 4);
   const bumpData = new Uint8Array(size * size * 4);
 
@@ -516,17 +546,18 @@ function createStonePaverTextures() {
     }
   }
 
-  const diffuseTex = new THREE.DataTexture(diffuseData, size, size, THREE.RGBAFormat);
-  diffuseTex.wrapS = THREE.RepeatWrapping;
-  diffuseTex.wrapT = THREE.RepeatWrapping;
-  diffuseTex.repeat.set(4, 4);
-  diffuseTex.needsUpdate = true;
-
-  const bumpTex = new THREE.DataTexture(bumpData, size, size, THREE.RGBAFormat);
-  bumpTex.wrapS = THREE.RepeatWrapping;
-  bumpTex.wrapT = THREE.RepeatWrapping;
-  bumpTex.repeat.set(4, 4);
-  bumpTex.needsUpdate = true;
+  const diffuseTex = configureDataTexture(
+    new THREE.DataTexture(diffuseData, size, size, THREE.RGBAFormat),
+    4,
+    4,
+    8
+  );
+  const bumpTex = configureDataTexture(
+    new THREE.DataTexture(bumpData, size, size, THREE.RGBAFormat),
+    4,
+    4,
+    8
+  );
 
   return { diffuseTex, bumpTex };
 }
@@ -536,16 +567,16 @@ function createStonePaverTextures() {
 // ─────────────────────────────────────────────────────────────────────────────
 
 function createNaturalWoodTextures() {
-  const size = 64;
+  const size = 128;
   const diffuseData = new Uint8Array(size * size * 4);
   const bumpData = new Uint8Array(size * size * 4);
 
-  // 8px wide timber planks running along Y
+  // 16px wide timber planks running along Y
   for (let y = 0; y < size; y++) {
     for (let x = 0; x < size; x++) {
-      const isSeam = x % 8 === 0;
+      const isSeam = x % 16 === 0;
       const idx = (y * size + x) * 4;
-      const grain = Math.sin(y * 0.4 + (x % 8) * 1.5) * 8;
+      const grain = Math.sin(y * 0.4 + (x % 16) * 1.5) * 8;
 
       if (isSeam) {
         diffuseData[idx] = 75;
@@ -571,17 +602,18 @@ function createNaturalWoodTextures() {
     }
   }
 
-  const diffuseTex = new THREE.DataTexture(diffuseData, size, size, THREE.RGBAFormat);
-  diffuseTex.wrapS = THREE.RepeatWrapping;
-  diffuseTex.wrapT = THREE.RepeatWrapping;
-  diffuseTex.repeat.set(2, 4);
-  diffuseTex.needsUpdate = true;
-
-  const bumpTex = new THREE.DataTexture(bumpData, size, size, THREE.RGBAFormat);
-  bumpTex.wrapS = THREE.RepeatWrapping;
-  bumpTex.wrapT = THREE.RepeatWrapping;
-  bumpTex.repeat.set(2, 4);
-  bumpTex.needsUpdate = true;
+  const diffuseTex = configureDataTexture(
+    new THREE.DataTexture(diffuseData, size, size, THREE.RGBAFormat),
+    2,
+    4,
+    8
+  );
+  const bumpTex = configureDataTexture(
+    new THREE.DataTexture(bumpData, size, size, THREE.RGBAFormat),
+    2,
+    4,
+    8
+  );
 
   return { diffuseTex, bumpTex };
 }
@@ -591,7 +623,7 @@ function createNaturalWoodTextures() {
 // ─────────────────────────────────────────────────────────────────────────────
 
 function createAsphaltBumpTexture() {
-  const size = 64;
+  const size = 128;
   const bumpData = new Uint8Array(size * size * 4);
   for (let i = 0; i < size * size; i++) {
     const val = 120 + ((i * 37) % 50);
@@ -601,12 +633,12 @@ function createAsphaltBumpTexture() {
     bumpData[idx + 2] = val;
     bumpData[idx + 3] = 255;
   }
-  const bumpTex = new THREE.DataTexture(bumpData, size, size, THREE.RGBAFormat);
-  bumpTex.wrapS = THREE.RepeatWrapping;
-  bumpTex.wrapT = THREE.RepeatWrapping;
-  bumpTex.repeat.set(8, 8);
-  bumpTex.needsUpdate = true;
-  return bumpTex;
+  return configureDataTexture(
+    new THREE.DataTexture(bumpData, size, size, THREE.RGBAFormat),
+    8,
+    8,
+    8
+  );
 }
 
 export const { bumpTex: concreteBumpTexture, roughTex: concreteRoughnessTexture } =
@@ -983,8 +1015,9 @@ export const sandstoneMaterial = new THREE.MeshStandardMaterial({
   color: new THREE.Color('#D8C3A5'),
   roughness: 0.84,
   metalness: 0.02,
+  map: paverDiffuseTexture,
   bumpMap: paverBumpTexture,
-  bumpScale: 0.04,
+  bumpScale: 0.035,
 });
 
 export const terracottaMaterial = new THREE.MeshStandardMaterial({
@@ -1093,8 +1126,9 @@ export const warmStoneMaterial = new THREE.MeshStandardMaterial({
   color: new THREE.Color('#D3C8B8'),
   roughness: 0.80,
   metalness: 0.03,
+  map: paverDiffuseTexture,
   bumpMap: paverBumpTexture,
-  bumpScale: 0.04,
+  bumpScale: 0.035,
 });
 
 export const teakTimberMaterial = new THREE.MeshStandardMaterial({
@@ -1117,8 +1151,9 @@ export const warmPlazaPavingMaterial = new THREE.MeshStandardMaterial({
   color: new THREE.Color('#E8E1D5'),
   roughness: 0.76,
   metalness: 0.03,
+  map: paverDiffuseTexture,
   bumpMap: paverBumpTexture,
-  bumpScale: 0.05,
+  bumpScale: 0.04,
 });
 
 export const floweringLavenderMaterial = new THREE.MeshStandardMaterial({

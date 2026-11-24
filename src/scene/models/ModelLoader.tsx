@@ -40,6 +40,36 @@ function ModelContent({
       if ((node as THREE.Mesh).isMesh) {
         node.castShadow = effectiveCastShadow;
         node.receiveShadow = effectiveReceiveShadow;
+
+        // Texture clarity & anisotropic filtering enhancement (Milestone 7.3)
+        const mesh = node as THREE.Mesh;
+        if (mesh.material) {
+          const mats = Array.isArray(mesh.material) ? mesh.material : [mesh.material];
+          mats.forEach((mat) => {
+            const std = mat as THREE.MeshStandardMaterial;
+            if (std.map) {
+              std.map.anisotropy = 8;
+              std.map.generateMipmaps = true;
+              std.map.minFilter = THREE.LinearMipmapLinearFilter;
+              std.map.magFilter = THREE.LinearFilter;
+              std.map.needsUpdate = true;
+            }
+            if (std.normalMap) {
+              std.normalMap.anisotropy = 8;
+              std.normalMap.generateMipmaps = true;
+              std.normalMap.minFilter = THREE.LinearMipmapLinearFilter;
+              std.normalMap.magFilter = THREE.LinearFilter;
+              std.normalMap.needsUpdate = true;
+            }
+            if (std.roughnessMap) {
+              std.roughnessMap.anisotropy = 8;
+              std.roughnessMap.generateMipmaps = true;
+              std.roughnessMap.minFilter = THREE.LinearMipmapLinearFilter;
+              std.roughnessMap.magFilter = THREE.LinearFilter;
+              std.roughnessMap.needsUpdate = true;
+            }
+          });
+        }
       }
     });
 

@@ -487,16 +487,16 @@ export function CentralLandmark() {
       <group name="monumental-crown" position={[0, 53.5, 0]}>
         {/* Crown Podium Platform with mechanical louvers */}
         <mesh position={[0, 0.8, 0]} material={pearlWhiteMaterial}>
-          <cylinderGeometry args={[3.0, 3.6, 1.6, 8]} />
+          <cylinderGeometry args={[3.0, 3.6, 1.6, 16]} />
         </mesh>
         <mesh position={[0, 0.8, 0]} material={brushedAlloyMaterial}>
-          <cylinderGeometry args={[3.05, 3.05, 0.4, 8]} />
+          <cylinderGeometry args={[3.05, 3.05, 0.4, 16]} />
         </mesh>
 
-        {/* Primary Segmented Architectural Crown Halo (Rotating) */}
+        {/* Primary Segmented Architectural Crown Halo (Smooth 32-segment circular curvature) */}
         <group ref={crownRingRef} position={[0, 3.6, 0]}>
           <mesh material={champagneSilverMaterial}>
-            <torusGeometry args={[3.4, 0.38, 8, 8]} />
+            <torusGeometry args={[3.4, 0.38, 16, 32]} />
           </mesh>
           {Array.from({ length: 8 }).map((_, idx) => {
             const ang = (idx * Math.PI * 2) / 8;
@@ -513,52 +513,52 @@ export function CentralLandmark() {
           })}
         </group>
 
-        {/* Secondary Inner Counter-Rotating Halo */}
+        {/* Secondary Inner Counter-Rotating Halo (Smooth 24-segment curvature) */}
         <group ref={secondaryRingRef} position={[0, 3.6, 0]}>
           <mesh material={titaniumStructuralMaterial}>
-            <torusGeometry args={[2.2, 0.22, 6, 8]} />
+            <torusGeometry args={[2.2, 0.22, 12, 24]} />
           </mesh>
           <mesh material={blueGlowMaterial}>
-            <torusGeometry args={[2.22, 0.08, 6, 8]} />
+            <torusGeometry args={[2.22, 0.08, 12, 24]} />
           </mesh>
         </group>
 
         {/* Floating Pulsing Quantum Energy Beacon Core */}
         <mesh ref={crownBeaconRef} position={[0, 3.6, 0]} material={cyanGlowMaterial}>
-          <octahedronGeometry args={[1.4, 0]} />
+          <octahedronGeometry args={[1.4, 1]} />
         </mesh>
 
         {/* Inner Luminous Core */}
         <mesh position={[0, 3.6, 0]} material={blueGlowMaterial}>
-          <icosahedronGeometry args={[0.85, 0]} />
+          <icosahedronGeometry args={[0.85, 1]} />
         </mesh>
 
         {/* Soaring High-Altitude Telemetry Spire Needle */}
         <group name="telemetry-needle" position={[0, 5.5, 0]}>
           <mesh position={[0, 3.5, 0]} material={titaniumStructuralMaterial}>
-            <cylinderGeometry args={[0.35, 0.75, 7.0, 8]} />
+            <cylinderGeometry args={[0.35, 0.75, 7.0, 16]} />
           </mesh>
           <mesh position={[0, 5.5, 0]} material={metalExoskeletonMaterial}>
-            <cylinderGeometry args={[0.8, 0.8, 0.6, 8]} />
+            <cylinderGeometry args={[0.8, 0.8, 0.6, 16]} />
           </mesh>
           <mesh position={[0, 5.5, 0]} material={cyanGlowMaterial}>
-            <cylinderGeometry args={[0.82, 0.82, 0.1, 8]} />
+            <cylinderGeometry args={[0.82, 0.82, 0.1, 16]} />
           </mesh>
 
           <mesh position={[0, 7.5, 0]} material={cyanGlowMaterial}>
-            <cylinderGeometry args={[0.6, 0.6, 0.35, 8]} />
+            <cylinderGeometry args={[0.6, 0.6, 0.35, 16]} />
           </mesh>
 
           <mesh position={[0, 11.0, 0]} material={titaniumStructuralMaterial}>
-            <cylinderGeometry args={[0.08, 0.28, 7.0, 8]} />
+            <cylinderGeometry args={[0.08, 0.28, 7.0, 16]} />
           </mesh>
 
           {/* Apex Air Navigation Strobe Beacon Light */}
           <mesh ref={apexStrobeRef} position={[0, 14.6, 0]} material={redBeaconMaterial}>
-            <sphereGeometry args={[0.38, 12, 12]} />
+            <sphereGeometry args={[0.38, 16, 16]} />
           </mesh>
           <mesh position={[0, 14.6, 0]} material={orangeGlowMaterial}>
-            <sphereGeometry args={[0.22, 8, 8]} />
+            <sphereGeometry args={[0.22, 12, 12]} />
           </mesh>
         </group>
       </group>

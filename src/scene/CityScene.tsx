@@ -33,7 +33,7 @@ export function CityScene({ className }: CitySceneProps) {
   return (
     <div className={`relative w-full h-full overflow-hidden ${className ?? ''}`}>
       <Canvas
-        shadows={settings.shadows}
+        shadows={settings.shadows ? { type: THREE.PCFSoftShadowMap } : false}
         camera={{
           position: [96, 126, 122],
           fov: 50,
@@ -41,15 +41,23 @@ export function CityScene({ className }: CitySceneProps) {
           far: 750,
         }}
         gl={{
-          antialias: settings.tier !== 'performance',
+          antialias: true,
           alpha: false,
           powerPreference: 'high-performance',
           stencil: false,
           depth: true,
           toneMapping: THREE.ACESFilmicToneMapping,
-          toneMappingExposure: 1.42,
+          toneMappingExposure: 1.40,
         }}
         dpr={settings.dpr}
+        onCreated={({ gl }) => {
+          gl.toneMapping = THREE.ACESFilmicToneMapping;
+          gl.toneMappingExposure = 1.40;
+          gl.outputColorSpace = THREE.SRGBColorSpace;
+          if (gl.shadowMap) {
+            gl.shadowMap.type = THREE.PCFSoftShadowMap;
+          }
+        }}
         className="w-full h-full"
       >
         <ProfilerFrameHook />

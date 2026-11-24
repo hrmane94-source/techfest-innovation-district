@@ -113,10 +113,17 @@ export function GraphicsQualityProvider({ children }: { children: ReactNode }) {
   const [isAutoDegraded, setIsAutoDegraded] = useState(false);
 
   // Runtime monitoring refs (pure initialization)
+  const mountTimeRef = useRef(0);
   const lowFpsDurationRef = useRef(0);
   const highFpsDurationRef = useRef(0);
   const lastTierChangeTimeRef = useRef(0);
   const activeTierRef = useRef(activeTier);
+
+  // Initialize timestamps on mount in effect to keep render pure
+  useEffect(() => {
+    mountTimeRef.current = performance.now();
+    lastTierChangeTimeRef.current = performance.now();
+  }, []);
 
   // Sync ref in effect to keep render pure
   useEffect(() => {
@@ -150,14 +157,18 @@ export function GraphicsQualityProvider({ children }: { children: ReactNode }) {
       setCurrentFps(snap.fps);
 
       const now = performance.now();
+      const timeSinceMount = (now - mountTimeRef.current) / 1000;
+      // Allow initial 8s grace period for shader compilation & asset loading
+      if (timeSinceMount < 8.0) return;
+
       const timeSinceLastSwitch = (now - lastTierChangeTimeRef.current) / 1000;
 
-      // Low FPS Condition (sustained < 32 FPS for 3.5s)
-      if (snap.fps < 32) {
+      // Low FPS Condition (genuinely struggling: sustained < 24 FPS for 6.0s with 8s cooldown)
+      if (snap.fps < 24) {
         lowFpsDurationRef.current += 0.5;
         highFpsDurationRef.current = 0;
 
-        if (lowFpsDurationRef.current >= 3.5 && timeSinceLastSwitch >= 5.0) {
+        if (lowFpsDurationRef.current >= 6.0 && timeSinceLastSwitch >= 8.0) {
           if (activeTierRef.current === 'high') {
             console.log('[GraphicsManager] Stepping down: high -> balanced (sustained low FPS)');
             setActiveTier('balanced');
@@ -172,12 +183,12 @@ export function GraphicsQualityProvider({ children }: { children: ReactNode }) {
             lowFpsDurationRef.current = 0;
           }
         }
-      } else if (snap.fps >= 56) {
-        // High FPS Condition (sustained >= 56 FPS for 8s with 15s cooldown)
+      } else if (snap.fps >= 52) {
+        // High FPS Condition (healthy recovery: sustained >= 52 FPS for 6s with 10s cooldown)
         highFpsDurationRef.current += 0.5;
         lowFpsDurationRef.current = 0;
 
-        if (highFpsDurationRef.current >= 8.0 && timeSinceLastSwitch >= 15.0) {
+        if (highFpsDurationRef.current >= 6.0 && timeSinceLastSwitch >= 10.0) {
           if (activeTierRef.current === 'performance' && hardware.initialTier !== 'performance') {
             console.log('[GraphicsManager] Stepping up: performance -> balanced (healthy FPS recovery)');
             setActiveTier('balanced');

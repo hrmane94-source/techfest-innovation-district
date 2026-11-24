@@ -438,32 +438,32 @@ export function CityGround() {
                 <cylinderGeometry args={[0.14, 0.24, 2.6, 8]} />
               </mesh>
 
-              {/* Multi-Lobed Natural Botanical Canopy */}
+              {/* Multi-Lobed Natural Botanical Canopy (Smooth Organic Silhouette) */}
               <group position={[0, 3.2, 0]}>
                 {/* Center Core Lobe */}
                 <mesh material={naturalFoliagePrimaryMaterial} castShadow={shouldCastShadow}>
-                  <sphereGeometry args={[1.35, 8, 8]} />
+                  <sphereGeometry args={[1.35, 16, 14]} />
                 </mesh>
                 {/* Secondary Offset Lobes */}
                 <mesh position={[0.55, -0.35, 0.45]} material={naturalFoliageSecondaryMaterial} castShadow={shouldCastShadow}>
-                  <sphereGeometry args={[1.05, 7, 7]} />
+                  <sphereGeometry args={[1.05, 14, 12]} />
                 </mesh>
                 <mesh position={[-0.5, -0.25, -0.45]} material={naturalFoliageAccentMaterial} castShadow={shouldCastShadow}>
-                  <sphereGeometry args={[0.95, 7, 7]} />
+                  <sphereGeometry args={[0.95, 14, 12]} />
                 </mesh>
                 <mesh position={[-0.45, 0.45, 0.35]} material={naturalFoliageSecondaryMaterial} castShadow={shouldCastShadow}>
-                  <sphereGeometry args={[0.85, 6, 6]} />
+                  <sphereGeometry args={[0.85, 12, 10]} />
                 </mesh>
                 {/* Upper Crown Tip */}
                 <mesh position={[0.15, 0.95, -0.1]} material={naturalFoliageAccentMaterial} castShadow={shouldCastShadow}>
-                  <sphereGeometry args={[0.75, 6, 6]} />
+                  <sphereGeometry args={[0.75, 12, 10]} />
                 </mesh>
               </group>
 
               {/* Low Evergreen Shrub Ring in Soil Bed */}
               {[-0.9, 0, 0.9].map((sx, sIdx) => (
                 <mesh key={`shrub-${sIdx}`} position={[sx * 0.9, 0.62, ((sIdx % 2) - 0.5) * 0.9]} material={naturalFoliageSecondaryMaterial}>
-                  <sphereGeometry args={[0.28, 6, 6]} />
+                  <sphereGeometry args={[0.28, 10, 8]} />
                 </mesh>
               ))}
 
@@ -490,19 +490,19 @@ export function CityGround() {
               <mesh position={[0, 1.6, 0]} material={treeBarkMaterial} castShadow={shouldCastShadow}>
                 <cylinderGeometry args={[0.15, 0.28, 2.8, 8]} />
               </mesh>
-              {/* Lush Multi-Tiered Foliage Canopy */}
+              {/* Lush Multi-Tiered Foliage Canopy (Smooth Botanical Curvature) */}
               <group position={[0, 3.4, 0]}>
                 <mesh material={naturalFoliagePrimaryMaterial} castShadow={shouldCastShadow}>
-                  <sphereGeometry args={[1.5, 8, 8]} />
+                  <sphereGeometry args={[1.5, 16, 14]} />
                 </mesh>
                 <mesh position={[0.7, -0.4, 0.4]} material={naturalFoliageSecondaryMaterial} castShadow={shouldCastShadow}>
-                  <sphereGeometry args={[1.15, 7, 7]} />
+                  <sphereGeometry args={[1.15, 14, 12]} />
                 </mesh>
                 <mesh position={[-0.6, -0.3, -0.5]} material={naturalFoliageAccentMaterial} castShadow={shouldCastShadow}>
-                  <sphereGeometry args={[1.05, 7, 7]} />
+                  <sphereGeometry args={[1.05, 14, 12]} />
                 </mesh>
                 <mesh position={[0.2, 0.85, 0.2]} material={naturalFoliageAccentMaterial} castShadow={shouldCastShadow}>
-                  <sphereGeometry args={[0.85, 6, 6]} />
+                  <sphereGeometry args={[0.85, 12, 10]} />
                 </mesh>
               </group>
             </group>
@@ -520,31 +520,31 @@ export function CityGround() {
             <group key={`woodland-tree-${idx}`} position={[pos[0], pos[1], pos[2]]} scale={[wScale, wScale, wScale]}>
               {/* Root Mound in Turf */}
               <mesh position={[0, 0.12, 0]} material={soilBedMaterial}>
-                <cylinderGeometry args={[1.0, 1.6, 0.25, 8]} />
+                <cylinderGeometry args={[1.0, 1.6, 0.25, 12]} />
               </mesh>
               {/* Sturdy Trunk */}
               <mesh position={[0, 2.2, 0]} material={treeBarkMaterial} castShadow={shouldCastShadow}>
-                <cylinderGeometry args={[0.18, 0.36, 4.2, 8]} />
+                <cylinderGeometry args={[0.18, 0.36, 4.2, 10]} />
               </mesh>
               {/* Distinctive Botanical Silhouette */}
               {isColumnar ? (
-                // Tall Columnar Cypress / Poplar Silhouette
+                // Tall Columnar Cypress / Poplar Silhouette (Smooth 16-segment cone)
                 <group position={[0, 5.0, 0]}>
                   <mesh material={naturalFoliagePrimaryMaterial} castShadow={shouldCastShadow}>
-                    <coneGeometry args={[1.2, 5.5, 8]} />
+                    <coneGeometry args={[1.2, 5.5, 16]} />
                   </mesh>
                   <mesh position={[0, -0.8, 0]} material={naturalFoliageSecondaryMaterial} castShadow={shouldCastShadow}>
-                    <coneGeometry args={[1.4, 4.5, 8]} />
+                    <coneGeometry args={[1.4, 4.5, 16]} />
                   </mesh>
                 </group>
               ) : (
-                // Broadleaf Forest Canopy with Tiered Foliage
+                // Broadleaf Forest Canopy with Refined Organic Detail
                 <group position={[0, 4.6, 0]}>
                   <mesh material={naturalFoliageSecondaryMaterial} castShadow={shouldCastShadow}>
-                    <dodecahedronGeometry args={[2.0, 0]} />
+                    <dodecahedronGeometry args={[2.0, 1]} />
                   </mesh>
                   <mesh position={[0.6, 0.8, 0.4]} material={naturalFoliageAccentMaterial} castShadow={shouldCastShadow}>
-                    <dodecahedronGeometry args={[1.4, 0]} />
+                    <dodecahedronGeometry args={[1.4, 1]} />
                   </mesh>
                 </group>
               )}

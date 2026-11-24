@@ -415,9 +415,9 @@ export function AerospaceComplex({ position, rotation = 0 }: AerospaceComplexPro
 
       {/* ── 2. FLIGHT OPERATIONS OBSERVATION TOWER (CANTED GLASS CAB - ACADEMIC 24M) ── */}
       <group position={[9.0, 0, 7.5]}>
-        {/* Tapered Slender Mast in Cool White */}
+        {/* Tapered Slender Mast in Cool White (Smooth 24-segment curvature) */}
         <mesh position={[0, 11.5, 0]} material={coolWhiteMaterial} castShadow>
-          <cylinderGeometry args={[1.1, 2.2, 23, 12]} />
+          <cylinderGeometry args={[1.1, 2.2, 23, 24]} />
         </mesh>
         {/* Vertical Navigational Lighting Conduits */}
         <mesh position={[0, 11.5, 1.15]} material={architecturalCyanMaterial}>
@@ -426,16 +426,16 @@ export function AerospaceComplex({ position, rotation = 0 }: AerospaceComplexPro
 
         {/* Flared 360-Degree Canted Glass Control Cab */}
         <mesh position={[0, 20.5, 0]} material={titaniumStructuralMaterial}>
-          <cylinderGeometry args={[4.0, 2.4, 2.8, 12]} />
+          <cylinderGeometry args={[4.0, 2.4, 2.8, 24]} />
         </mesh>
         <mesh position={[0, 20.5, 0]} material={deepBlueGlassMaterial}>
-          <cylinderGeometry args={[4.05, 4.05, 1.0, 12]} />
+          <cylinderGeometry args={[4.05, 4.05, 1.0, 24]} />
         </mesh>
         <mesh position={[0, 20.5, 0]} material={architecturalCyanMaterial}>
-          <cylinderGeometry args={[2.8, 2.8, 0.6, 12]} />
+          <cylinderGeometry args={[2.8, 2.8, 0.6, 24]} />
         </mesh>
         <mesh position={[0, 22.0, 0]} material={architecturalCyanMaterial}>
-          <cylinderGeometry args={[4.1, 4.1, 0.16, 12]} />
+          <cylinderGeometry args={[4.1, 4.1, 0.16, 24]} />
         </mesh>
 
         {/* Spherical Weather Radar Radome */}
